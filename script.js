@@ -57,9 +57,8 @@ const stepTemplates = {
         <label for="valorAPP_select" class="form-label">Valor APP por pessoa (R$) *</label>
         <select id="valorAPP_select" class="form-select" required>
           <option value="">Selecione</option>
-          <option value="50000">R$ 50.000</option>
-          <option value="100000">R$ 100.000</option>
-          <option value="150000">R$ 150.000</option>
+          <option value="5000">R$ 5.000</option>
+          <option value="10000">R$ 10.000</option>
           <option value="outro">Outro Valor</option>
         </select>
         <input type="number" class="form-control mt-2" id="valorAPP_outro" step="1000" style="display: none;" placeholder="Digite o valor desejado" />
@@ -78,21 +77,13 @@ const stepTemplates = {
     <div class="form-step" data-step="3">
       <h4 class="mb-4">Parcelamento</h4>
       <div class="row">
-        <div class="col-md-6 mb-3">
+        <div class="col-md-12 mb-3">
           <label for="qtdParcelas" class="form-label">Quantidade de parcelas *</label>
           <select id="qtdParcelas" class="form-select" required>
             <option value="">Selecione</option>
-            <option>1</option> <option>3</option> <option>6</option> <option>10</option> <option>12</option>
+            <option>1x</option> <option>2x</option> <option>3x</option> <option>4x</option> <option>5x</option> <option>6x</option> <option>7x</option> <option>8x</option> <option>9x</option> <option>10x</option> 
           </select>
           <div class="invalid-feedback">Informe a quantidade de parcelas.</div>
-        </div>
-        <div class="col-md-6 mb-3">
-          <label for="vencimento" class="form-label">Dia de vencimento *</label>
-          <select id="vencimento" class="form-select" required>
-            <option value="">Selecione</option>
-            <option>5</option> <option>10</option> <option>15</option> <option>20</option> <option>25</option>
-          </select>
-          <div class="invalid-feedback">Informe o dia de vencimento.</div>
         </div>
       </div>
       <div class="btn-group-navigation">
@@ -104,9 +95,9 @@ const stepTemplates = {
         </button>
       </div>
     </div>`,
-  solicitante: `
+  Estipulante: `
     <div class="form-step" data-step="4">
-      <h4 class="mb-4">Dados do solicitante</h4>
+      <h4 class="mb-4">Dados do Estipulante</h4>
       <div class="mb-3">
         <label class="form-label">Nome *</label>
         <input id="solNome" class="form-control" required />
@@ -147,28 +138,20 @@ const stepTemplates = {
     <div class="form-step" data-step="5">
       <h4 class="mb-4">Dados do veículo</h4>
       <div class="row">
-        <div class="col-md-3 mb-3">
-          <label class="form-label">Uso *</label>
-          <select id="veiUso" class="form-select" required>
-            <option value="">Selecione</option>
-            <option>Particular</option> <option>Comercial</option> <option>Aplicativo</option>
-          </select>
-          <div class="invalid-feedback">Informe o uso.</div>
-        </div>
-        <div class="col-md-3 mb-3">
+        <div class="col-md-4 mb-3">
           <label class="form-label">Placa *</label>
           <input id="veiPlaca" class="form-control" placeholder="ABC1D23" required />
           <div class="invalid-feedback">Placa inválida.</div>
         </div>
-        <div class="col-md-3 mb-3">
+        <div class="col-md-4 mb-3">
           <label class="form-label">Chassi *</label>
           <input id="veiChassi" class="form-control" minlength="5" required />
           <div class="invalid-feedback">Informe o chassi.</div>
         </div>
-        <div class="col-md-3 mb-3">
-          <label class="form-label">Ano *</label>
-          <input id="veiAno" type="number" class="form-control" min="1980" max="2099" required />
-          <div class="invalid-feedback">Informe o ano.</div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Renavam *</label>
+          <input id="veiRenavam" class="form-control" required />
+          <div class="invalid-feedback">Informe o Renavam.</div>
         </div>
       </div>
       <div class="row">
@@ -183,6 +166,21 @@ const stepTemplates = {
           <div class="invalid-feedback">Informe o modelo.</div>
         </div>
         <div class="col-md-4 mb-3">
+          <label class="form-label">Ano *</label>
+          <input id="veiAno" type="number" class="form-control" min="1980" max="2099" required />
+          <div class="invalid-feedback">Informe o ano.</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Uso *</label>
+          <select id="veiUso" class="form-select" required>
+            <option value="">Selecione</option>
+            <option>Particular</option> <option>Comercial</option> <option>Aplicativo</option>
+          </select>
+          <div class="invalid-feedback">Informe o uso.</div>
+        </div>
+        <div class="col-md-6 mb-3">
           <label class="form-label">Lotação *</label>
           <input id="veiLotacao" type="number" class="form-control" min="1" required />
           <div class="invalid-feedback">Informe a lotação.</div>
@@ -246,7 +244,7 @@ const stepTemplates = {
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">CNPJ *</label>
-            <input id="segCNPJ" class="form-control" placeholder="00.000.000/0000-00" />
+            <input id="segCNPJ" class="form-control" placeholder="00000000000000" />
             <div class="invalid-feedback">CNPJ inválido.</div>
           </div>
         </div>
@@ -442,6 +440,11 @@ const stepTemplates = {
               <div class="invalid-feedback">Informe a lotação.</div>
             </div>
           </div>
+          <div class="mb-3">
+            <label class="form-label">Upload CRLV (PDF/JPG/PNG) *</label>
+            <input id="endossoVeiculoCRLV" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
+            <div class="invalid-feedback">Faça o upload do CRLV.</div>
+          </div>
           <div class="btn-group-navigation">
             <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
             <button type="button" class="btn btn-primary" onclick="nextStep()"><i class="bi bi-arrow-right"></i> Próximo</button>
@@ -520,20 +523,122 @@ const stepTemplates = {
             <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
           </div>
         </div>`,
+      endosso_alteracao_contato: `
+        <div class="form-step" data-step="2">
+          <h4 class="mb-4">Alteração de Contato</h4>
+          <p class="text-muted">Preencha apenas os campos que deseja alterar.</p>
+          <div class="mb-3">
+            <label class="form-label">Novo Endereço</label>
+            <input id="endossoNovoEndereco" class="form-control" />
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Novo E-mail</label>
+              <input id="endossoNovoEmail" type="email" class="form-control" />
+              <div class="invalid-feedback">E-mail inválido.</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Novo Telefone</label>
+              <input id="endossoNovoTelefone" class="form-control" placeholder="(00) 00000-0000" />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Upload Comprovante de Endereço (PDF/JPG/PNG) *</label>
+            <input id="endossoNovoEnderecoComp" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
+            <div class="invalid-feedback">Faça o upload do comprovante de endereço.</div>
+          </div>
+          <div class="btn-group-navigation">
+            <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
+            <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
+          </div>
+        </div>`,
+      endosso_correcao_cadastral: `
+        <div class="form-step" data-step="2">
+          <h4 class="mb-4">Correção de Dados Cadastrais</h4>
+          <div class="mb-3">
+            <label class="form-label">Tipo de pessoa *</label>
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="tipoPessoa" id="pf" value="pf" required checked />
+                <label class="form-check-label" for="pf">Pessoa Física</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="tipoPessoa" id="pj" value="pj" required />
+                <label class="form-check-label" for="pj">Pessoa Jurídica</label>
+              </div>
+            </div>
+            <div class="invalid-feedback">Escolha PF ou PJ.</div>
+          </div>
+          <div id="blocoPF">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Nome completo *</label>
+                <input id="segNomePF" class="form-control" />
+                <div class="invalid-feedback">Informe o nome.</div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">CPF *</label>
+                <input id="segCPF" class="form-control" placeholder="000.000.000-00" />
+                <div class="invalid-feedback">CPF inválido.</div>
+              </div>
+            </div>
+          </div>
+          <div id="blocoPJ" style="display: none">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Razão Social *</label>
+                <input id="segRazao" class="form-control" />
+                <div class="invalid-feedback">Informe a razão social.</div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">CNPJ *</label>
+                <input id="segCNPJ" class="form-control" placeholder="00000000000000" />
+                <div class="invalid-feedback">CNPJ inválido.</div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Upload CNH do Segurado (PDF/JPG/PNG) *</label>
+            <input id="endossoCorrecaoCNH" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
+            <div class="invalid-feedback">Faça o upload da CNH.</div>
+          </div>
+          <div class="btn-group-navigation">
+            <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
+            <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
+          </div>
+        </div>`,
+
   renovacao_confirmar: `
     <div class="form-step" data-step="2">
       <h4 class="mb-4">Confirmar Dados</h4>
-      <p>Verifique os dados carregados da apólice anterior e confirme.</p>
+      <p class="text-muted">Verifique os dados da apólice anterior e do segurado antes de confirmar.</p>
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Dados da Apólice Anterior</h5>
+          <p><strong>Número da Apólice:</strong> <span id="displayRenovApolice"></span></p>
+          <p><strong>Vencimento:</strong> <span id="displayRenovVencimento"></span></p>
+          <p><strong>Seguradora:</strong> <span id="displayRenovSeguradora"></span></p>
+          <p id="displayRenovOutraSeguradora" style="display: none;"><strong>Nome da Outra Seguradora:</strong> <span id="displayRenovOutraSeguradoraNome"></span></p>
+        </div>
+      </div>
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Dados do Segurado</h5>
+          <p><strong>Tipo de Pessoa:</strong> <span id="displaySegTipoPessoa"></span></p>
+          <p><strong>Nome/Razão Social:</strong> <span id="displaySegNomeRazao"></span></p>
+          <p><strong>CPF/CNPJ:</strong> <span id="displaySegDocumento"></span></p>
+        </div>
+      </div>
       <div class="form-check mb-3">
         <input class="form-check-input" type="checkbox" id="renovConfirm" required />
         <label class="form-check-label" for="renovConfirm">Os dados estão corretos. *</label>
-        <div class="invalid-feedback">Confirme os dados.</div>
+        <div class="invalid-feedback">Você deve confirmar que os dados estão corretos.</div>
       </div>
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
         <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Finalizar Renovação</button>
       </div>
-            </div>`,
+    </div>`,
           endosso_dados_condutor_1: `
             <div class="form-step" data-step="4">
               <h4 class="mb-4">Dados do Novo Condutor Auxiliar</h4>
@@ -545,7 +650,7 @@ const stepTemplates = {
                 </div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">CPF *</label>
-                  <input id="endossoCondutor1CPF" class="form-control" placeholder="000.000.000-00" required />
+                  <input id="endossoCondutor1CPF" class="form-control" placeholder="00000000000" required />
                   <div class="invalid-feedback">CPF inválido.</div>
                 </div>
               </div>
@@ -566,7 +671,7 @@ const stepTemplates = {
                 </div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">CPF *</label>
-                  <input id="endossoCondutor1CPF" class="form-control" placeholder="000.000.000-00" required />
+                  <input id="endossoCondutor1CPF" class="form-control" placeholder="000000000-00" required />
                   <div class="invalid-feedback">CPF inválido.</div>
                 </div>
               </div>
@@ -580,7 +685,7 @@ const stepTemplates = {
                 </div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">CPF *</label>
-                  <input id="endossoCondutor2CPF" class="form-control" placeholder="000.000.000-00" required />
+                  <input id="endossoCondutor2CPF" class="form-control" placeholder="00000000000" required />
                   <div class="invalid-feedback">CPF inválido.</div>
                 </div>
               </div>
@@ -697,7 +802,7 @@ const fluxosConfig = {
       { label: "Produtos", template: "produtos" },
       { label: "Coberturas", template: "coberturas" },
       { label: "Parcelas", template: "parcelas" },
-      { label: "Solicitante", template: "solicitante" },
+      { label: "Estipulante", template: "Estipulante" },
       { label: "Veículo", template: "veiculo" },
       { label: "Segurado", template: "segurado" },
       { label: "Info & Consent.", template: "consentimento" },
@@ -713,35 +818,38 @@ const fluxosConfig = {
       { label: "Confirmar", template: "renovacao_confirmar" },
     ],
   },
-        endosso: {
-          description: "Siga as etapas para solicitar o Endosso",
-          steps: [
-            { label: "Tipo", template: "tipo" },
-            { label: "Dados", template: "endosso_dados" },
-          ],
-        },
-              segunda_via: {
-                description: "Solicite 2ª Via de Documentos ou Posição Financeira",
-                steps: [
-                  { label: "Tipo", template: "tipo" },
-                  { label: "Dados", template: "segunda_via_docs" },
-                  { label: "Enviar", template: "enviar" },
-                ],
-              },
-              financeiro_regularizacao: {
-                description: "Solicite Regularização Financeira",
-                steps: [
-                  { label: "Tipo", template: "tipo" },
-                  { label: "Dados", template: "financeiro_regularizacao" },
-                  { label: "Enviar", template: "enviar" },
-                ],
-              },
-            };// =================================================================
+  endosso: {
+    description: "Siga as etapas para solicitar o Endosso",
+    steps: [
+      { label: "Tipo", template: "tipo" },
+      { label: "Dados", template: "endosso_dados" },
+    ],
+  },
+  segunda_via: {
+    description: "Solicite 2ª Via de Documentos ou Posição Financeira",
+    steps: [
+      { label: "Tipo", template: "tipo" },
+      { label: "Dados", template: "segunda_via_docs" },
+      { label: "Enviar", template: "enviar" },
+    ],
+  },
+  financeiro_regularizacao: {
+    description: "Solicite Regularização Financeira",
+    steps: [
+      { label: "Tipo", template: "tipo" },
+      { label: "Dados", template: "financeiro_regularizacao" },
+      { label: "Enviar", template: "enviar" },
+    ],
+  },
+};
+
+// =================================================================
 // 3. ESTADO GLOBAL E RENDERIZAÇÃO
 // =================================================================
 let currentStep = 0;
 let currentFluxo = "";
 let activeSteps = []; // Array de etapas ativas para o fluxo atual
+let formDataStorage = {}; // Objeto para armazenar os dados do formulário
 
 function renderizarFluxo(tipo) {
   currentFluxo = tipo;
@@ -827,6 +935,11 @@ function updateProgress() {
   document.querySelectorAll(".form-step").forEach((step) => {
     step.classList.toggle("active", Number(step.dataset.step) === currentStep);
   });
+
+  // Popula a etapa de confirmação da renovação se for a etapa ativa
+  if (currentFluxo === 'renovacao' && activeSteps[currentStep]?.template === 'renovacao_confirmar') {
+    populateRenovacaoConfirmacao();
+  }
 }
 
 // =================================================================
@@ -877,12 +990,17 @@ function nextStep() {
 
       if (tipoEndosso === 'substituicao_veiculo') {
         stepsToAdd.push({ label: "Veículo", template: "endosso_veiculo" });
-        stepsToAdd.push({ label: "Enviar", template: "enviar" });
       } else if (tipoEndosso === 'inclusao_condutor') {
         stepsToAdd.push({ label: "Condutores", template: "endosso_qa_inicial" });
-      } else {
-        stepsToAdd.push({ label: "Enviar", template: "enviar" });
+      } else if (tipoEndosso === 'alteracao_endereco') {
+        stepsToAdd.push({ label: "Contato", template: "endosso_alteracao_contato" });
+      } else if (tipoEndosso === 'correcao_cadastral') {
+        stepsToAdd.push({ label: "Correção", template: "endosso_correcao_cadastral" });
       }
+
+      // Todos os sub-fluxos de endosso terminam com a etapa de envio
+      stepsToAdd.push({ label: "Enviar", template: "enviar" });
+
     } else if (currentStepConfig.template === 'endosso_qa_inicial') {
       needsDynamicRender = true;
       const qaInicial = document.getElementById('endossoQaInicial').value;
@@ -1032,11 +1150,14 @@ const maskPlacaBR = (v) => v.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 7)
 // 6. LISTENERS E INICIALIZAÇÃO
 // =================================================================
 function addListenersAndMasks() {
-  // Submissão
   const form = document.getElementById("multiStepForm");
-  // Remove listener antigo para evitar duplicatas
-  form.replaceWith(form.cloneNode(true)); 
-  document.getElementById("multiStepForm").addEventListener("submit", async function (e) {
+
+  // Para evitar listeners duplicados, removemos o antigo antes de adicionar um novo
+  if (window.formSubmitHandler) {
+    form.removeEventListener("submit", window.formSubmitHandler);
+  }
+
+  window.formSubmitHandler = async function (e) {
     e.preventDefault();
     if (!validateStep(currentStep)) return;
 
@@ -1050,23 +1171,17 @@ function addListenersAndMasks() {
     submitButton.disabled = true;
     submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...';
 
-    // --- Lógica de Múltiplos Fluxos ---
     const powerAutomateUrls = {
       nova: 'https://e1b82d98c0c4efb7972bac26ccc599.ed.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/bb0741a77ad2482695083f8eea76af57/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=CCQQvWjQfkRO26M9m1WVe5UoFX1HY5pFR8svJERAIbo',
-
       renovacao: 'https://e1b82d98c0c4efb7972bac26ccc599.ed.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/284cd1c4bf544f5f8055542fec59e994/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WwYcTkLu_T9Eql_7xF4KomGHvNCuewnGP1kXdXLIDDg',
-
       endosso: 'URL_DO_FLUXO_DE_ENDOSSO_AQUI',
-
       segunda_via: 'URL_DO_FLUXO_DE_SEGUNDA_VIA_AQUI',
-      
       financeiro_regularizacao: 'URL_DO_FLUXO_DE_FINANCEIRO_REGULARIZACAO_AQUI',
     };
 
     let formData = {};
     let targetUrl = powerAutomateUrls[currentFluxo];
 
-    // Coleta dados baseado no fluxo atual
     switch (currentFluxo) {
       case 'nova':
         formData = {
@@ -1088,6 +1203,7 @@ function addListenersAndMasks() {
           veiUso: document.getElementById('veiUso')?.value,
           veiPlaca: document.getElementById('veiPlaca')?.value,
           veiChassi: document.getElementById('veiChassi')?.value,
+          veiRenavam: document.getElementById('veiRenavam')?.value,
           veiAno: (parseInt(document.getElementById('veiAno')?.value, 10) || 0),
           veiFab: document.getElementById('veiFab')?.value,
           veiModelo: document.getElementById('veiModelo')?.value,
@@ -1103,7 +1219,6 @@ function addListenersAndMasks() {
           termos: document.getElementById('termos')?.checked,
         };
         break;
-
       case 'renovacao':
         formData = {
           tipo: currentFluxo,
@@ -1119,37 +1234,63 @@ function addListenersAndMasks() {
           confirmado: document.getElementById('renovConfirm')?.checked,
         };
         break;
-
       case 'endosso':
         formData = {
           tipo: currentFluxo,
-          // Etapa 1: Dados Iniciais
           nomeOuRazao: document.getElementById('endossoNome')?.value,
           documento: document.getElementById('endossoDocumento')?.value,
           seguradora: document.getElementById('endossoSeguradora')?.value,
           outraSeguradora: document.getElementById('endossoOutraSeguradoraNome')?.value || "",
-          apoliceAPP: document.getElementById('endossoApoliceAPP')?.value, // Pode ser null
-          apoliceRCF: document.getElementById('endossoApoliceRCF')?.value, // Pode ser null
+          apoliceAPP: document.getElementById('endossoApoliceAPP')?.value,
+          apoliceRCF: document.getElementById('endossoApoliceRCF')?.value,
           tipoSolicitacao: document.getElementById('endossoTipo')?.value,
-          // Etapa 2 (dinâmica): Veículo
-          placaAtual: document.getElementById('endossoVeiculoPlacaAtual')?.value,
-          placaNova: document.getElementById('endossoVeiculoPlacaNova')?.value,
-          chassi: document.getElementById('endossoVeiculoChassi')?.value,
-          renavam: document.getElementById('endossoVeiculoRenavam')?.value,
-          fabricante: document.getElementById('endossoVeiculoFab')?.value,
-          modelo: document.getElementById('endossoVeiculoModelo')?.value,
-          ano: document.getElementById('endossoVeiculoAno')?.value,
-          lotacao: parseInt(document.getElementById('endossoVeiculoLotacao')?.value, 10) || 0,
-          // Etapa 3 (dinâmica): Condutores
-          qaInicial: document.getElementById('endossoQaInicial')?.value,
-          acaoCondutor: document.getElementById('endossoAcao')?.value,
-          condutor1Nome: document.getElementById('endossoCondutor1Nome')?.value,
-          condutor1CPF: document.getElementById('endossoCondutor1CPF')?.value,
-          condutor2Nome: document.getElementById('endossoCondutor2Nome')?.value,
-          condutor2CPF: document.getElementById('endossoCondutor2CPF')?.value,
         };
+        switch (formData.tipoSolicitacao) {
+          case 'substituicao_veiculo':
+            Object.assign(formData, {
+              placaAtual: document.getElementById('endossoVeiculoPlacaAtual')?.value,
+              placaNova: document.getElementById('endossoVeiculoPlacaNova')?.value,
+              chassi: document.getElementById('endossoVeiculoChassi')?.value,
+              renavam: document.getElementById('endossoVeiculoRenavam')?.value,
+              fabricante: document.getElementById('endossoVeiculoFab')?.value,
+              modelo: document.getElementById('endossoVeiculoModelo')?.value,
+              ano: document.getElementById('endossoVeiculoAno')?.value,
+              lotacao: parseInt(document.getElementById('endossoVeiculoLotacao')?.value, 10) || 0,
+              crlv: document.getElementById('endossoVeiculoCRLV')?.files[0]?.name || "",
+            });
+            break;
+          case 'inclusao_condutor':
+            Object.assign(formData, {
+              qaInicial: document.getElementById('endossoQaInicial')?.value,
+              acaoCondutor: document.getElementById('endossoAcao')?.value,
+              condutor1Nome: document.getElementById('endossoCondutor1Nome')?.value,
+              condutor1CPF: document.getElementById('endossoCondutor1CPF')?.value,
+              condutor1CNH: document.getElementById('endossoCondutor1CNH')?.files[0]?.name || "",
+              condutor2Nome: document.getElementById('endossoCondutor2Nome')?.value,
+              condutor2CPF: document.getElementById('endossoCondutor2CPF')?.value,
+              condutor2CNH: document.getElementById('endossoCondutor2CNH')?.files[0]?.name || "",
+            });
+            break;
+          case 'alteracao_endereco':
+            Object.assign(formData, {
+              novoEndereco: document.getElementById('endossoNovoEndereco')?.value,
+              novoEmail: document.getElementById('endossoNovoEmail')?.value,
+              novoTelefone: document.getElementById('endossoNovoTelefone')?.value,
+              comprovanteEndereco: document.getElementById('endossoNovoEnderecoComp')?.files[0]?.name || "",
+            });
+            break;
+          case 'correcao_cadastral':
+            Object.assign(formData, {
+              tipoPessoa: document.querySelector('input[name="tipoPessoa"]:checked')?.value,
+              segNomePF: document.getElementById('segNomePF')?.value,
+              segCPF: document.getElementById('segCPF')?.value,
+              segRazao: document.getElementById('segRazao')?.value,
+              segCNPJ: document.getElementById('segCNPJ')?.value,
+              cnhSegurado: document.getElementById('endossoCorrecaoCNH')?.files[0]?.name || "",
+            });
+            break;
+        }
         break;
-
       case 'segunda_via':
         formData = {
           tipo: currentFluxo,
@@ -1161,7 +1302,6 @@ function addListenersAndMasks() {
           observacoes: document.getElementById('segundaViaObs')?.value,
         };
         break;
-
       case 'financeiro_regularizacao':
         formData = {
           tipo: currentFluxo,
@@ -1175,7 +1315,6 @@ function addListenersAndMasks() {
           observacoes: document.getElementById('finRegObs')?.value,
         };
         break;
-
       default:
         alert("Tipo de solicitação não configurado para envio.");
         submitButton.disabled = false;
@@ -1195,15 +1334,13 @@ function addListenersAndMasks() {
     try {
       const response = await fetch(targetUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
       if (response.ok) {
         console.log(`Formulário do fluxo '${currentFluxo}' enviado com sucesso!`);
-        this.style.display = "none";
+        document.getElementById("multiStepForm").style.display = "none";
         document.getElementById("successMessageText").textContent = `Recebemos sua ${tipoText}. Entraremos em contato em breve.`;
         document.getElementById("successMessage").classList.add("active");
       } else {
@@ -1216,7 +1353,9 @@ function addListenersAndMasks() {
       submitButton.disabled = false;
       submitButton.innerHTML = originalButtonText;
     }
-  });
+  };
+
+  form.addEventListener("submit", window.formSubmitHandler);
 
   // Lógica condicional da UI
   const produtosSelect = document.getElementById("produtos");
@@ -1233,21 +1372,6 @@ function addListenersAndMasks() {
   const appSelect = document.getElementById("valorAPP_select");
   if (appSelect) appSelect.addEventListener("change", handleAppVisibility);
   
-  // Máscaras
-  const on = (id, evt, fn) => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener(evt, (e) => e.target.value = fn(e.target.value));
-  };
-  on("solTelefone", "input", maskPhone);
-  on("solDocumento", "input", maskDocAuto);
-  on("endossoDocumento", "input", maskDocAuto);
-  on("segundaViaDocumento", "input", maskDocAuto);
-  on("finRegDocumento", "input", maskDocAuto);
-  on("segCPF", "input", maskCPF);
-  on("endossoCondutor1CPF", "input", maskCPF);
-  on("endossoCondutor2CPF", "input", maskCPF);
-  on("segCNPJ", "input", maskCNPJ);
-  on("veiPlaca", "input", maskPlacaBR);
 
   // Remove erro on-input
   document.querySelectorAll("input, select, textarea").forEach((input) => {
@@ -1263,6 +1387,11 @@ function addListenersAndMasks() {
   toggleSegundaViaOutro();
   handleRcfVisibility();
   handleAppVisibility();
+
+  // Popula a etapa de confirmação da renovação se for a etapa ativa
+  if (activeSteps[currentStep]?.template === 'renovacao_confirmar') {
+    populateRenovacaoConfirmacao();
+  }
 }
 
 function handleAppVisibility() {
@@ -1393,6 +1522,36 @@ function applyPessoaTipo() {
   document.getElementById("segCPF").required = pf;
   document.getElementById("segRazao").required = !pf;
   document.getElementById("segCNPJ").required = !pf;
+}
+
+function populateRenovacaoConfirmacao() {
+  // Dados da Apólice Anterior
+  document.getElementById('displayRenovApolice').textContent = document.getElementById('renovApolice')?.value || 'Não informado';
+  document.getElementById('displayRenovVencimento').textContent = document.getElementById('renovVencimento')?.value || 'Não informado';
+  
+  const seguradoraVencendo = document.getElementById('renovSeguradora')?.value;
+  document.getElementById('displayRenovSeguradora').textContent = seguradoraVencendo === 'outra' ? 'Outra' : (seguradoraVencendo || 'Não informado');
+
+  const displayOutraSeguradora = document.getElementById('displayRenovOutraSeguradora');
+  const displayOutraSeguradoraNome = document.getElementById('displayRenovOutraSeguradoraNome');
+  if (seguradoraVencendo === 'outra' && displayOutraSeguradora && displayOutraSeguradoraNome) {
+    displayOutraSeguradora.style.display = 'block';
+    displayOutraSeguradoraNome.textContent = document.getElementById('outraSeguradoraNome')?.value || 'Não informado';
+  } else if (displayOutraSeguradora) {
+    displayOutraSeguradora.style.display = 'none';
+  }
+
+  // Dados do Segurado
+  const tipoPessoa = document.querySelector('input[name="tipoPessoa"]:checked')?.value;
+  document.getElementById('displaySegTipoPessoa').textContent = tipoPessoa === 'pf' ? 'Pessoa Física' : 'Pessoa Jurídica';
+
+  if (tipoPessoa === 'pf') {
+    document.getElementById('displaySegNomeRazao').textContent = document.getElementById('segNomePF')?.value || 'Não informado';
+    document.getElementById('displaySegDocumento').textContent = document.getElementById('segCPF')?.value || 'Não informado';
+  } else {
+    document.getElementById('displaySegNomeRazao').textContent = document.getElementById('segRazao')?.value || 'Não informado';
+    document.getElementById('displaySegDocumento').textContent = document.getElementById('segCNPJ')?.value || 'Não informado';
+  }
 }
 
 // Listener inicial para o tipo de solicitação
