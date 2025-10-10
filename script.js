@@ -2,6 +2,28 @@
 // 1. TEMPLATES PARA CADA ETAPA
 // =================================================================
 const stepTemplates = {
+  tipo_solicitante: `
+    <div class="form-step" data-step="0">
+      <h4 class="mb-4">Identificação</h4>
+      <div class="mb-3">
+        <label for="tipoSolicitante" class="form-label">Você é? *</label>
+        <select id="tipoSolicitante" class="form-select" required>
+          <option value="">Selecione</option>
+          <option value="segurado">Segurado</option>
+          <option value="estipulante">Estipulante</option>
+          <option value="colaborador">Colaborador</option>
+        </select>
+        <div class="invalid-feedback">Informe o tipo de solicitante.</div>
+      </div>
+      <div class="btn-group-navigation">
+        <button type="button" class="btn btn-secondary" onclick="resetForm()">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">
+          Próximo <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>`,
   tipo: `
     <div class="form-step" data-step="0">
       <h4 class="mb-4">Tipo de Solicitação</h4>
@@ -10,6 +32,20 @@ const stepTemplates = {
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="resetForm()">
           <i class="bi bi-arrow-left"></i> Alterar Tipo
+        </button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">
+          Próximo <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>`,
+  tipo_para_nova: `
+    <div class="form-step">
+      <h4 class="mb-4">Tipo de Solicitação</h4>
+      <p>Você selecionou: <strong><span id="tipoSelecionado">Nova Transmissão</span></strong>.</p>
+      <p class="text-muted">Clique em próximo para continuar ou volte para alterar o tipo.</p>
+      <div class="btn-group-navigation">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+          <i class="bi bi-arrow-left"></i> Voltar
         </button>
         <button type="button" class="btn btn-primary" onclick="nextStep()">
           Próximo <i class="bi bi-arrow-right"></i>
@@ -76,6 +112,9 @@ const stepTemplates = {
   parcelas: `
     <div class="form-step" data-step="3">
       <h4 class="mb-4">Parcelamento</h4>
+      <div id="observacaoAPP" class="alert alert-info" style="display: none;">
+        <strong>Atenção:</strong> O produto APP (Acidentes Pessoais de Passageiros) é sempre pago à vista. O parcelamento se aplica apenas ao RCF.
+      </div>
       <div class="row">
         <div class="col-md-12 mb-3">
           <label for="qtdParcelas" class="form-label">Quantidade de parcelas *</label>
@@ -95,9 +134,179 @@ const stepTemplates = {
         </button>
       </div>
     </div>`,
-  Estipulante: `
+  estipulante: `
+    <div class="form-step" data-step="5">
+      <h4 class="mb-4">Dados do estipulante</h4>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Nome *</label>
+          <input id="estipNome" class="form-control" required />
+          <div class="invalid-feedback">Informe o nome.</div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Nome Social</label>
+          <input id="estipNomeSocial" class="form-control" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="estipTipoPessoa" class="form-label">Tipo de pessoa *</label>
+          <select id="estipTipoPessoa" class="form-select" required>
+            <option value="">Selecione</option>
+            <option value="pf">Pessoa Física</option>
+            <option value="pj">Pessoa Jurídica</option>
+          </select>
+          <div class="invalid-feedback">Informe o tipo</div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">CPF/CNPJ *</label>
+          <input id="estipDocumento" class="form-control" placeholder="CPF ou CNPJ" required />
+          <div class="invalid-feedback">Documento inválido.</div>
+        </div>
+      </div>
+      <div class="row">
+          <div class="col-md-4 mb-3">
+              <label class="form-label">Data de Nascimento *</label>
+              <input id="estipDataNascimento" type="date" class="form-control" required />
+              <div class="invalid-feedback">Informe a data de nascimento.</div>
+          </div>
+          <div class="col-md-4 mb-3">
+              <label class="form-label">Estado Civil *</label>
+              <select id="estipEstadoCivil" class="form-select" required>
+                  <option value="">Selecione</option>
+                  <option>Solteiro(a)</option>
+                  <option>Casado(a)</option>
+                  <option>Divorciado(a)</option>
+                  <option>Viúvo(a)</option>
+              </select>
+              <div class="invalid-feedback">Informe o estado civil.</div>
+          </div>
+          <div class="col-md-4 mb-3">
+              <label class="form-label">Sexo *</label>
+              <select id="estipSexo" class="form-select" required>
+                  <option value="">Selecione</option>
+                  <option>Masculino</option>
+                  <option>Feminino</option>
+              </select>
+              <div class="invalid-feedback">Informe o sexo.</div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-4 mb-3">
+              <label class="form-label">Tipo Identidade *</label>
+              <select id="tipoIdentidade" class="form-select" required>
+                  <option value="">Selecione</option>
+                  <option>CNH</option>
+                  <option>CREA</option>
+                  <option>MILITAR</option>
+                  <option>CREA</option>
+                  <option>ORDEM ADVOG BRASIL</option>
+                  <option>PASSAPORTE</option>
+                  <option>RG</option>
+                  <option>OUTROS</option>
+              </select>
+              <div class="invalid-feedback">Informe o tipo de identidade.</div>
+          </div>
+          <div class="col-md-4 mb-3">
+              <label class="form-label">Nº Identidade *</label>
+              <input id="estipNumIdentidade" class="form-control" required />
+              <div class="invalid-feedback">Informe o nº da identidade.</div>
+          </div>
+          <div class="col-md-4 mb-3">
+              <label class="form-label">Órgão Emissor *</label>
+              <input id="estipOrgaoEmissor" class="form-control" required />
+              <div class="invalid-feedback">Informe o órgão emissor.</div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-6 mb-3">
+              <label class="form-label">Data de Emissão *</label>
+              <input id="estipDataEmissao" type="date" class="form-control" required />
+              <div class="invalid-feedback">Informe a data de emissão.</div>
+          </div>
+          <div class="col-md-6 mb-3">
+              <label class="form-label">Estrangeiro? *</label>
+              <div class="d-flex gap-3">
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="estipEstrangeiro" id="estipEstrangeiroSim" value="sim" required />
+                      <label class="form-check-label" for="estipEstrangeiroSim">Sim</label>
+                  </div>
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="estipEstrangeiro" id="estipEstrangeiroNao" value="nao" required checked />
+                      <label class="form-check-label" for="estipEstrangeiroNao">Não</label>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="estipBlocoEstrangeiro" style="display: none;">
+          <div class="row">
+              <div class="col-md-4 mb-3">
+                  <label class="form-label">País</label>
+                  <input id="estipPais" class="form-control" />
+              </div>
+              <div class="col-md-4 mb-3">
+                  <label class="form-label">Tempo no País</label>
+                  <input id="estipTempoPais" class="form-control" />
+              </div>
+              <div class="col-md-4 mb-3">
+                  <label class="form-label">País de Residência</label>
+                  <input id="estipPaisResidencia" class="form-control" />
+              </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-6 mb-3">
+              <label class="form-label">Atividade Principal</label>
+              <input id="estipAtividadePrincipal" class="form-control" />
+          </div>
+          <div class="col-md-6 mb-3">
+              <label class="form-label">Faixa de Renda Mensal</label>
+              <input id="estipFaixaRenda" class="form-control" />
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12 mb-3">
+              <label class="form-label">Pessoa Politicamente Exposta? *</label>
+              <div class="d-flex gap-3">
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="estipPPE" id="estipPPESim" value="sim" required />
+                      <label class="form-check-label" for="estipPPESim">Sim</label>
+                  </div>
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="estipPPE" id="estipPPENao" value="nao" required checked />
+                      <label class="form-check-label" for="estipPPENao">Não</label>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="estipBlocoPPE" style="display: none;">
+          <div class="row">
+              <div class="col-md-4 mb-3">
+                  <label class="form-label">Nome</label>
+                  <input id="estipPPENome" class="form-control" />
+              </div>
+              <div class="col-md-4 mb-3">
+                  <label class="form-label">CPF</label>
+                  <input id="estipPPECPF" class="form-control" />
+              </div>
+              <div class="col-md-4 mb-3">
+                  <label class="form-label">Grau de Relacionamento</label>
+                  <input id="estipPPEGrauRelacionamento" class="form-control" />
+              </div>
+          </div>
+      </div>
+      <div class="btn-group-navigation">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">
+          Próximo <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>`,
+  solicitante: `
     <div class="form-step" data-step="4">
-      <h4 class="mb-4">Dados do Estipulante</h4>
+      <h4 class="mb-4">Dados do solicitante</h4>
       <div class="mb-3">
         <label class="form-label">Nome *</label>
         <input id="solNome" class="form-control" required />
@@ -796,17 +1005,10 @@ const stepTemplates = {
 // =================================================================
 const fluxosConfig = {
   nova: {
-    description: "Preencha os dados em 9 etapas (Nova Transmissão)",
+    description: "Preencha os dados para Nova Transmissão",
     steps: [
       { label: "Tipo", template: "tipo" },
-      { label: "Produtos", template: "produtos" },
-      { label: "Coberturas", template: "coberturas" },
-      { label: "Parcelas", template: "parcelas" },
-      { label: "Estipulante", template: "Estipulante" },
-      { label: "Veículo", template: "veiculo" },
-      { label: "Segurado", template: "segurado" },
-      { label: "Info & Consent.", template: "consentimento" },
-      { label: "Enviar", template: "enviar" },
+      { label: "Identificação", template: "tipo_solicitante" },
     ],
   },
   renovacao: {
@@ -981,6 +1183,36 @@ function nextStep() {
   let needsDynamicRender = false;
   let stepsToAdd = [];
 
+  if (currentFluxo === 'nova' && currentStepConfig.template === 'tipo_solicitante') {
+    needsDynamicRender = true;
+    const tipoSolicitante = document.getElementById('tipoSolicitante').value;
+
+    // const stepsAfterTipoSolicitante = [
+    //     { label: "Tipo", template: "tipo_para_nova" },  
+    // ];
+
+    const baseStepsAfter = [
+        { label: "Produtos", template: "produtos" },
+        { label: "Coberturas", template: "coberturas" },
+        { label: "Parcelas", template: "parcelas"},
+        { label: "Veículo", template: "veiculo" },
+        { label: "Info & Consent.", template: "consentimento" },
+        { label: "Enviar", template: "enviar" }
+    ];
+
+    let dynamicSteps = [];
+    if (tipoSolicitante === 'segurado') {
+        dynamicSteps.push({ label: "Segurado", template: "segurado" });
+    } else if (tipoSolicitante === 'estipulante') {
+        dynamicSteps.push({ label: "Estipulante", template: "estipulante" });
+        dynamicSteps.push({ label: "Segurado", template: "segurado" });
+    } else if (tipoSolicitante === 'colaborador') {
+        dynamicSteps.push({ label: "Solicitante", template: "solicitante" });
+    }
+
+    activeSteps.splice(currentStep + 1, activeSteps.length - currentStep - 1, ...dynamicSteps, ...baseStepsAfter);
+  }
+
   // Lógica para adicionar etapas dinâmicas
   if (currentFluxo === 'endosso') {
     if (currentStepConfig.template === 'endosso_dados') {
@@ -1140,11 +1372,6 @@ const validaCNPJ = (cnpj) => {
   resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
   return resultado == digitos.charAt(1);
 };
-const maskCPF = (v) => v.replace(/\\D/g, "").replace(/(\\d{3})(\\d)/, "$1.$2").replace(/(\\d{3})(\\d)/, "$1.$2").replace(/(\\d{3})(\\d{1,2})$/, "$1-$2").slice(0, 14);
-const maskCNPJ = (v) => v.replace(/\\D/g, "").replace(/^(\\d{2})(\\d)/, "$1.$2").replace(/^(\\d{2})\\.(\\d{3})(\\d)/, "$1.$2.$3").replace(/\\.(\\d{3})(\\d)/, ".$1/$2").replace(/(\\d{4})(\\d)/, "$1-$2").slice(0, 18);
-const maskPhone = (v) => v.replace(/\\D/g, "").replace(/(\\d{2})(\\d)/, "($1) $2").replace(/(\\d{5})(\\d)/, "$1-$2").slice(0, 15);
-const maskDocAuto = (v) => onlyDigits(v).length <= 11 ? maskCPF(v) : maskCNPJ(v);
-const maskPlacaBR = (v) => v.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 7);
 
 // =================================================================
 // 6. LISTENERS E INICIALIZAÇÃO
@@ -1171,20 +1398,21 @@ function addListenersAndMasks() {
     submitButton.disabled = true;
     submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...';
 
-    const powerAutomateUrls = {
-      nova: 'https://e1b82d98c0c4efb7972bac26ccc599.ed.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/bb0741a77ad2482695083f8eea76af57/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=CCQQvWjQfkRO26M9m1WVe5UoFX1HY5pFR8svJERAIbo',
-      renovacao: 'https://e1b82d98c0c4efb7972bac26ccc599.ed.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/284cd1c4bf544f5f8055542fec59e994/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WwYcTkLu_T9Eql_7xF4KomGHvNCuewnGP1kXdXLIDDg',
-      endosso: 'URL_DO_FLUXO_DE_ENDOSSO_AQUI',
-      segunda_via: 'URL_DO_FLUXO_DE_SEGUNDA_VIA_AQUI',
-      financeiro_regularizacao: 'URL_DO_FLUXO_DE_FINANCEIRO_REGULARIZACAO_AQUI',
-    };
+    // const powerAutomateUrls = {
+    //   nova: 'https://e1b82d98c0c4efb7972bac26ccc599.ed.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/bb0741a77ad2482695083f8eea76af57/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=CCQQvWjQfkRO26M9m1WVe5UoFX1HY5pFR8svJERAIbo',
+    //   renovacao: 'https://e1b82d98c0c4efb7972bac26ccc599.ed.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/284cd1c4bf544f5f8055542fec59e994/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WwYcTkLu_T9Eql_7xF4KomGHvNCuewnGP1kXdXLIDDg',
+    //   endosso: 'URL_DO_FLUXO_DE_ENDOSSO_AQUI',
+    //   segunda_via: 'URL_DO_FLUXO_DE_SEGUNDA_VIA_AQUI',
+    //   financeiro_regularizacao: 'URL_DO_FLUXO_DE_FINANCEIRO_REGULARIZACAO_AQUI',
+    // };
 
     let formData = {};
-    let targetUrl = powerAutomateUrls[currentFluxo];
+    let targetUrl = 'https://e1b82d98c0c4efb7972bac26ccc599.ed.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/284cd1c4bf544f5f8055542fec59e994/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WwYcTkLu_T9Eql_7xF4KomGHvNCuewnGP1kXdXLIDDg';
 
     switch (currentFluxo) {
       case 'nova':
         formData = {
+          tipoSolicitante: document.getElementById('tipoSolicitante')?.value,
           tipo: currentFluxo,
           produtos: document.getElementById('produtos')?.value,
           valorRCF: (parseInt(document.getElementById('valorRCF_select')?.value === 'outro' 
@@ -1194,7 +1422,6 @@ function addListenersAndMasks() {
                 ? document.getElementById('valorAPP_outro')?.value 
                 : document.getElementById('valorAPP_select')?.value, 10) || 0),
           qtdParcelas: (parseInt(document.getElementById('qtdParcelas')?.value, 10) || 0),
-          vencimento: (parseInt(document.getElementById('vencimento')?.value, 10) || 0),
           solNome: document.getElementById('solNome')?.value,
           solEmail: document.getElementById('solEmail')?.value,
           solTelefone: document.getElementById('solTelefone')?.value,
@@ -1217,6 +1444,11 @@ function addListenersAndMasks() {
           segCNPJ: document.getElementById('segCNPJ')?.value,
           infoAdicionais: document.getElementById('infoAdicionais')?.value,
           termos: document.getElementById('termos')?.checked,
+          estipNome: document.getElementById('estipNome')?.value,
+          estipEmail: document.getElementById('estipEmail')?.value,
+          estipTelefone: document.getElementById('estipTelefone')?.value,
+          estipDocumento: document.getElementById('estipDocumento')?.value,
+          estipEndereco: document.getElementById('estipEndereco')?.value,
         };
         break;
       case 'renovacao':
@@ -1244,6 +1476,10 @@ function addListenersAndMasks() {
           apoliceAPP: document.getElementById('endossoApoliceAPP')?.value,
           apoliceRCF: document.getElementById('endossoApoliceRCF')?.value,
           tipoSolicitacao: document.getElementById('endossoTipo')?.value,
+          anexoCRLV: document.getElementById('anexoCRLV')?.files[0]?.name || "",
+          anexoCNH: document.getElementById('anexoCNH')?.files[0]?.name || "",
+          anexoCNHAuxiliar: document.getElementById('anexoCNHAuxiliar')?.files[0]?.name || "",
+          anexoEndereco: document.getElementById('anexoEndereco')?.files[0]?.name || "",
         };
         switch (formData.tipoSolicitacao) {
           case 'substituicao_veiculo':
@@ -1359,8 +1595,12 @@ function addListenersAndMasks() {
 
   // Lógica condicional da UI
   const produtosSelect = document.getElementById("produtos");
-  if (produtosSelect) produtosSelect.addEventListener("change", applyProductsVisibility);
-  document.querySelectorAll('input[name="tipoPessoa"]').forEach((r) => r.addEventListener("change", applyPessoaTipo));
+  if (produtosSelect) {
+    produtosSelect.addEventListener("change", () => {
+      applyProductsVisibility();
+      toggleObservacaoAPP();
+    });
+  }
   const seguradoraSelect = document.getElementById("renovSeguradora");
   if (seguradoraSelect) seguradoraSelect.addEventListener("change", toggleOutraSeguradora);
   const endossoSeguradoraSelect = document.getElementById("endossoSeguradora");
@@ -1371,6 +1611,8 @@ function addListenersAndMasks() {
   if (rcfSelect) rcfSelect.addEventListener("change", handleRcfVisibility);
   const appSelect = document.getElementById("valorAPP_select");
   if (appSelect) appSelect.addEventListener("change", handleAppVisibility);
+  document.querySelectorAll('input[name="estipEstrangeiro"]').forEach((r) => r.addEventListener("change", applyEstipulanteVisibility));
+  document.querySelectorAll('input[name="estipPPE"]').forEach((r) => r.addEventListener("change", applyEstipulanteVisibility));
   
 
   // Remove erro on-input
@@ -1381,17 +1623,50 @@ function addListenersAndMasks() {
 
   // Lógica que depende do DOM recém-criado
   applyProductsVisibility();
-  applyPessoaTipo();
   toggleOutraSeguradora();
   toggleEndossoOutraSeguradora();
   toggleSegundaViaOutro();
   handleRcfVisibility();
   handleAppVisibility();
+  toggleObservacaoAPP();
+  applyEstipulanteVisibility();
 
   // Popula a etapa de confirmação da renovação se for a etapa ativa
   if (activeSteps[currentStep]?.template === 'renovacao_confirmar') {
     populateRenovacaoConfirmacao();
   }
+}
+
+function toggleObservacaoAPP() {
+  const observacaoAPP = document.getElementById('observacaoAPP');
+  if (!observacaoAPP) return;
+
+  const produtos = document.getElementById('produtos')?.value;
+  if (currentFluxo === 'nova' && (produtos === 'app' || produtos === 'rcf_app')) {
+    observacaoAPP.style.display = 'block';
+  } else {
+    observacaoAPP.style.display = 'none';
+  }
+}
+
+function applyEstipulanteVisibility() {
+    const estrangeiroSim = document.getElementById("estipEstrangeiroSim");
+    const blocoEstrangeiro = document.getElementById("estipBlocoEstrangeiro");
+    if (estrangeiroSim && blocoEstrangeiro) {
+        blocoEstrangeiro.style.display = estrangeiroSim.checked ? "" : "none";
+        document.getElementById("estipPais").required = estrangeiroSim.checked;
+        document.getElementById("estipTempoPais").required = estrangeiroSim.checked;
+        document.getElementById("estipPaisResidencia").required = estrangeiroSim.checked;
+    }
+
+    const ppeSim = document.getElementById("estipPPESim");
+    const blocoPPE = document.getElementById("estipBlocoPPE");
+    if (ppeSim && blocoPPE) {
+        blocoPPE.style.display = ppeSim.checked ? "" : "none";
+        document.getElementById("estipPPENome").required = ppeSim.checked;
+        document.getElementById("estipPPECPF").required = ppeSim.checked;
+        document.getElementById("estipPPEGrauRelacionamento").required = ppeSim.checked;
+    }
 }
 
 function handleAppVisibility() {
