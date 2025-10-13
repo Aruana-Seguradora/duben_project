@@ -79,6 +79,7 @@ const stepTemplates = {
       <h4 class="mb-4">Coberturas</h4>
       <div id="coberturaRCF" class="mb-3">
         <label for="valorRCF_select" class="form-label">Valor RCF (R$) *</label>
+        <div id="rcfApoliceInfo" class="text-muted mb-2"></div>
         <select id="valorRCF_select" class="form-select" required>
           <option value="">Selecione</option>
           <option value="50000">R$ 50.000</option>
@@ -91,6 +92,7 @@ const stepTemplates = {
       </div>
       <div id="coberturaAPP" class="mb-3">
         <label for="valorAPP_select" class="form-label">Valor APP por pessoa (R$) *</label>
+        <div id="appApoliceInfo" class="text-muted mb-2"></div>
         <select id="valorAPP_select" class="form-select" required>
           <option value="">Selecione</option>
           <option value="5000">R$ 5.000</option>
@@ -112,7 +114,7 @@ const stepTemplates = {
   parcelas: `
     <div class="form-step" data-step="3">
       <h4 class="mb-4">Parcelamento</h4>
-      <div id="observacaoAPP" class="alert alert-info" style="display: none;">
+      <div id="observacaoAPP" class="alert alert-info">
         <strong>Atenção:</strong> O produto APP (Acidentes Pessoais de Passageiros) é sempre pago à vista. O parcelamento se aplica apenas ao RCF.
       </div>
       <div class="row">
@@ -134,9 +136,219 @@ const stepTemplates = {
         </button>
       </div>
     </div>`,
-  estipulante: `
+  segurado: `
     <div class="form-step" data-step="5">
-      <h4 class="mb-4">Dados do estipulante</h4>
+      <h4 class="mb-4">Dados do Segurado</h4>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Nome *</label>
+          <input id="seguradoNome" class="form-control" required />
+          <div class="invalid-feedback">Informe o nome.</div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Nome Social</label>
+          <input id="seguradoNomeSocial" class="form-control" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="seguradoTipoPessoa" class="form-label">Tipo de pessoa *</label>
+          <select id="seguradoTipoPessoa" class="form-select" required>
+            <option value="">Selecione</option>
+            <option value="pf">Pessoa Física</option>
+            <option value="pj">Pessoa Jurídica</option>
+          </select>
+          <div class="invalid-feedback">Informe o tipo</div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">CPF/CNPJ *</label>
+          <input id="seguradoDocumento" class="form-control" placeholder="CPF ou CNPJ" required />
+          <div class="invalid-feedback">Documento inválido.</div>
+        </div>
+      </div>
+      <div class="row">
+          <div class="col-md-4 mb-3">
+              <label class="form-label">Data de Nascimento *</label>
+              <input id="seguradoDataNascimento" type="date" class="form-control" required />
+              <div class="invalid-feedback">Informe a data de nascimento.</div>
+          </div>
+          <div class="col-md-4 mb-3">
+              <label class="form-label">Estado Civil *</label>
+              <select id="seguradoEstadoCivil" class="form-select" required>
+                  <option value="">Selecione</option>
+                  <option>Solteiro(a)</option>
+                  <option>Casado(a)</option>
+                  <option>Divorciado(a)</option>
+                  <option>Viúvo(a)</option>
+              </select>
+              <div class="invalid-feedback">Informe o estado civil.</div>
+          </div>
+          <div class="col-md-4 mb-3">
+              <label class="form-label">Sexo *</label>
+              <select id="seguradoSexo" class="form-select" required>
+                  <option value="">Selecione</option>
+                  <option>Masculino</option>
+                  <option>Feminino</option>
+              </select>
+              <div class="invalid-feedback">Informe o sexo.</div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-4 mb-3">
+              <label class="form-label">Tipo Identidade *</label>
+              <select id="seguradoTipoIdentidade" class="form-select" required>
+                  <option value="">Selecione</option>
+                  <option>CNH</option>
+                  <option>CREA</option>
+                  <option>MILITAR</option>
+                  <option>CREA</option>
+                  <option>ORDEM ADVOG BRASIL</option>
+                  <option>PASSAPORTE</option>
+                  <option>RG</option>
+                  <option>OUTROS</option>
+              </select>
+              <div class="invalid-feedback">Informe o tipo de identidade.</div>
+          </div>
+          <div class="col-md-4 mb-3">
+              <label class="form-label">Nº Identidade *</label>
+              <input id="seguradoNumIdentidade" class="form-control" required />
+              <div class="invalid-feedback">Informe o nº da identidade.</div>
+          </div>
+          <div class="col-md-4 mb-3">
+              <label class="form-label">Órgão Emissor *</label>
+              <input id="seguradoOrgaoEmissor" class="form-control" required />
+              <div class="invalid-feedback">Informe o órgão emissor.</div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-6 mb-3">
+              <label class="form-label">Data de Emissão *</label>
+              <input id="seguradoDataEmissao" type="date" class="form-control" required />
+              <div class="invalid-feedback">Informe a data de emissão.</div>
+          </div>
+          <div class="col-md-6 mb-3">
+              <label class="form-label">Estrangeiro? *</label>
+              <div class="d-flex gap-3">
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="seguradoEstrangeiro" id="seguradoEstrangeiroSim" value="sim" required />
+                      <label class="form-check-label" for="seguradoEstrangeiroSim">Sim</label>
+                  </div>
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="seguradoEstrangeiro" id="seguradoEstrangeiroNao" value="nao" required checked />
+                      <label class="form-check-label" for="seguradoEstrangeiroNao">Não</label>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="seguradoBlocoEstrangeiro" style="display: none;">
+          <div class="row">
+              <div class="col-md-4 mb-3">
+                  <label class="form-label">País</label>
+                  <input id="seguradoPais" class="form-control" />
+              </div>
+              <div class="col-md-4 mb-3">
+                  <label class="form-label">Tempo no País</label>
+                  <input id="seguradoTempoPais" class="form-control" />
+              </div>
+              <div class="col-md-4 mb-3">
+                  <label class="form-label">País de Residência</label>
+                  <input id="seguradoPaisResidencia" class="form-control" />
+              </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-6 mb-3">
+              <label class="form-label">Atividade Principal</label>
+              <input id="seguradoAtividadePrincipal" class="form-control" />
+          </div>
+          <div class="col-md-6 mb-3">
+              <label class="form-label">Faixa de Renda Mensal</label>
+              <input id="seguradoFaixaRenda" class="form-control" />
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12 mb-3">
+              <label class="form-label">Pessoa Politicamente Exposta? *</label>
+              <div class="d-flex gap-3">
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="seguradoPPE" id="seguradoPPESim" value="sim" required />
+                      <label class="form-check-label" for="seguradoPPESim">Sim</label>
+                  </div>
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="seguradoPPE" id="seguradoPPENao" value="nao" required checked />
+                      <label class="form-check-label" for="seguradoPPENao">Não</label>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="seguradoBlocoPPE" style="display: none;">
+          <div class="row">
+              <div class="col-md-4 mb-3">
+                  <label class="form-label">Nome</label>
+                  <input id="seguradoPPENome" class="form-control" />
+              </div>
+              <div class="col-md-4 mb-3">
+                  <label class="form-label">CPF</label>
+                  <input id="seguradoPPECPF" class="form-control" />
+              </div>
+              <div class="col-md-4 mb-3">
+                  <label class="form-label">Grau de Relacionamento</label>
+                  <input id="seguradoPPEGrauRelacionamento" class="form-control" />
+              </div>
+          </div>
+      </div>
+
+      <h5 class="mt-4">Endereço do Segurado</h5>
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label for="segurado_cep" class="form-label">CEP *</label>
+          <input id="segurado_cep" class="form-control" placeholder="00000-000" required>
+          <div class="invalid-feedback">Informe um CEP válido.</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-8 mb-3">
+          <label class="form-label">Logradouro</label>
+          <input id="segurado_logradouro" class="form-control" readonly>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Número</label>
+          <input id="segurado_numero" class="form-control">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Bairro</label>
+          <input id="segurado_bairro" class="form-control" readonly>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Cidade</label>
+          <input id="segurado_cidade" class="form-control" readonly>
+        </div>
+        <div class="col-md-2 mb-3">
+          <label class="form-label">Estado</label>
+          <input id="segurado_estado" class="form-control" readonly>
+        </div>
+      </div>
+      
+      <div class="mb-3">
+        <label class="form-label">Upload CNH (PDF/JPG/PNG) *</label>
+        <input id="cnhSeg" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
+        <div class="invalid-feedback">Faça o upload da CNH.</div>
+      </div>
+
+      <div class="btn-group-navigation">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">
+          Próximo <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>`,
+  solicitante: `
+    <div class="form-step" data-step="5">
+      <h4 class="mb-4">Dados do Colaborador</h4>
       <div class="row">
         <div class="col-md-6 mb-3">
           <label class="form-label">Nome *</label>
@@ -304,45 +516,6 @@ const stepTemplates = {
         </button>
       </div>
     </div>`,
-  solicitante: `
-    <div class="form-step" data-step="4">
-      <h4 class="mb-4">Dados do solicitante</h4>
-      <div class="mb-3">
-        <label class="form-label">Nome *</label>
-        <input id="solNome" class="form-control" required />
-        <div class="invalid-feedback">Informe o nome.</div>
-      </div>
-      <div class="row">
-        <div class="col-md-4 mb-3">
-          <label class="form-label">E-mail *</label>
-          <input id="solEmail" type="email" class="form-control" required />
-          <div class="invalid-feedback">E-mail inválido.</div>
-        </div>
-        <div class="col-md-4 mb-3">
-          <label class="form-label">Telefone *</label>
-          <input id="solTelefone" class="form-control" placeholder="(00) 00000-0000" required />
-          <div class="invalid-feedback">Informe o telefone.</div>
-        </div>
-        <div class="col-md-4 mb-3">
-          <label class="form-label">CPF/CNPJ *</label>
-          <input id="solDocumento" class="form-control" placeholder="CPF ou CNPJ" required />
-          <div class="invalid-feedback">Documento inválido.</div>
-        </div>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Endereço *</label>
-        <input id="solEndereco" class="form-control" required />
-        <div class="invalid-feedback">Informe o endereço.</div>
-      </div>
-      <div class="btn-group-navigation">
-        <button type="button" class="btn btn-secondary" onclick="prevStep()">
-          <i class="bi bi-arrow-left"></i> Voltar
-        </button>
-        <button type="button" class="btn btn-primary" onclick="nextStep()">
-          Próximo <i class="bi bi-arrow-right"></i>
-        </button>
-      </div>
-    </div>`,
   veiculo: `
     <div class="form-step" data-step="5">
       <h4 class="mb-4">Dados do veículo</h4>
@@ -396,13 +569,9 @@ const stepTemplates = {
         </div>
       </div>
       <div class="mb-3">
-        <label class="form-label">Auxiliares (condutores adicionais)</label>
-        <textarea id="veiAuxiliares" class="form-control" rows="3" placeholder="Nome, idade e relação..."></textarea>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Upload CNH (PDF/JPG/PNG) *</label>
+        <label class="form-label">Upload CLRV (PDF/JPG/PNG) *</label>
         <input id="veiCNH" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
-        <div class="invalid-feedback">Faça o upload da CNH.</div>
+        <div class="invalid-feedback">Faça o upload do CLRV.</div>
       </div>
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()">
@@ -413,51 +582,130 @@ const stepTemplates = {
         </button>
       </div>
     </div>`,
-  segurado: `
+  auxiliares: `
     <div class="form-step" data-step="6">
-      <h4 class="mb-4">Dados do segurado</h4>
+      <h4 class="mb-4">Condutores Auxiliares</h4>
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" id="addAuxiliar" onchange="toggleAuxiliares(this.checked)">
+        <label class="form-check-label" for="addAuxiliar">
+          Adicionar condutor auxiliar
+        </label>
+      </div>
+
+      <div id="auxiliaresContainer" style="display: none;">
+        <div class="auxiliar-block mb-3">
+          <h5>Condutor Auxiliar 1</h5>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Nome Completo *</label>
+              <input id="aux1Nome" class="form-control" />
+              <div class="invalid-feedback">Informe o nome.</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">CPF *</label>
+              <input id="aux1CPF" class="form-control" placeholder="000.000.000-00" />
+              <div class="invalid-feedback">CPF inválido.</div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Upload CNH (PDF/JPG/PNG) *</label>
+            <input id="aux1CNH" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" />
+            <div class="invalid-feedback">Faça o upload da CNH.</div>
+          </div>
+        </div>
+
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" id="addAuxiliar2" onchange="toggleAuxiliar2(this.checked)">
+          <label class="form-check-label" for="addAuxiliar2">
+            Adicionar um segundo condutor auxiliar
+          </label>
+        </div>
+
+        <div id="auxiliar2Container" style="display: none;" class="auxiliar-block mb-3">
+          <h5>Condutor Auxiliar 2</h5>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Nome Completo *</label>
+              <input id="aux2Nome" class="form-control" />
+              <div class="invalid-feedback">Informe o nome.</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">CPF *</label>
+              <input id="aux2CPF" class="form-control" placeholder="000.000.000-00" />
+              <div class="invalid-feedback">CPF inválido.</div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Upload CNH (PDF/JPG/PNG) *</label>
+            <input id="aux2CNH" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" />
+            <div class="invalid-feedback">Faça o upload da CNH.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-group-navigation">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">
+          Próximo <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>`,
+  estipulante: `
+    <div class="form-step" data-step="6">
+      <h4 class="mb-4">Dados do Estipulante</h4>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label for="cnpj" class="form-label">CNPJ *</label>
+          <input id="cnpj" class="form-control" placeholder="00.000.000/0000-00" required>
+           <div class="invalid-feedback">Informe um CNPJ válido.</div>
+        </div>
+      </div>
+
+      <div id="resultadoEstipulante" class="mt-3">
+        <!-- Os dados do estipulante serão exibidos aqui -->
+      </div>
+
+      <h5 class="mt-4">Endereço do Estipulante</h5>
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label for="cep" class="form-label">CEP *</label>
+          <input id="cep" class="form-control" placeholder="00000-000" required>
+          <div class="invalid-feedback">Informe um CEP válido.</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-8 mb-3">
+          <label class="form-label">Logradouro</label>
+          <input id="logradouro" class="form-control" readonly>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Número</label>
+          <input id="numero" class="form-control">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Bairro</label>
+          <input id="bairro" class="form-control" readonly>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Cidade</label>
+          <input id="cidade" class="form-control" readonly>
+        </div>
+        <div class="col-md-2 mb-3">
+          <label class="form-label">Estado</label>
+          <input id="estado" class="form-control" readonly>
+        </div>
+      </div>
+      
       <div class="mb-3">
-        <label class="form-label">Tipo de pessoa *</label>
-        <div class="d-flex gap-3">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="tipoPessoa" id="pf" value="pf" required checked />
-            <label class="form-check-label" for="pf">Pessoa Física</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="tipoPessoa" id="pj" value="pj" required />
-            <label class="form-check-label" for="pj">Pessoa Jurídica</label>
-          </div>
-        </div>
-        <div class="invalid-feedback">Escolha PF ou PJ.</div>
+        <label class="form-label">Upload Comprovante Residência (PDF/JPG/PNG) *</label>
+        <input id="comprovante" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
+        <div class="invalid-feedback">Faça o upload do Comprovante.</div>
       </div>
-      <div id="blocoPF">
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Nome completo *</label>
-            <input id="segNomePF" class="form-control" />
-            <div class="invalid-feedback">Informe o nome.</div>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">CPF *</label>
-            <input id="segCPF" class="form-control" placeholder="000.000.000-00" />
-            <div class="invalid-feedback">CPF inválido.</div>
-          </div>
-        </div>
-      </div>
-      <div id="blocoPJ" style="display: none">
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Razão Social *</label>
-            <input id="segRazao" class="form-control" />
-            <div class="invalid-feedback">Informe a razão social.</div>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">CNPJ *</label>
-            <input id="segCNPJ" class="form-control" placeholder="00000000000000" />
-            <div class="invalid-feedback">CNPJ inválido.</div>
-          </div>
-        </div>
-      </div>
+
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()">
           <i class="bi bi-arrow-left"></i> Voltar
@@ -1173,6 +1421,16 @@ function validateStep(step) {
     input.classList.toggle("is-invalid", !fieldValid);
   });
 
+  if (activeSteps[step]?.template === 'estipulante') {
+    const resultadoDiv = document.getElementById('resultadoEstipulante');
+    if (!resultadoDiv.querySelector('select')) {
+      isValid = false;
+      const cnpjInput = document.getElementById('cnpj');
+      cnpjInput.classList.add('is-invalid');
+      resultadoDiv.innerHTML = `<div class="alert alert-danger">É necessário buscar e selecionar um estipulante válido.</div>`;
+    }
+  }
+
   return isValid;
 }
 
@@ -1191,11 +1449,12 @@ function nextStep() {
     //     { label: "Tipo", template: "tipo_para_nova" },  
     // ];
 
-    const baseStepsAfter = [
-        { label: "Produtos", template: "produtos" },
-        { label: "Coberturas", template: "coberturas" },
+const baseStepsAfter = [
+        // { label: "Produtos", template: "produtos" },
+        // { label: "Coberturas", template: "coberturas" },
         { label: "Parcelas", template: "parcelas"},
         { label: "Veículo", template: "veiculo" },
+        { label: "Auxiliares", template: "auxiliares" },
         { label: "Info & Consent.", template: "consentimento" },
         { label: "Enviar", template: "enviar" }
     ];
@@ -1210,6 +1469,7 @@ function nextStep() {
         dynamicSteps.push({ label: "Solicitante", template: "solicitante" });
     }
 
+    // TALVEZ MEXER AQUI
     activeSteps.splice(currentStep + 1, activeSteps.length - currentStep - 1, ...dynamicSteps, ...baseStepsAfter);
   }
 
@@ -1379,6 +1639,13 @@ const validaCNPJ = (cnpj) => {
 function addListenersAndMasks() {
   const form = document.getElementById("multiStepForm");
 
+  // Impede o envio do formulário ao pressionar Enter em um input
+  form.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter' && event.target.tagName === 'INPUT') {
+      event.preventDefault();
+    }
+  });
+
   // Para evitar listeners duplicados, removemos o antigo antes de adicionar um novo
   if (window.formSubmitHandler) {
     form.removeEventListener("submit", window.formSubmitHandler);
@@ -1411,6 +1678,12 @@ function addListenersAndMasks() {
 
     switch (currentFluxo) {
       case 'nova':
+        const rcfPolicySelect = document.getElementById('rcf_policy_select');
+        const appPolicySelect = document.getElementById('app_policy_select');
+
+        const rcfData = rcfPolicySelect ? JSON.parse(rcfPolicySelect.value) : {};
+        const appData = appPolicySelect ? JSON.parse(appPolicySelect.value) : {};
+
         formData = {
           tipoSolicitante: document.getElementById('tipoSolicitante')?.value,
           tipo: currentFluxo,
@@ -1444,11 +1717,32 @@ function addListenersAndMasks() {
           segCNPJ: document.getElementById('segCNPJ')?.value,
           infoAdicionais: document.getElementById('infoAdicionais')?.value,
           termos: document.getElementById('termos')?.checked,
-          estipNome: document.getElementById('estipNome')?.value,
-          estipEmail: document.getElementById('estipEmail')?.value,
-          estipTelefone: document.getElementById('estipTelefone')?.value,
-          estipDocumento: document.getElementById('estipDocumento')?.value,
-          estipEndereco: document.getElementById('estipEndereco')?.value,
+          estipulante: rcfData.estipulante || appData.estipulante,
+          cnpj: document.getElementById('cnpj')?.value,
+          apolice_rcf: rcfData.apolice,
+          premio_rcf: rcfData.premio,
+          dano_material_DM: rcfData.dano_material_DM,
+          apolice_app: appData.apolice,
+          premio_app: appData.premio,
+          dano_corporal_DC: appData.dano_corporal_DC,
+          cep: document.getElementById('cep')?.value,
+          logradouro: document.getElementById('logradouro')?.value,
+          numero: document.getElementById('numero')?.value,
+          bairro: document.getElementById('bairro')?.value,
+          cidade: document.getElementById('cidade')?.value,
+          estado: document.getElementById('estado')?.value,
+          segurado_cep: document.getElementById('segurado_cep')?.value,
+          segurado_logradouro: document.getElementById('segurado_logradouro')?.value,
+          segurado_numero: document.getElementById('segurado_numero')?.value,
+          segurado_bairro: document.getElementById('segurado_bairro')?.value,
+          segurado_cidade: document.getElementById('segurado_cidade')?.value,
+          segurado_estado: document.getElementById('segurado_estado')?.value,
+          aux1Nome: document.getElementById('aux1Nome')?.value,
+          aux1CPF: document.getElementById('aux1CPF')?.value,
+          aux1CNH: document.getElementById('aux1CNH')?.files[0]?.name || "",
+          aux2Nome: document.getElementById('aux2Nome')?.value,
+          aux2CPF: document.getElementById('aux2CPF')?.value,
+          aux2CNH: document.getElementById('aux2CNH')?.files[0]?.name || "",
         };
         break;
       case 'renovacao':
@@ -1614,6 +1908,21 @@ function addListenersAndMasks() {
   document.querySelectorAll('input[name="estipEstrangeiro"]').forEach((r) => r.addEventListener("change", applyEstipulanteVisibility));
   document.querySelectorAll('input[name="estipPPE"]').forEach((r) => r.addEventListener("change", applyEstipulanteVisibility));
   
+  // Listener para o campo CNPJ
+  const cnpjInput = document.getElementById('cnpj');
+  if (cnpjInput) {
+    cnpjInput.addEventListener('blur', buscar);
+  }
+
+  const cepInput = document.getElementById('cep');
+  if (cepInput) {
+    cepInput.addEventListener('blur', () => buscarCep('estipulante'));
+  }
+
+  const seguradoCepInput = document.getElementById('segurado_cep');
+  if (seguradoCepInput) {
+    seguradoCepInput.addEventListener('blur', () => buscarCep('segurado'));
+  }
 
   // Remove erro on-input
   document.querySelectorAll("input, select, textarea").forEach((input) => {
@@ -1628,7 +1937,7 @@ function addListenersAndMasks() {
   toggleSegundaViaOutro();
   handleRcfVisibility();
   handleAppVisibility();
-  toggleObservacaoAPP();
+  // toggleObservacaoAPP();
   applyEstipulanteVisibility();
 
   // Popula a etapa de confirmação da renovação se for a etapa ativa
@@ -1799,6 +2108,26 @@ function applyPessoaTipo() {
   document.getElementById("segCNPJ").required = !pf;
 }
 
+function toggleAuxiliares(checked) {
+  const container = document.getElementById('auxiliaresContainer');
+  if (container) {
+    container.style.display = checked ? 'block' : 'none';
+    document.getElementById('aux1Nome').required = checked;
+    document.getElementById('aux1CPF').required = checked;
+    document.getElementById('aux1CNH').required = checked;
+  }
+}
+
+function toggleAuxiliar2(checked) {
+  const container = document.getElementById('auxiliar2Container');
+  if (container) {
+    container.style.display = checked ? 'block' : 'none';
+    document.getElementById('aux2Nome').required = checked;
+    document.getElementById('aux2CPF').required = checked;
+    document.getElementById('aux2CNH').required = checked;
+  }
+}
+
 function populateRenovacaoConfirmacao() {
   // Dados da Apólice Anterior
   document.getElementById('displayRenovApolice').textContent = document.getElementById('renovApolice')?.value || 'Não informado';
@@ -1828,6 +2157,105 @@ function populateRenovacaoConfirmacao() {
     document.getElementById('displaySegDocumento').textContent = document.getElementById('segCNPJ')?.value || 'Não informado';
   }
 }
+
+async function buscarCep(prefix) {
+  const cepInput = document.getElementById(prefix === 'estipulante' ? 'cep' : 'segurado_cep');
+  const cep = cepInput.value.replace(/\D/g, '');
+
+  if (cep.length !== 8) {
+    return;
+  }
+
+  const url = `https://viacep.com.br/ws/${cep}/json/`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.erro) {
+      alert('CEP não encontrado.');
+      return;
+    }
+
+    if (prefix === 'estipulante') {
+        document.getElementById('logradouro').value = data.logradouro;
+        document.getElementById('bairro').value = data.bairro;
+        document.getElementById('cidade').value = data.localidade;
+        document.getElementById('estado').value = data.uf;
+    } else {
+        document.getElementById('segurado_logradouro').value = data.logradouro;
+        document.getElementById('segurado_bairro').value = data.bairro;
+        document.getElementById('segurado_cidade').value = data.localidade;
+        document.getElementById('segurado_estado').value = data.uf;
+    }
+
+  } catch (error) {
+    console.error('Erro ao buscar CEP:', error);
+    alert('Erro ao buscar CEP. Tente novamente.');
+  }
+}
+
+// =================================================================
+// 7. CHAMADA AO CSV DE ESTIPULANTES
+// =================================================================
+function limpar(str){ return (str || '').replace(/\D/g, ''); }
+
+    async function buscar(){
+      const cnpjInput = document.getElementById('cnpj');
+      const cnpj = limpar(cnpjInput.value);
+      const resultadoDiv = document.getElementById('resultadoEstipulante');
+
+      if(!cnpj){
+        resultadoDiv.innerHTML = `<div class="alert alert-warning">Digite um CNPJ válido.</div>`;
+        return;
+      }
+
+      resultadoDiv.innerHTML = `<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Buscando...</span></div>`;
+
+      try {
+        const res = await fetch('estipulantes.csv');
+        const texto = await res.text();
+        const csv = Papa.parse(texto, { header: true }).data;
+
+        const achados = csv.filter(l => limpar(l.cnpj) === cnpj);
+
+        if (achados.length > 0) {
+          const rcfPolicies = achados.filter(p => p.dano_material_DM);
+          const appPolicies = achados.filter(p => p.dano_corporal_DC);
+
+          let html = '';
+
+          if (rcfPolicies.length > 0) {
+            html += `
+              <div class="mb-3">
+                <label for="rcf_policy_select" class="form-label"><strong>RCF - Dano Material (DM)</strong></label>
+                <select id="rcf_policy_select" class="form-select">
+                  <option disable value=''>Nenhuma</option>
+                  ${rcfPolicies.map(p => `<option value='${JSON.stringify(p)}'>${p.apolice} - ${p.premio}</option>`).join('')}
+                </select>
+              </div>`;
+          }
+
+          if (appPolicies.length > 0) {
+            html += `
+              <div class="mb-3">
+                <label for="app_policy_select" class="form-label"><strong>APP - Dano Corporal (DC)</strong></label>
+                <select id="app_policy_select" class="form-select">
+                  <option disable value=''>Nenhuma</option>
+                  ${appPolicies.map(p => `<option value='${JSON.stringify(p)}'>${p.apolice} - ${p.premio}</option>`).join('')}
+                </select>
+              </div>`;
+          }
+
+          resultadoDiv.innerHTML = html;
+        } else {
+          resultadoDiv.innerHTML = `<div class="alert alert-danger">Estipulante não encontrado para o CNPJ informado.</div>`;
+        }
+      } catch (error) {
+        console.error('Erro ao buscar dados do estipulante:', error);
+        resultadoDiv.innerHTML = `<div class="alert alert-danger">Erro ao carregar os dados. Tente novamente.</div>`;
+      }
+    }
 
 // Listener inicial para o tipo de solicitação
 document.getElementById("tipoSolicitacao").addEventListener("change", (e) => {
