@@ -302,8 +302,11 @@ const stepTemplates = {
       <div class="row">
         <div class="col-md-4 mb-3">
           <label for="segurado_cep" class="form-label">CEP *</label>
-          <input id="segurado_cep" class="form-control" placeholder="00000-000" required>
-          <div class="invalid-feedback">Informe um CEP válido.</div>
+          <div class="input-group">
+            <input id="segurado_cep" class="form-control" placeholder="00000-000" required>
+            <button class="btn btn-outline-secondary" type="button" onclick="buscarCep()"><i class="bi bi-search"></i></button>
+            <div class="invalid-feedback">Informe um CEP válido.</div>
+          </div>
         </div>
       </div>
       <div class="row">
@@ -337,6 +340,12 @@ const stepTemplates = {
         <div class="invalid-feedback">Faça o upload da CNH.</div>
       </div>
 
+      <div class="mb-3">
+        <label class="form-label">Upload Comprovante de Residência (PDF/JPG/PNG) *</label>
+        <input id="comprovanteResidenciaSeg" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
+        <div class="invalid-feedback">Faça o upload do Comprovante.</div>
+      </div>
+
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()">
           <i class="bi bi-arrow-left"></i> Voltar
@@ -360,153 +369,7 @@ const stepTemplates = {
           <input id="estipNomeSocial" class="form-control" />
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label for="estipTipoPessoa" class="form-label">Tipo de pessoa *</label>
-          <select id="estipTipoPessoa" class="form-select" required>
-            <option value="">Selecione</option>
-            <option value="pf">Pessoa Física</option>
-            <option value="pj">Pessoa Jurídica</option>
-          </select>
-          <div class="invalid-feedback">Informe o tipo</div>
-        </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label">CPF/CNPJ *</label>
-          <input id="estipDocumento" class="form-control" placeholder="CPF ou CNPJ" required />
-          <div class="invalid-feedback">Documento inválido.</div>
-        </div>
-      </div>
-      <div class="row">
-          <div class="col-md-4 mb-3">
-              <label class="form-label">Data de Nascimento *</label>
-              <input id="estipDataNascimento" type="date" class="form-control" required />
-              <div class="invalid-feedback">Informe a data de nascimento.</div>
-          </div>
-          <div class="col-md-4 mb-3">
-              <label class="form-label">Estado Civil *</label>
-              <select id="estipEstadoCivil" class="form-select" required>
-                  <option value="">Selecione</option>
-                  <option>Solteiro(a)</option>
-                  <option>Casado(a)</option>
-                  <option>Divorciado(a)</option>
-                  <option>Viúvo(a)</option>
-              </select>
-              <div class="invalid-feedback">Informe o estado civil.</div>
-          </div>
-          <div class="col-md-4 mb-3">
-              <label class="form-label">Sexo *</label>
-              <select id="estipSexo" class="form-select" required>
-                  <option value="">Selecione</option>
-                  <option>Masculino</option>
-                  <option>Feminino</option>
-              </select>
-              <div class="invalid-feedback">Informe o sexo.</div>
-          </div>
-      </div>
-      <div class="row">
-          <div class="col-md-4 mb-3">
-              <label class="form-label">Tipo Identidade *</label>
-              <select id="tipoIdentidade" class="form-select" required>
-                  <option value="">Selecione</option>
-                  <option>CNH</option>
-                  <option>CREA</option>
-                  <option>MILITAR</option>
-                  <option>CREA</option>
-                  <option>ORDEM ADVOG BRASIL</option>
-                  <option>PASSAPORTE</option>
-                  <option>RG</option>
-                  <option>OUTROS</option>
-              </select>
-              <div class="invalid-feedback">Informe o tipo de identidade.</div>
-          </div>
-          <div class="col-md-4 mb-3">
-              <label class="form-label">Nº Identidade *</label>
-              <input id="estipNumIdentidade" class="form-control" required />
-              <div class="invalid-feedback">Informe o nº da identidade.</div>
-          </div>
-          <div class="col-md-4 mb-3">
-              <label class="form-label">Órgão Emissor *</label>
-              <input id="estipOrgaoEmissor" class="form-control" required />
-              <div class="invalid-feedback">Informe o órgão emissor.</div>
-          </div>
-      </div>
-      <div class="row">
-          <div class="col-md-6 mb-3">
-              <label class="form-label">Data de Emissão *</label>
-              <input id="estipDataEmissao" type="date" class="form-control" required />
-              <div class="invalid-feedback">Informe a data de emissão.</div>
-          </div>
-          <div class="col-md-6 mb-3">
-              <label class="form-label">Estrangeiro? *</label>
-              <div class="d-flex gap-3">
-                  <div class="form-check">
-                      <input class="form-check-input" type="radio" name="estipEstrangeiro" id="estipEstrangeiroSim" value="sim" required />
-                      <label class="form-check-label" for="estipEstrangeiroSim">Sim</label>
-                  </div>
-                  <div class="form-check">
-                      <input class="form-check-input" type="radio" name="estipEstrangeiro" id="estipEstrangeiroNao" value="nao" required checked />
-                      <label class="form-check-label" for="estipEstrangeiroNao">Não</label>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <div id="estipBlocoEstrangeiro" style="display: none;">
-          <div class="row">
-              <div class="col-md-4 mb-3">
-                  <label class="form-label">País</label>
-                  <input id="estipPais" class="form-control" />
-              </div>
-              <div class="col-md-4 mb-3">
-                  <label class="form-label">Tempo no País</label>
-                  <input id="estipTempoPais" class="form-control" />
-              </div>
-              <div class="col-md-4 mb-3">
-                  <label class="form-label">País de Residência</label>
-                  <input id="estipPaisResidencia" class="form-control" />
-              </div>
-          </div>
-      </div>
-      <div class="row">
-          <div class="col-md-6 mb-3">
-              <label class="form-label">Atividade Principal</label>
-              <input id="estipAtividadePrincipal" class="form-control" />
-          </div>
-          <div class="col-md-6 mb-3">
-              <label class="form-label">Faixa de Renda Mensal</label>
-              <input id="estipFaixaRenda" class="form-control" />
-          </div>
-      </div>
-      <div class="row">
-          <div class="col-md-12 mb-3">
-              <label class="form-label">Pessoa Politicamente Exposta? *</label>
-              <div class="d-flex gap-3">
-                  <div class="form-check">
-                      <input class="form-check-input" type="radio" name="estipPPE" id="estipPPESim" value="sim" required />
-                      <label class="form-check-label" for="estipPPESim">Sim</label>
-                  </div>
-                  <div class="form-check">
-                      <input class="form-check-input" type="radio" name="estipPPE" id="estipPPENao" value="nao" required checked />
-                      <label class="form-check-label" for="estipPPENao">Não</label>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <div id="estipBlocoPPE" style="display: none;">
-          <div class="row">
-              <div class="col-md-4 mb-3">
-                  <label class="form-label">Nome</label>
-                  <input id="estipPPENome" class="form-control" />
-              </div>
-              <div class="col-md-4 mb-3">
-                  <label class="form-label">CPF</label>
-                  <input id="estipPPECPF" class="form-control" />
-              </div>
-              <div class="col-md-4 mb-3">
-                  <label class="form-label">Grau de Relacionamento</label>
-                  <input id="estipPPEGrauRelacionamento" class="form-control" />
-              </div>
-          </div>
-      </div>
+      
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()">
           <i class="bi bi-arrow-left"></i> Voltar
@@ -665,45 +528,6 @@ const stepTemplates = {
 
       <div id="resultadoEstipulante" class="mt-3">
         <!-- Os dados do estipulante serão exibidos aqui -->
-      </div>
-
-      <h5 class="mt-4">Endereço do Estipulante</h5>
-      <div class="row">
-        <div class="col-md-4 mb-3">
-          <label for="cep" class="form-label">CEP *</label>
-          <input id="cep" class="form-control" placeholder="00000-000" required>
-          <div class="invalid-feedback">Informe um CEP válido.</div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-8 mb-3">
-          <label class="form-label">Logradouro</label>
-          <input id="logradouro" class="form-control" readonly>
-        </div>
-        <div class="col-md-4 mb-3">
-          <label class="form-label">Número</label>
-          <input id="numero" class="form-control">
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Bairro</label>
-          <input id="bairro" class="form-control" readonly>
-        </div>
-        <div class="col-md-4 mb-3">
-          <label class="form-label">Cidade</label>
-          <input id="cidade" class="form-control" readonly>
-        </div>
-        <div class="col-md-2 mb-3">
-          <label class="form-label">Estado</label>
-          <input id="estado" class="form-control" readonly>
-        </div>
-      </div>
-      
-      <div class="mb-3">
-        <label class="form-label">Upload Comprovante Residência (PDF/JPG/PNG) *</label>
-        <input id="comprovante" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
-        <div class="invalid-feedback">Faça o upload do Comprovante.</div>
       </div>
 
       <div class="btn-group-navigation">
@@ -1467,6 +1291,8 @@ const baseStepsAfter = [
         dynamicSteps.push({ label: "Segurado", template: "segurado" });
     } else if (tipoSolicitante === 'colaborador') {
         dynamicSteps.push({ label: "Solicitante", template: "solicitante" });
+        dynamicSteps.push({ label: "Estipulante", template: "estipulante" });
+        dynamicSteps.push({ label: "Segurado", template: "segurado" });
     }
 
     // TALVEZ MEXER AQUI
@@ -1665,158 +1491,209 @@ function addListenersAndMasks() {
     submitButton.disabled = true;
     submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...';
 
-    // const powerAutomateUrls = {
-    //   nova: 'https://e1b82d98c0c4efb7972bac26ccc599.ed.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/bb0741a77ad2482695083f8eea76af57/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=CCQQvWjQfkRO26M9m1WVe5UoFX1HY5pFR8svJERAIbo',
-    //   renovacao: 'https://e1b82d98c0c4efb7972bac26ccc599.ed.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/284cd1c4bf544f5f8055542fec59e994/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WwYcTkLu_T9Eql_7xF4KomGHvNCuewnGP1kXdXLIDDg',
-    //   endosso: 'URL_DO_FLUXO_DE_ENDOSSO_AQUI',
-    //   segunda_via: 'URL_DO_FLUXO_DE_SEGUNDA_VIA_AQUI',
-    //   financeiro_regularizacao: 'URL_DO_FLUXO_DE_FINANCEIRO_REGULARIZACAO_AQUI',
-    // };
+    const powerAutomateUrls = {
+      nova: 'https://e1b82d98c0c4efb7972bac26ccc599.ed.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/284cd1c4bf544f5f8055542fec59e994/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WwYcTkLu_T9Eql_7xF4KomGHvNCuewnGP1kXdXLIDDg',
+      renovacao: 'https://e1b82d98c0c4efb7972bac26ccc599.ed.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/284cd1c4bf544f5f8055542fec59e994/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WwYcTkLu_T9Eql_7xF4KomGHvNCuewnGP1kXdXLIDDg',
+      endosso: 'URL_DO_FLUXO_DE_ENDOSSO_AQUI',
+      segunda_via: 'URL_DO_FLUXO_DE_SEGUNDA_VIA_AQUI',
+      financeiro_regularizacao: 'URL_DO_FLUXO_DE_FINANCEIRO_REGULARIZACAO_AQUI',
+    };
 
     let formData = {};
-    let targetUrl = 'https://e1b82d98c0c4efb7972bac26ccc599.ed.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/284cd1c4bf544f5f8055542fec59e994/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WwYcTkLu_T9Eql_7xF4KomGHvNCuewnGP1kXdXLIDDg';
+    let targetUrl = powerAutomateUrls[currentFluxo];
+
+    // Funções auxiliares para obter valores dos campos
+    const getValue = (id) => document.getElementById(id)?.value || null;
+    const getFile = (id) => document.getElementById(id)?.files[0]?.name || null;
+    const getChecked = (id) => document.getElementById(id)?.checked || false;
+    const getRadio = (name) => document.querySelector(`input[name="${name}"]:checked`)?.value || null;
+    const getIntValue = (id) => parseInt(getValue(id), 10) || 0;
 
     switch (currentFluxo) {
       case 'nova':
         const rcfPolicySelect = document.getElementById('rcf_policy_select');
         const appPolicySelect = document.getElementById('app_policy_select');
-
         const rcfData = rcfPolicySelect ? JSON.parse(rcfPolicySelect.value) : {};
         const appData = appPolicySelect ? JSON.parse(appPolicySelect.value) : {};
 
         formData = {
-          tipoSolicitante: document.getElementById('tipoSolicitante')?.value,
+          // Identificação
+          tipoSolicitante: getValue('tipoSolicitante'),
           tipo: currentFluxo,
-          produtos: document.getElementById('produtos')?.value,
-          valorRCF: (parseInt(document.getElementById('valorRCF_select')?.value === 'outro' 
-                ? document.getElementById('valorRCF_outro')?.value 
-                : document.getElementById('valorRCF_select')?.value, 10) || 0),
-          valorAPP: (parseInt(document.getElementById('valorAPP_select')?.value === 'outro' 
-                ? document.getElementById('valorAPP_outro')?.value 
-                : document.getElementById('valorAPP_select')?.value, 10) || 0),
-          qtdParcelas: (parseInt(document.getElementById('qtdParcelas')?.value, 10) || 0),
-          solNome: document.getElementById('solNome')?.value,
-          solEmail: document.getElementById('solEmail')?.value,
-          solTelefone: document.getElementById('solTelefone')?.value,
-          solDocumento: document.getElementById('solDocumento')?.value,
-          solEndereco: document.getElementById('solEndereco')?.value,
-          veiUso: document.getElementById('veiUso')?.value,
-          veiPlaca: document.getElementById('veiPlaca')?.value,
-          veiChassi: document.getElementById('veiChassi')?.value,
-          veiRenavam: document.getElementById('veiRenavam')?.value,
-          veiAno: (parseInt(document.getElementById('veiAno')?.value, 10) || 0),
-          veiFab: document.getElementById('veiFab')?.value,
-          veiModelo: document.getElementById('veiModelo')?.value,
-          veiLotacao: (parseInt(document.getElementById('veiLotacao')?.value, 10) || 0),
-          veiAuxiliares: document.getElementById('veiAuxiliares')?.value,
-          veiCNH: document.getElementById('veiCNH')?.files[0]?.name || "",
-          tipoPessoa: document.querySelector('input[name="tipoPessoa"]:checked')?.value,
-          segNomePF: document.getElementById('segNomePF')?.value,
-          segCPF: document.getElementById('segCPF')?.value,
-          segRazao: document.getElementById('segRazao')?.value,
-          segCNPJ: document.getElementById('segCNPJ')?.value,
-          infoAdicionais: document.getElementById('infoAdicionais')?.value,
-          termos: document.getElementById('termos')?.checked,
-          estipulante: rcfData.estipulante || appData.estipulante,
-          cnpj: document.getElementById('cnpj')?.value,
-          apolice_rcf: rcfData.apolice,
-          premio_rcf: rcfData.premio,
-          dano_material_DM: rcfData.dano_material_DM,
-          apolice_app: appData.apolice,
-          premio_app: appData.premio,
-          dano_corporal_DC: appData.dano_corporal_DC,
-          cep: document.getElementById('cep')?.value,
-          logradouro: document.getElementById('logradouro')?.value,
-          numero: document.getElementById('numero')?.value,
-          bairro: document.getElementById('bairro')?.value,
-          cidade: document.getElementById('cidade')?.value,
-          estado: document.getElementById('estado')?.value,
-          segurado_cep: document.getElementById('segurado_cep')?.value,
-          segurado_logradouro: document.getElementById('segurado_logradouro')?.value,
-          segurado_numero: document.getElementById('segurado_numero')?.value,
-          segurado_bairro: document.getElementById('segurado_bairro')?.value,
-          segurado_cidade: document.getElementById('segurado_cidade')?.value,
-          segurado_estado: document.getElementById('segurado_estado')?.value,
-          aux1Nome: document.getElementById('aux1Nome')?.value,
-          aux1CPF: document.getElementById('aux1CPF')?.value,
-          aux1CNH: document.getElementById('aux1CNH')?.files[0]?.name || "",
-          aux2Nome: document.getElementById('aux2Nome')?.value,
-          aux2CPF: document.getElementById('aux2CPF')?.value,
-          aux2CNH: document.getElementById('aux2CNH')?.files[0]?.name || "",
+
+          // Colaborador (se aplicável)
+          colaboradorNome: getValue('estipNome'),
+          colaboradorNomeSocial: getValue('estipNomeSocial'),
+
+          // Estipulante (se aplicável)
+          estipulanteCNPJ: getValue('cnpj'),
+          estipulanteApoliceRCF: rcfData.apolice,
+          estipulantePremioRCF: rcfData.premio,
+          estipulanteDanoMaterial: rcfData.dano_material_DM,
+          estipulanteApoliceAPP: appData.apolice,
+          estipulantePremioAPP: appData.premio,
+          estipulanteDanoCorporal: appData.dano_corporal_DC,
+
+          // Produtos e Coberturas
+          produtos: getValue('produtos'),
+          valorRCF: getValue('valorRCF_select') === 'outro' ? getIntValue('valorRCF_outro') : getIntValue('valorRCF_select'),
+          valorAPP: getValue('valorAPP_select') === 'outro' ? getIntValue('valorAPP_outro') : getIntValue('valorAPP_select'),
+
+          // Parcelas
+          qtdParcelas: getValue('qtdParcelas'),
+
+          // Segurado
+          seguradoNome: getValue('seguradoNome'),
+          seguradoNomeSocial: getValue('seguradoNomeSocial'),
+          seguradoTipoPessoa: getValue('seguradoTipoPessoa'),
+          seguradoDocumento: getValue('seguradoDocumento'),
+          seguradoDataNascimento: getValue('seguradoDataNascimento'),
+          seguradoEstadoCivil: getValue('seguradoEstadoCivil'),
+          seguradoSexo: getValue('seguradoSexo'),
+          seguradoTipoIdentidade: getValue('seguradoTipoIdentidade'),
+          seguradoNumIdentidade: getValue('seguradoNumIdentidade'),
+          seguradoOrgaoEmissor: getValue('seguradoOrgaoEmissor'),
+          seguradoDataEmissao: getValue('seguradoDataEmissao'),
+          seguradoEstrangeiro: getRadio('seguradoEstrangeiro'),
+          seguradoPais: getValue('seguradoPais'),
+          seguradoTempoPais: getValue('seguradoTempoPais'),
+          seguradoPaisResidencia: getValue('seguradoPaisResidencia'),
+          seguradoAtividadePrincipal: getValue('seguradoAtividadePrincipal'),
+          seguradoFaixaRenda: getValue('seguradoFaixaRenda'),
+          seguradoPPE: getRadio('seguradoPPE'),
+          seguradoPPENome: getValue('seguradoPPENome'),
+          seguradoPPECPF: getValue('seguradoPPECPF'),
+          seguradoPPEGrauRelacionamento: getValue('seguradoPPEGrauRelacionamento'),
+          seguradoCEP: getValue('segurado_cep'),
+          seguradoLogradouro: getValue('segurado_logradouro'),
+          seguradoNumero: getValue('segurado_numero'),
+          seguradoBairro: getValue('segurado_bairro'),
+          seguradoCidade: getValue('segurado_cidade'),
+          seguradoEstado: getValue('segurado_estado'),
+          seguradoCNH: getFile('cnhSeg'),
+          seguradoComprovanteResidencia: getFile('comprovanteResidenciaSeg'),
+
+          // Veículo
+          veiculoPlaca: getValue('veiPlaca'),
+          veiculoChassi: getValue('veiChassi'),
+          veiculoRenavam: getValue('veiRenavam'),
+          veiculoFabricante: getValue('veiFab'),
+          veiculoModelo: getValue('veiModelo'),
+          veiculoAno: getValue('veiAno'),
+          veiculoUso: getValue('veiUso'),
+          veiculoLotacao: getIntValue('veiLotacao'),
+          veiculoCRLV: getFile('veiCNH'), // ID no HTML é veiCNH
+
+          // Auxiliares
+          adicionarAuxiliar: getChecked('addAuxiliar'),
+          auxiliar1Nome: getValue('aux1Nome'),
+          auxiliar1CPF: getValue('aux1CPF'),
+          auxiliar1CNH: getFile('aux1CNH'),
+          adicionarAuxiliar2: getChecked('addAuxiliar2'),
+          auxiliar2Nome: getValue('aux2Nome'),
+          auxiliar2CPF: getValue('aux2CPF'),
+          auxiliar2CNH: getFile('aux2CNH'),
+
+          // Consentimento
+          infoAdicionais: getValue('infoAdicionais'),
+          termos: getChecked('termos'),
         };
         break;
       case 'renovacao':
         formData = {
           tipo: currentFluxo,
-          numeroApolice: document.getElementById('renovApolice')?.value,
-          dataVencimento: document.getElementById('renovVencimento')?.value,
-          seguradoraVencendo: document.getElementById('renovSeguradora')?.value,
-          outraSeguradora: document.getElementById('outraSeguradoraNome')?.value || "",
-          tipoPessoa: document.querySelector('input[name="tipoPessoa"]:checked')?.value,
-          nomeCompleto: document.getElementById('segNomePF')?.value,
-          cpf: document.getElementById('segCPF')?.value,
-          razaoSocial: document.getElementById('segRazao')?.value,
-          cnpj: document.getElementById('segCNPJ')?.value,
-          confirmado: document.getElementById('renovConfirm')?.checked,
+          // Apólice Anterior
+          numeroApoliceAnterior: getValue('renovApolice'),
+          dataVencimentoAnterior: getValue('renovVencimento'),
+          seguradoraAnterior: getValue('renovSeguradora'),
+          outraSeguradoraAnterior: getValue('outraSeguradoraNome'),
+          // Segurado (mapeamento completo)
+          seguradoNome: getValue('seguradoNome'),
+          seguradoNomeSocial: getValue('seguradoNomeSocial'),
+          seguradoTipoPessoa: getValue('seguradoTipoPessoa'),
+          seguradoDocumento: getValue('seguradoDocumento'),
+          seguradoDataNascimento: getValue('seguradoDataNascimento'),
+          seguradoEstadoCivil: getValue('seguradoEstadoCivil'),
+          seguradoSexo: getValue('seguradoSexo'),
+          seguradoTipoIdentidade: getValue('seguradoTipoIdentidade'),
+          seguradoNumIdentidade: getValue('seguradoNumIdentidade'),
+          seguradoOrgaoEmissor: getValue('seguradoOrgaoEmissor'),
+          seguradoDataEmissao: getValue('seguradoDataEmissao'),
+          seguradoEstrangeiro: getRadio('seguradoEstrangeiro'),
+          seguradoPais: getValue('seguradoPais'),
+          seguradoTempoPais: getValue('seguradoTempoPais'),
+          seguradoPaisResidencia: getValue('seguradoPaisResidencia'),
+          seguradoAtividadePrincipal: getValue('seguradoAtividadePrincipal'),
+          seguradoFaixaRenda: getValue('seguradoFaixaRenda'),
+          seguradoPPE: getRadio('seguradoPPE'),
+          seguradoPPENome: getValue('seguradoPPENome'),
+          seguradoPPECPF: getValue('seguradoPPECPF'),
+          seguradoPPEGrauRelacionamento: getValue('seguradoPPEGrauRelacionamento'),
+          seguradoCEP: getValue('segurado_cep'),
+          seguradoLogradouro: getValue('segurado_logradouro'),
+          seguradoNumero: getValue('segurado_numero'),
+          seguradoBairro: getValue('segurado_bairro'),
+          seguradoCidade: getValue('segurado_cidade'),
+          seguradoEstado: getValue('segurado_estado'),
+          seguradoCNH: getFile('cnhSeg'),
+          seguradoComprovanteResidencia: getFile('comprovanteResidenciaSeg'),
+          // Confirmação
+          confirmado: getChecked('renovConfirm'),
         };
         break;
       case 'endosso':
         formData = {
           tipo: currentFluxo,
-          nomeOuRazao: document.getElementById('endossoNome')?.value,
-          documento: document.getElementById('endossoDocumento')?.value,
-          seguradora: document.getElementById('endossoSeguradora')?.value,
-          outraSeguradora: document.getElementById('endossoOutraSeguradoraNome')?.value || "",
-          apoliceAPP: document.getElementById('endossoApoliceAPP')?.value,
-          apoliceRCF: document.getElementById('endossoApoliceRCF')?.value,
-          tipoSolicitacao: document.getElementById('endossoTipo')?.value,
-          anexoCRLV: document.getElementById('anexoCRLV')?.files[0]?.name || "",
-          anexoCNH: document.getElementById('anexoCNH')?.files[0]?.name || "",
-          anexoCNHAuxiliar: document.getElementById('anexoCNHAuxiliar')?.files[0]?.name || "",
-          anexoEndereco: document.getElementById('anexoEndereco')?.files[0]?.name || "",
+          nomeOuRazao: getValue('endossoNome'),
+          documento: getValue('endossoDocumento'),
+          seguradora: getValue('endossoSeguradora'),
+          outraSeguradora: getValue('endossoOutraSeguradoraNome'),
+          apoliceAPP: getValue('endossoApoliceAPP'),
+          apoliceRCF: getValue('endossoApoliceRCF'),
+          tipoSolicitacao: getValue('endossoTipo'),
         };
         switch (formData.tipoSolicitacao) {
           case 'substituicao_veiculo':
             Object.assign(formData, {
-              placaAtual: document.getElementById('endossoVeiculoPlacaAtual')?.value,
-              placaNova: document.getElementById('endossoVeiculoPlacaNova')?.value,
-              chassi: document.getElementById('endossoVeiculoChassi')?.value,
-              renavam: document.getElementById('endossoVeiculoRenavam')?.value,
-              fabricante: document.getElementById('endossoVeiculoFab')?.value,
-              modelo: document.getElementById('endossoVeiculoModelo')?.value,
-              ano: document.getElementById('endossoVeiculoAno')?.value,
-              lotacao: parseInt(document.getElementById('endossoVeiculoLotacao')?.value, 10) || 0,
-              crlv: document.getElementById('endossoVeiculoCRLV')?.files[0]?.name || "",
+              placaAtual: getValue('endossoVeiculoPlacaAtual'),
+              placaNova: getValue('endossoVeiculoPlacaNova'),
+              chassi: getValue('endossoVeiculoChassi'),
+              renavam: getValue('endossoVeiculoRenavam'),
+              fabricante: getValue('endossoVeiculoFab'),
+              modelo: getValue('endossoVeiculoModelo'),
+              ano: getValue('endossoVeiculoAno'),
+              lotacao: getIntValue('endossoVeiculoLotacao'),
+              crlv: getFile('endossoVeiculoCRLV'),
             });
             break;
           case 'inclusao_condutor':
             Object.assign(formData, {
-              qaInicial: document.getElementById('endossoQaInicial')?.value,
-              acaoCondutor: document.getElementById('endossoAcao')?.value,
-              condutor1Nome: document.getElementById('endossoCondutor1Nome')?.value,
-              condutor1CPF: document.getElementById('endossoCondutor1CPF')?.value,
-              condutor1CNH: document.getElementById('endossoCondutor1CNH')?.files[0]?.name || "",
-              condutor2Nome: document.getElementById('endossoCondutor2Nome')?.value,
-              condutor2CPF: document.getElementById('endossoCondutor2CPF')?.value,
-              condutor2CNH: document.getElementById('endossoCondutor2CNH')?.files[0]?.name || "",
+              qaInicial: getValue('endossoQaInicial'),
+              acaoCondutor: getValue('endossoAcao'),
+              condutor1Nome: getValue('endossoCondutor1Nome'),
+              condutor1CPF: getValue('endossoCondutor1CPF'),
+              condutor1CNH: getFile('endossoCondutor1CNH'),
+              condutor2Nome: getValue('endossoCondutor2Nome'),
+              condutor2CPF: getValue('endossoCondutor2CPF'),
+              condutor2CNH: getFile('endossoCondutor2CNH'),
             });
             break;
           case 'alteracao_endereco':
             Object.assign(formData, {
-              novoEndereco: document.getElementById('endossoNovoEndereco')?.value,
-              novoEmail: document.getElementById('endossoNovoEmail')?.value,
-              novoTelefone: document.getElementById('endossoNovoTelefone')?.value,
-              comprovanteEndereco: document.getElementById('endossoNovoEnderecoComp')?.files[0]?.name || "",
+              novoEndereco: getValue('endossoNovoEndereco'),
+              novoEmail: getValue('endossoNovoEmail'),
+              novoTelefone: getValue('endossoNovoTelefone'),
+              comprovanteEndereco: getFile('endossoNovoEnderecoComp'),
             });
             break;
           case 'correcao_cadastral':
             Object.assign(formData, {
-              tipoPessoa: document.querySelector('input[name="tipoPessoa"]:checked')?.value,
-              segNomePF: document.getElementById('segNomePF')?.value,
-              segCPF: document.getElementById('segCPF')?.value,
-              segRazao: document.getElementById('segRazao')?.value,
-              segCNPJ: document.getElementById('segCNPJ')?.value,
-              cnhSegurado: document.getElementById('endossoCorrecaoCNH')?.files[0]?.name || "",
+              tipoPessoa: getRadio('tipoPessoa'),
+              segNomePF: getValue('segNomePF'),
+              segCPF: getValue('segCPF'),
+              segRazao: getValue('segRazao'),
+              segCNPJ: getValue('segCNPJ'),
+              cnhSegurado: getFile('endossoCorrecaoCNH'),
             });
             break;
         }
@@ -1824,25 +1701,25 @@ function addListenersAndMasks() {
       case 'segunda_via':
         formData = {
           tipo: currentFluxo,
-          nomeOuRazao: document.getElementById('segundaViaNome')?.value,
-          documento: document.getElementById('segundaViaDocumento')?.value,
-          tipoDocumento: document.getElementById('segundaViaTipoDoc')?.value,
-          outroDocumento: document.getElementById('segundaViaOutroNome')?.value || "",
-          responsavel: document.getElementById('segundaViaResponsavel')?.value,
-          observacoes: document.getElementById('segundaViaObs')?.value,
+          nomeOuRazao: getValue('segundaViaNome'),
+          documento: getValue('segundaViaDocumento'),
+          tipoDocumento: getValue('segundaViaTipoDoc'),
+          outroDocumento: getValue('segundaViaOutroNome'),
+          responsavel: getValue('segundaViaResponsavel'),
+          observacoes: getValue('segundaViaObs'),
         };
         break;
       case 'financeiro_regularizacao':
         formData = {
           tipo: currentFluxo,
-          nomeOuRazao: document.getElementById('finRegNome')?.value,
-          documento: document.getElementById('finRegDocumento')?.value,
-          dataVencimento: document.getElementById('finRegDataVencimento')?.value,
-          parcelaAberta: document.getElementById('finRegParcela')?.value,
-          apoliceRCF: document.getElementById('finRegApoliceRCF')?.value,
-          motivoInadimplencia: document.getElementById('finRegMotivo')?.value,
-          responsavel: document.getElementById('finRegResponsavel')?.value,
-          observacoes: document.getElementById('finRegObs')?.value,
+          nomeOuRazao: getValue('finRegNome'),
+          documento: getValue('finRegDocumento'),
+          dataVencimento: getValue('finRegDataVencimento'),
+          parcelaAberta: getValue('finRegParcela'),
+          apoliceRCF: getValue('finRegApoliceRCF'),
+          motivoInadimplencia: getValue('finRegMotivo'),
+          responsavel: getValue('finRegResponsavel'),
+          observacoes: getValue('finRegObs'),
         };
         break;
       default:
@@ -1912,16 +1789,32 @@ function addListenersAndMasks() {
   const cnpjInput = document.getElementById('cnpj');
   if (cnpjInput) {
     cnpjInput.addEventListener('blur', buscar);
+    cnpjInput.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        buscar();
+      }
+    });
   }
 
-  const cepInput = document.getElementById('cep');
-  if (cepInput) {
-    cepInput.addEventListener('blur', () => buscarCep('estipulante'));
-  }
+  // const cepInput = document.getElementById('cep');
+  // if (cepInput) {
+  //   cepInput.addEventListener('keydown', function(event) {
+  //     if (event.key === 'Enter') {
+  //       event.preventDefault();
+  //       buscar();
+  //     }
+  //   });
+  // }
 
   const seguradoCepInput = document.getElementById('segurado_cep');
   if (seguradoCepInput) {
-    seguradoCepInput.addEventListener('blur', () => buscarCep('segurado'));
+    seguradoCepInput.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        buscarCep();
+      }
+    });
   }
 
   // Remove erro on-input
@@ -2162,6 +2055,14 @@ async function buscarCep(prefix) {
   const cepInput = document.getElementById(prefix === 'estipulante' ? 'cep' : 'segurado_cep');
   const cep = cepInput.value.replace(/\D/g, '');
 
+  // Remove existing error message
+  const existingError = cepInput.nextElementSibling;
+  if (existingError && existingError.classList.contains('invalid-feedback')) {
+    existingError.remove();
+  }
+  cepInput.classList.remove('is-invalid');
+
+
   if (cep.length !== 8) {
     return;
   }
@@ -2173,7 +2074,11 @@ async function buscarCep(prefix) {
     const data = await response.json();
 
     if (data.erro) {
-      alert('CEP não encontrado.');
+      cepInput.classList.add('is-invalid');
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'invalid-feedback d-block';
+      errorDiv.textContent = 'CEP não encontrado.';
+      cepInput.parentNode.insertBefore(errorDiv, cepInput.nextSibling);
       return;
     }
 
@@ -2191,7 +2096,11 @@ async function buscarCep(prefix) {
 
   } catch (error) {
     console.error('Erro ao buscar CEP:', error);
-    alert('Erro ao buscar CEP. Tente novamente.');
+    cepInput.classList.add('is-invalid');
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'invalid-feedback d-block';
+    errorDiv.textContent = 'Erro ao buscar CEP. Tente novamente.';
+    cepInput.parentNode.insertBefore(errorDiv, cepInput.nextSibling);
   }
 }
 
@@ -2200,9 +2109,13 @@ async function buscarCep(prefix) {
 // =================================================================
 function limpar(str){ return (str || '').replace(/\D/g, ''); }
 
+    const cnpj = '';
     async function buscar(){
       const cnpjInput = document.getElementById('cnpj');
-      const cnpj = limpar(cnpjInput.value);
+      if (cnpjInput) {
+        cnpj = limpar(cnpjInput.value);
+      }
+      
       const resultadoDiv = document.getElementById('resultadoEstipulante');
 
       if(!cnpj){
@@ -2223,14 +2136,20 @@ function limpar(str){ return (str || '').replace(/\D/g, ''); }
           const rcfPolicies = achados.filter(p => p.dano_material_DM);
           const appPolicies = achados.filter(p => p.dano_corporal_DC);
 
-          let html = '';
+          let html = `
+            <div class="row mb-3">
+              <div class="col-12 col-sm-auto d-flex flex-wrap align-items-baseline">
+                <span class="fw-bold text-break">${achados[0].estipulante}</span>
+              </div>
+            </div>
+          `;
 
           if (rcfPolicies.length > 0) {
             html += `
               <div class="mb-3">
                 <label for="rcf_policy_select" class="form-label"><strong>RCF - Dano Material (DM)</strong></label>
                 <select id="rcf_policy_select" class="form-select">
-                  <option disable value=''>Nenhuma</option>
+                  <option value=''>Nenhuma</option>
                   ${rcfPolicies.map(p => `<option value='${JSON.stringify(p)}'>${p.apolice} - ${p.premio}</option>`).join('')}
                 </select>
               </div>`;
@@ -2241,7 +2160,7 @@ function limpar(str){ return (str || '').replace(/\D/g, ''); }
               <div class="mb-3">
                 <label for="app_policy_select" class="form-label"><strong>APP - Dano Corporal (DC)</strong></label>
                 <select id="app_policy_select" class="form-select">
-                  <option disable value=''>Nenhuma</option>
+                  <option value=''>Nenhuma</option>
                   ${appPolicies.map(p => `<option value='${JSON.stringify(p)}'>${p.apolice} - ${p.premio}</option>`).join('')}
                 </select>
               </div>`;
