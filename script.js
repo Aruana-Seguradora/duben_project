@@ -2109,12 +2109,10 @@ async function buscarCep(prefix) {
 // =================================================================
 function limpar(str){ return (str || '').replace(/\D/g, ''); }
 
-    const cnpj = '';
     async function buscar(){
+      
       const cnpjInput = document.getElementById('cnpj');
-      if (cnpjInput) {
-        cnpj = limpar(cnpjInput.value);
-      }
+      cnpj = limpar(cnpjInput.value);
       
       const resultadoDiv = document.getElementById('resultadoEstipulante');
 
