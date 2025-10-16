@@ -1529,17 +1529,17 @@ function nextStep() {
     // ];
 
     const baseStepsAfter = [
-        // { label: "Veículo", template: "veiculo" },
-        // { label: "Produtos", template: "produtos_coberturas" },
-        // { label: "Parcelas", template: "parcelas"},
-        // { label: "Auxiliares", template: "auxiliares" },
-        // { label: "Info & Consent.", template: "consentimento" },
-        { label: "Enviar", template: "enviar" }
+        { label: "Veículo", template: "veiculo" },
+        { label: "Produtos", template: "produtos_coberturas" },
+        { label: "Parcelas", template: "parcelas"},
+        { label: "Auxiliares", template: "auxiliares" },
+        { label: "Info & Consent.", template: "consentimento" },
+        // { label: "Enviar", template: "enviar" }
     ];
 
     let dynamicSteps = [];
     if (tipoSolicitante === 'segurado') {
-        // dynamicSteps.push({ label: "Segurado", template: "segurado" });
+        dynamicSteps.push({ label: "Segurado", template: "segurado" });
     } else if (tipoSolicitante === 'estipulante') {
         dynamicSteps.push({ label: "Estipulante", template: "estipulante" });
         dynamicSteps.push({ label: "Segurado", template: "segurado" });
@@ -1631,7 +1631,7 @@ function nextStep() {
     // Adiciona as novas etapas ao fluxo
     activeSteps.push(...stepsToAdd);
     
-    renderForm(); // Re-renderiza o formulário
+    renderForm();
 
     // 2. Restaura o estado do formulário
     // Object.keys(formDataBeforeRender).forEach(id => {
