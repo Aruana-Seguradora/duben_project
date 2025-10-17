@@ -473,13 +473,13 @@ const stepTemplates = {
           <div class="invalid-feedback">Informe o nome.</div>
         </div>
         <div class="col-md-6 mb-3">
-          <label class="form-label">Venda Condicionada a Tigo?</label>
-          <select id="tigo" class="form-select" required>
+          <label class="form-label">Trabalha com estipulantes?</label>
+          <select id="estipuQuestion" class="form-select" required>
             <option disabled selected value="">Selecione</option>
             <option>Sim</option>
             <option>Não</option>
           </select>
-          <div class="invalid-feedback">Informe a venda.</div>
+          <div class="invalid-feedback">Informe se trabalha.</div>
         </div>
       </div>
       
@@ -492,6 +492,232 @@ const stepTemplates = {
         </button>
       </div>
     </div>`,
+  colaborador_dados: `
+    <div class="form-step" data-step="5">
+      <h4 class="mb-4">Dados do Colaborador</h4>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="colaboradorTipoPessoa" class="form-label">Tipo de pessoa *</label>
+          <select id="colaboradorTipoPessoa" class="form-select" required>
+            <option value="">Selecione</option>
+            <option value="pf">Pessoa Física</option>
+            <option value="pj">Pessoa Jurídica</option>
+          </select>
+          <div class="invalid-feedback">Informe o tipo</div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">CPF/CNPJ *</label>
+          <input id="colaboradorDocumento" class="form-control" placeholder="CPF ou CNPJ" required />
+          <div class="invalid-feedback">Documento inválido.</div>
+        </div>
+      </div>
+      <div class="row">
+          <div class="col-md-4 mb-3">
+              <label class="form-label">Data de Nascimento *</label>
+              <input id="colaboradorDataNascimento" type="date" class="form-control" required />
+              <div class="invalid-feedback">Informe a data de nascimento.</div>
+          </div>
+          <div class="col-md-4 mb-3">
+              <label class="form-label">Estado Civil *</label>
+              <select id="colaboradorEstadoCivil" class="form-select" required>
+                  <option value="">Selecione</option>
+                  <option>Solteiro(a)</option>
+                  <option>Casado(a)</option>
+                  <option>Divorciado(a)</option>
+                  <option>Viúvo(a)</option>
+              </select>
+              <div class="invalid-feedback">Informe o estado civil.</div>
+          </div>
+          <div class="col-md-4 mb-3">
+              <label class="form-label">Sexo *</label>
+              <select id="colaboradorSexo" class="form-select" required>
+                  <option value="">Selecione</option>
+                  <option>Masculino</option>
+                  <option>Feminino</option>
+              </select>
+              <div class="invalid-feedback">Informe o sexo.</div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-4 mb-3">
+              <label class="form-label">Tipo Identidade *</label>
+              <select id="colaboradorTipoIdentidade" class="form-select" required>
+                  <option value="">Selecione</option>
+                  <option>CNH</option>
+                  <option>CREA</option>
+                  <option>MILITAR</option>
+                  <option>CREA</option>
+                  <option>ORDEM ADVOG BRASIL</option>
+                  <option>PASSAPORTE</option>
+                  <option>RG</option>
+                  <option>OUTROS</option>
+              </select>
+              <div class="invalid-feedback">Informe o tipo de identidade.</div>
+          </div>
+          <div class="col-md-4 mb-3">
+              <label class="form-label">Nº Identidade *</label>
+              <input type="number" id="colaboradorNumIdentidade" class="form-control" required />
+              <div class="invalid-feedback">Informe o nº da identidade.</div>
+          </div>
+          <div class="col-md-4 mb-3">
+              <label class="form-label">Órgão Emissor *</label>
+              <input id="colaboradorOrgaoEmissor" class="form-control" required />
+              <div class="invalid-feedback">Informe o órgão emissor.</div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-6 mb-3">
+              <label class="form-label">Data de Emissão *</label>
+              <input id="colaboradorDataEmissao" type="date" class="form-control" required />
+              <div class="invalid-feedback">Informe a data de emissão.</div>
+          </div>
+          <div class="col-md-6 mb-3">
+              <label class="form-label">Estrangeiro? *</label>
+              <div class="d-flex gap-3">
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="colaboradorEstrangeiro" id="colaboradorEstrangeiroSim" value="sim" required />
+                      <label class="form-check-label" for="colaboradorEstrangeiroSim">Sim</label>
+                  </div>
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="colaboradorEstrangeiro" id="colaboradorEstrangeiroNao" value="nao" required checked />
+                      <label class="form-check-label" for="colaboradorEstrangeiroNao">Não</label>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="colaboradorBlocoEstrangeiro" style="display: none;">
+          <div class="row">
+              <div class="col-md-4 mb-3">
+                  <label class="form-label">País</label>
+                  <input id="colaboradorPais" class="form-control" />
+              </div>
+              <div class="col-md-4 mb-3">
+                  <label class="form-label">Tempo no País</label>
+                  <input id="colaboradorTempoPais" class="form-control" />
+              </div>
+              <div class="col-md-4 mb-3">
+                  <label class="form-label">País de Residência</label>
+                  <input id="colaboradorPaisResidencia" class="form-control" />
+              </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-6 mb-3">
+              <label class="form-label">Atividade Principal</label>
+              <input id="colaboradorAtividadePrincipal" class="form-control" />
+          </div>
+          <div class="col-md-6 mb-3">
+              <label class="form-label">Faixa de Renda Mensal</label>
+              <input id="colaboradorFaixaRenda" class="form-control" />
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Email *</label>
+            <input type="email" id="emailColaborador" class="form-control" required/>
+            <div class="invalid-feedback">Informe o email.</div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Telefone *</label>
+            <input id="telColaborador" class="form-control" required/>
+            <div class="invalid-feedback">Informe o telefone.</div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Email Adicional</label>
+            <input type="email" id="emailColaboradorAux" class="form-control"/>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Telefone Adicional</label>
+            <input id="telColaboradorAux" class="form-control"/>
+          </div>
+          <div class="col-md-4 mb-3">
+              <label class="form-label">Pessoa Politicamente Exposta? *</label>
+              <div class="d-flex gap-3">
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="colaboradorPPE" id="colaboradorPPESim" value="sim" required />
+                      <label class="form-check-label" for="colaboradorPPESim">Sim</label>
+                  </div>
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="colaboradorPPE" id="colaboradorPPENao" value="nao" required checked />
+                      <label class="form-check-label" for="colaboradorPPENao">Não</label>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="colaboradorBlocoPPE" style="display: none;">
+          <div class="row">
+              <div class="col-md-4 mb-3">
+                  <label class="form-label">Nome</label>
+                  <input id="colaboradorPPENome" class="form-control" />
+              </div>
+              <div class="col-md-4 mb-3">
+                  <label class="form-label">CPF</label>
+                  <input id="colaboradorPPECPF" class="form-control" />
+              </div>
+              <div class="col-md-4 mb-3">
+                  <label class="form-label">Grau de Relacionamento</label>
+                  <input id="colaboradorPPEGrauRelacionamento" class="form-control" />
+              </div>
+          </div>
+      </div>
+      <h5 class="mt-4">Endereço do Colaborador</h5>
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label for="colaborador_cep" class="form-label">CEP *</label>
+          <div class="input-group">
+            <input id="colaborador_cep" class="form-control" placeholder="00000-000" required>
+            <button class="btn btn-outline-secondary" type="button" onclick="buscarCep('colaborador')"><i class="bi bi-search"></i></button>
+            <div class="invalid-feedback">Informe um CEP válido.</div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-8 mb-3">
+          <label class="form-label">Logradouro</label>
+          <input id="colaborador_logradouro" class="form-control" readonly>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Número</label>
+          <input type="number" required id="colaborador_numero" class="form-control">
+          <div class="invalid-feedback">Informe o número.</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Bairro</label>
+          <input id="colaborador_bairro" class="form-control" readonly>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Cidade</label>
+          <input id="colaborador_cidade" class="form-control" readonly>
+        </div>
+        <div class="col-md-2 mb-3">
+          <label class="form-label">Estado</label>
+          <input id="colaborador_estado" class="form-control" readonly>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Upload CNH (PDF/JPG/PNG) *</label>
+        <input id="cnhColaborador" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
+        <div class="invalid-feedback">Faça o upload da CNH.</div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Upload Comprovante de Residência (PDF/JPG/PNG) *</label>
+        <input id="comprovanteResidenciaColaborador" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
+        <div class="invalid-feedback">Faça o upload do Comprovante.</div>
+      </div>
+      <div class="btn-group-navigation">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">
+          Próximo <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  `,
   veiculo: `
     <div class="form-step" data-step="5">
       <h4 class="mb-4">Dados do veículo</h4>
@@ -654,9 +880,9 @@ const stepTemplates = {
       <h4 class="mb-4">Dados do Estipulante</h4>
       <div class="row">
         <div class="col-md-12 mb-3">
-          <label for="cnpj" class="form-label">CNPJ *</label>
-          <input id="cnpj" class="form-control" placeholder="00.000.000/0000-00" required>
-           <div class="invalid-feedback">Informe um CNPJ válido.</div>
+          <label for="codigo" class="form-label">Código Estipulante *</label>
+          <input id="codigo" class="form-control" placeholder="10L4" required>
+           <div class="invalid-feedback">Informe um código válido.</div>
         </div>
       </div>
 
@@ -1531,7 +1757,7 @@ function nextStep() {
     const baseStepsAfter = [
         { label: "Veículo", template: "veiculo" },
         { label: "Produtos", template: "produtos_coberturas" },
-        { label: "Parcelas", template: "parcelas"},
+        // { label: "Parcelas", template: "parcelas"},
         { label: "Auxiliares", template: "auxiliares" },
         { label: "Info & Consent.", template: "consentimento" },
         // { label: "Enviar", template: "enviar" }
@@ -1544,13 +1770,38 @@ function nextStep() {
         dynamicSteps.push({ label: "Estipulante", template: "estipulante" });
         dynamicSteps.push({ label: "Segurado", template: "segurado" });
     } else if (tipoSolicitante === 'colaborador') {
-        dynamicSteps.push({ label: "Solicitante", template: "solicitante" });
-        dynamicSteps.push({ label: "Estipulante", template: "estipulante" });
+        dynamicSteps.push({ label: "Colaborador", template: "solicitante" });
         dynamicSteps.push({ label: "Segurado", template: "segurado" });
     }
 
     // TALVEZ MEXER AQUI
     activeSteps.splice(currentStep + 1, activeSteps.length - currentStep - 1, ...dynamicSteps, ...baseStepsAfter);
+  }
+
+  if (currentFluxo === 'nova' && currentStepConfig.template === 'solicitante') {
+    needsDynamicRender = true;
+    const estipuQuestion = document.getElementById('estipuQuestion').value;
+
+    const solicitanteStepIndex = currentStep;
+
+    // Base steps that always come after the person-related steps
+    const baseStepsAfter = [
+        { label: "Veículo", template: "veiculo" },
+        { label: "Produtos", template: "produtos_coberturas" },
+        { label: "Auxiliares", template: "auxiliares" },
+        { label: "Info & Consent.", template: "consentimento" },
+    ];
+
+    let personSteps = [];
+    if (estipuQuestion === 'Sim') {
+        personSteps.push({ label: "Estipulante", template: "estipulante" });
+        personSteps.push({ label: "Segurado", template: "segurado" });
+    } else {
+        personSteps.push({ label: "Dados", template: "colaborador_dados" });
+        personSteps.push({ label: "Segurado", template: "segurado" });
+    }
+
+    activeSteps.splice(solicitanteStepIndex + 1, Infinity, ...personSteps, ...baseStepsAfter);
   }
 
   // Lógica para adicionar etapas dinâmicas
@@ -1798,7 +2049,6 @@ function addListenersAndMasks() {
 
           // Colaborador (se aplicável)
           solicitanteNome: getValue('estipNome'),
-          vendaCondicionadaTigo: getValue('tigo'),
 
           // Estipulante (se aplicável)
           estipulanteCNPJ: getValue('cnpj'),
@@ -1854,6 +2104,10 @@ function addListenersAndMasks() {
           seguradoBairro: getValue('segurado_bairro'),
           seguradoCidade: getValue('segurado_cidade'),
           seguradoEstado: getValue('segurado_estado'),
+          seguradoEmail: getValue('emailSeg'),
+          seguradoTelefone: getValue('telSeg'),
+          seguradoEmailAdicional: getValue('emailSegAux'),
+          seguradoTelefoneAdicional: getValue('telSegAux'),
           seguradoCNH: getFile('cnhSeg'),
           seguradoComprovanteResidencia: getFile('comprovanteResidenciaSeg'),
 
@@ -1884,6 +2138,43 @@ function addListenersAndMasks() {
           infoAdicionais: getValue('infoAdicionais'),
           termos: getChecked('termos'),
         };
+
+        const hasColaboradorDados = activeSteps.some(step => step.template === 'colaborador_dados');
+        if (hasColaboradorDados) {
+            Object.assign(formData, {
+                colaboradorTipoPessoa: getValue('colaboradorTipoPessoa'),
+                colaboradorDocumento: getValue('colaboradorDocumento'),
+                colaboradorDataNascimento: getValue('colaboradorDataNascimento'),
+                colaboradorEstadoCivil: getValue('colaboradorEstadoCivil'),
+                colaboradorSexo: getValue('colaboradorSexo'),
+                colaboradorTipoIdentidade: getValue('colaboradorTipoIdentidade'),
+                colaboradorNumIdentidade: getValue('colaboradorNumIdentidade'),
+                colaboradorOrgaoEmissor: getValue('colaboradorOrgaoEmissor'),
+                colaboradorDataEmissao: getValue('colaboradorDataEmissao'),
+                colaboradorEstrangeiro: getRadio('colaboradorEstrangeiro'),
+                colaboradorPais: getValue('colaboradorPais'),
+                colaboradorTempoPais: getValue('colaboradorTempoPais'),
+                colaboradorPaisResidencia: getValue('colaboradorPaisResidencia'),
+                colaboradorAtividadePrincipal: getValue('colaboradorAtividadePrincipal'),
+                colaboradorFaixaRenda: getValue('colaboradorFaixaRenda'),
+                colaboradorPPE: getRadio('colaboradorPPE'),
+                colaboradorPPENome: getValue('colaboradorPPENome'),
+                colaboradorPPECPF: getValue('colaboradorPPECPF'),
+                colaboradorPPEGrauRelacionamento: getValue('colaboradorPPEGrauRelacionamento'),
+                colaboradorCEP: getValue('colaborador_cep'),
+                colaboradorLogradouro: getValue('colaborador_logradouro'),
+                colaboradorNumero: getValue('colaborador_numero'),
+                colaboradorBairro: getValue('colaborador_bairro'),
+                colaboradorCidade: getValue('colaborador_cidade'),
+                colaboradorEstado: getValue('colaborador_estado'),
+                colaboradorEmail: getValue('emailColaborador'),
+                colaboradorTelefone: getValue('telColaborador'),
+                colaboradorEmailAdicional: getValue('emailColaboradorAux'),
+                colaboradorTelefoneAdicional: getValue('telColaboradorAux'),
+                colaboradorCNH: getFile('cnhColaborador'),
+                colaboradorComprovanteResidencia: getFile('comprovanteResidenciaColaborador'),
+            });
+        }
         break;
       case 'renovacao':
         formData = {
@@ -2077,10 +2368,10 @@ function addListenersAndMasks() {
   document.querySelectorAll('input[name="tigoClube"]').forEach((r) => r.addEventListener("change", toggleTigoClubeAdesao));
   
   // Listener para o campo CNPJ
-  const cnpjInput = document.getElementById('cnpj');
-  if (cnpjInput) {
-    cnpjInput.addEventListener('blur', buscar);
-    cnpjInput.addEventListener('keydown', function(event) {
+  const codigo = document.getElementById('codigo');
+  if (codigo) {
+    codigo.addEventListener('blur', buscar);
+    codigo.addEventListener('keydown', function(event) {
       if (event.key === 'Enter') {
         event.preventDefault();
         buscar();
@@ -2388,11 +2679,13 @@ function populateRenovacaoConfirmacao() {
 async function buscarCep(prefix) {
   // Define os IDs dos campos com base no prefixo
   const isEstipulante = prefix === 'estipulante';
-  const cepId = isEstipulante ? 'cep' : 'segurado_cep';
-  const logradouroId = isEstipulante ? 'logradouro' : 'segurado_logradouro';
-  const bairroId = isEstipulante ? 'bairro' : 'segurado_bairro';
-  const cidadeId = isEstipulante ? 'cidade' : 'segurado_cidade';
-  const estadoId = isEstipulante ? 'estado' : 'segurado_estado';
+  const isColaborador = prefix === 'colaborador';
+
+  const cepId = isEstipulante ? 'cep' : (isColaborador ? 'colaborador_cep' : 'segurado_cep');
+  const logradouroId = isEstipulante ? 'logradouro' : (isColaborador ? 'colaborador_logradouro' : 'segurado_logradouro');
+  const bairroId = isEstipulante ? 'bairro' : (isColaborador ? 'colaborador_bairro' : 'segurado_bairro');
+  const cidadeId = isEstipulante ? 'cidade' : (isColaborador ? 'colaborador_cidade' : 'segurado_cidade');
+  const estadoId = isEstipulante ? 'estado' : (isColaborador ? 'colaborador_estado' : 'segurado_estado');
 
   const cepInput = document.getElementById(cepId);
   const addressFields = [
@@ -2457,15 +2750,17 @@ async function buscarCep(prefix) {
 // =================================================================
 // 7. CHAMADA AO CSV DE ESTIPULANTES
 // =================================================================
-function limpar(str){ return (str || '').replace(/\D/g, ''); }
 
 async function buscar() {
-    const cnpjInput = document.getElementById('cnpj');
-    const cnpj = limpar(cnpjInput.value);
+    let codigo = '';
+    if (document.getElementById('codigo')) {
+      codigo = document.getElementById('codigo').value;
+    }
+    
     const resultadoDiv = document.getElementById('resultadoEstipulante');
 
-    if (!cnpj) {
-        resultadoDiv.innerHTML = `<div class="alert alert-warning">Digite um CNPJ válido.</div>`;
+    if (!codigo) {
+        resultadoDiv.innerHTML = `<div class="alert alert-warning">Digite um Código válido.</div>`;
         return;
     }
 
@@ -2486,7 +2781,7 @@ async function buscar() {
         if (rcfResponse.ok) {
             const texto_rcf = await rcfResponse.text();
             const csv_rcf = Papa.parse(texto_rcf, { header: true, skipEmptyLines: true }).data;
-            achados_rcf = csv_rcf.filter(l => limpar(l.cnpj) === cnpj);
+            achados_rcf = csv_rcf.filter(l => l.codigo === codigo);
         } else {
             console.error('Falha ao carregar estipulantes_rcf.csv');
         }
@@ -2495,13 +2790,13 @@ async function buscar() {
         if (appResponse.ok) {
             const texto_app = await appResponse.text();
             const csv_app = Papa.parse(texto_app, { header: true, skipEmptyLines: true, delimiter: ';' }).data;
-            achados_app = csv_app.filter(l => limpar(l.cnpj) === cnpj);
+            achados_app = csv_app.filter(l => l.codigo === codigo);
         } else {
             console.error('Falha ao carregar estipulantes_app.csv');
         }
 
         if (achados_rcf.length === 0 && achados_app.length === 0) {
-            resultadoDiv.innerHTML = `<div class="alert alert-danger">Estipulante não encontrado para o CNPJ informado.</div>`;
+            resultadoDiv.innerHTML = `<div class="alert alert-danger">Estipulante não encontrado para o Código informado.</div>`;
             return;
         }
         
