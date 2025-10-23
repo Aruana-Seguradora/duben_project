@@ -1,0 +1,355 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "additionalProperties": false,
+    "$defs": {
+        "stringOrNull": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "intOrNull": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "boolOrNull": {
+            "type": [
+                "boolean",
+                "null"
+            ]
+        }
+    },
+    "properties": {
+        "tipoSolicitante": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "tipo": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "colaboradorNome": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "colaboradorNomeSocial": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "estipulanteCNPJ": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "estipulanteApoliceRCF": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "estipulantePremioRCF": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "estipulanteDanoMaterial": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "estipulanteApoliceAPP": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "estipulantePremioAPP": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "estipulanteDanoCorporal": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "produtos": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "valorRCF": {
+            "$ref": "#/$defs/intOrNull"
+        },
+        "valorAPP": {
+            "$ref": "#/$defs/intOrNull"
+        },
+        "qtdParcelas": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoNome": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoNomeSocial": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoTipoPessoa": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoDocumento": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoDataNascimento": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoEstadoCivil": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoSexo": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoTipoIdentidade": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoNumIdentidade": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoOrgaoEmissor": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoDataEmissao": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoEstrangeiro": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoPais": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoTempoPais": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoPaisResidencia": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoAtividadePrincipal": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoFaixaRenda": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoPPE": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoPPENome": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoPPECPF": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoPPEGrauRelacionamento": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoCEP": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoLogradouro": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoNumero": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoBairro": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoCidade": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoEstado": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoCNH": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoComprovanteResidencia": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "veiculoPlaca": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "veiculoChassi": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "veiculoRenavam": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "veiculoFabricante": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "veiculoModelo": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "veiculoAno": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "veiculoUso": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "veiculoLotacao": {
+            "$ref": "#/$defs/intOrNull"
+        },
+        "veiculoCRLV": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "adicionarAuxiliar": {
+            "$ref": "#/$defs/boolOrNull"
+        },
+        "auxiliar1Nome": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "auxiliar1CPF": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "auxiliar1CNH": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "adicionarAuxiliar2": {
+            "$ref": "#/$defs/boolOrNull"
+        },
+        "auxiliar2Nome": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "auxiliar2CPF": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "auxiliar2CNH": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "infoAdicionais": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "termos": {
+            "$ref": "#/$defs/boolOrNull"
+        },
+        "numeroApoliceAnterior": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "dataVencimentoAnterior": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradoraAnterior": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "outraSeguradoraAnterior": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "confirmado": {
+            "$ref": "#/$defs/boolOrNull"
+        },
+        "nomeOuRazao": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "documento": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "seguradora": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "outraSeguradora": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "apoliceAPP": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "apoliceRCF": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "tipoSolicitacao": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "placaAtual": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "placaNova": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "chassi": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "renavam": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "fabricante": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "modelo": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "ano": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "lotacao": {
+            "$ref": "#/$defs/intOrNull"
+        },
+        "crlv": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "qaInicial": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "acaoCondutor": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "condutor1Nome": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "condutor1CPF": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "condutor1CNH": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "condutor2Nome": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "condutor2CPF": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "condutor2CNH": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "novoEndereco": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "novoEmail": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "novoTelefone": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "comprovanteEndereco": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "tipoPessoa": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "segNomePF": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "segCPF": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "segRazao": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "segCNPJ": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "cnhSegurado": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "tipoDocumento": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "outroDocumento": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "responsavel": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "observacoes": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "dataVencimento": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "parcelaAberta": {
+            "$ref": "#/$defs/stringOrNull"
+        },
+        "motivoInadimplencia": {
+            "$ref": "#/$defs/stringOrNull"
+        }
+    }
+}
+ 
