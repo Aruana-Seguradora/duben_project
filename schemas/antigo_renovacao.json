@@ -1,0 +1,72 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "tipo": { "type": "string" },
+    "tipoSolicitante": { "type": "string" },
+    "numeroApoliceAnterior": { "type": "string" },
+    "dataVencimentoAnterior": { "type": "string" },
+    "seguradoraAnterior": { "type": "string" },
+    "outraSeguradoraAnterior": { "type": "string" },
+    "seguradoNome": { "type": "string" },
+    "seguradoNomeSocial": { "type": "string" },
+    "seguradoTipoPessoa": { "type": "string" },
+    "seguradoDocumento": { "type": "string" },
+    "seguradoDataNascimento": { "type": "string" },
+    "seguradoEstadoCivil": { "type": "string" },
+    "seguradoSexo": { "type": "string" },
+    "seguradoTipoIdentidade": { "type": "string" },
+    "seguradoNumIdentidade": { "type": "string" },
+    "seguradoOrgaoEmissor": { "type": "string" },
+    "seguradoDataEmissao": { "type": "string" },
+    "seguradoEstrangeiro": { "type": "string" },
+    "seguradoPais": { "type": "string" },
+    "seguradoTempoPais": { "type": "string" },
+    "seguradoPaisResidencia": { "type": "string" },
+    "seguradoAtividadePrincipal": { "type": "string" },
+    "seguradoFaixaRenda": { "type": "string" },
+    "seguradoPPE": { "type": "string" },
+    "seguradoPPENome": { "type": "string" },
+    "seguradoPPECPF": { "type": "string" },
+    "seguradoPPEGrauRelacionamento": { "type": "string" },
+    "seguradoCEP": { "type": "string" },
+    "seguradoLogradouro": { "type": "string" },
+    "seguradoNumero": { "type": "string" },
+    "seguradoBairro": { "type": "string" },
+    "seguradoCidade": { "type": "string" },
+    "seguradoEstado": { "type": "string" },
+    "confirmado": { "type": "boolean" },
+
+    "seguradoCNH": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "filename": { "type": "string" },
+            "contentType": { "type": "string" },
+            "content": { "type": "string" }
+          },
+          "required": ["filename", "content"]
+        }
+      ]
+    },
+
+    "seguradoComprovanteResidencia": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "filename": { "type": "string" },
+            "contentType": { "type": "string" },
+            "content": { "type": "string" }
+          },
+          "required": ["filename", "content"]
+        }
+      ]
+    }
+  }
+}

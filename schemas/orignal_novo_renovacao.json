@@ -159,10 +159,10 @@
             "$ref": "#/$defs/stringOrNull"
         },
         "seguradoCNH": {
-            "$ref": "#/$defs/stringOrNull"
+            "$ref": "#/$defs/attachmentOrNull"
         },
         "seguradoComprovanteResidencia": {
-            "$ref": "#/$defs/stringOrNull"
+            "$ref": "#/$defs/attachmentOrNull"
         },
         "veiculoPlaca": {
             "$ref": "#/$defs/stringOrNull"
