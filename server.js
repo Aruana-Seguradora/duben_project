@@ -4,11 +4,8 @@ const path = require('path');
 const multer = require('multer');
 
 const app = express();
-const port = process.env.PORT || 3000;
+// const port = process.env.PORT || 3000;
 const upload = multer({ storage: multer.memoryStorage() });
-
-// Se usar Node < 18, descomente as 2 linhas abaixo e instale node-fetch
-// const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -65,8 +62,4 @@ app.post('/submit-form', upload.any(), async (req, res) => {
   }
 });
 
-
-
-// app.listen(port, () => {
-//   console.log(`Servidor em http://localhost:${port}`);
-// });
+module.exports = app;
