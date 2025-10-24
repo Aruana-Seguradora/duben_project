@@ -492,232 +492,6 @@ const stepTemplates = {
         </button>
       </div>
     </div>`,
-  colaborador_dados: `
-    <div class="form-step" data-step="5">
-      <h4 class="mb-4">Dados do Colaborador</h4>
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label for="colaboradorTipoPessoa" class="form-label">Tipo de pessoa *</label>
-          <select id="colaboradorTipoPessoa" class="form-select" required>
-            <option value="">Selecione</option>
-            <option value="pf">Pessoa Física</option>
-            <option value="pj">Pessoa Jurídica</option>
-          </select>
-          <div class="invalid-feedback">Informe o tipo</div>
-        </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label">CPF/CNPJ *</label>
-          <input id="colaboradorDocumento" class="form-control" placeholder="CPF ou CNPJ" required />
-          <div class="invalid-feedback">Documento inválido.</div>
-        </div>
-      </div>
-      <div class="row">
-          <div class="col-md-4 mb-3">
-              <label class="form-label">Data de Nascimento *</label>
-              <input id="colaboradorDataNascimento" type="date" class="form-control" required />
-              <div class="invalid-feedback">Informe a data de nascimento.</div>
-          </div>
-          <div class="col-md-4 mb-3">
-              <label class="form-label">Estado Civil *</label>
-              <select id="colaboradorEstadoCivil" class="form-select" required>
-                  <option value="">Selecione</option>
-                  <option>Solteiro(a)</option>
-                  <option>Casado(a)</option>
-                  <option>Divorciado(a)</option>
-                  <option>Viúvo(a)</option>
-              </select>
-              <div class="invalid-feedback">Informe o estado civil.</div>
-          </div>
-          <div class="col-md-4 mb-3">
-              <label class="form-label">Sexo *</label>
-              <select id="colaboradorSexo" class="form-select" required>
-                  <option value="">Selecione</option>
-                  <option>Masculino</option>
-                  <option>Feminino</option>
-              </select>
-              <div class="invalid-feedback">Informe o sexo.</div>
-          </div>
-      </div>
-      <div class="row">
-          <div class="col-md-4 mb-3">
-              <label class="form-label">Tipo Identidade *</label>
-              <select id="colaboradorTipoIdentidade" class="form-select" required>
-                  <option value="">Selecione</option>
-                  <option>CNH</option>
-                  <option>CREA</option>
-                  <option>MILITAR</option>
-                  <option>CREA</option>
-                  <option>ORDEM ADVOG BRASIL</option>
-                  <option>PASSAPORTE</option>
-                  <option>RG</option>
-                  <option>OUTROS</option>
-              </select>
-              <div class="invalid-feedback">Informe o tipo de identidade.</div>
-          </div>
-          <div class="col-md-4 mb-3">
-              <label class="form-label">Nº Identidade *</label>
-              <input type="number" id="colaboradorNumIdentidade" class="form-control" required />
-              <div class="invalid-feedback">Informe o nº da identidade.</div>
-          </div>
-          <div class="col-md-4 mb-3">
-              <label class="form-label">Órgão Emissor *</label>
-              <input id="colaboradorOrgaoEmissor" class="form-control" required />
-              <div class="invalid-feedback">Informe o órgão emissor.</div>
-          </div>
-      </div>
-      <div class="row">
-          <div class="col-md-6 mb-3">
-              <label class="form-label">Data de Emissão *</label>
-              <input id="colaboradorDataEmissao" type="date" class="form-control" required />
-              <div class="invalid-feedback">Informe a data de emissão.</div>
-          </div>
-          <div class="col-md-6 mb-3">
-              <label class="form-label">Estrangeiro? *</label>
-              <div class="d-flex gap-3">
-                  <div class="form-check">
-                      <input class="form-check-input" type="radio" name="colaboradorEstrangeiro" id="colaboradorEstrangeiroSim" value="sim" required />
-                      <label class="form-check-label" for="colaboradorEstrangeiroSim">Sim</label>
-                  </div>
-                  <div class="form-check">
-                      <input class="form-check-input" type="radio" name="colaboradorEstrangeiro" id="colaboradorEstrangeiroNao" value="nao" required checked />
-                      <label class="form-check-label" for="colaboradorEstrangeiroNao">Não</label>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <div id="colaboradorBlocoEstrangeiro" style="display: none;">
-          <div class="row">
-              <div class="col-md-4 mb-3">
-                  <label class="form-label">País</label>
-                  <input id="colaboradorPais" class="form-control" />
-              </div>
-              <div class="col-md-4 mb-3">
-                  <label class="form-label">Tempo no País</label>
-                  <input id="colaboradorTempoPais" class="form-control" />
-              </div>
-              <div class="col-md-4 mb-3">
-                  <label class="form-label">País de Residência</label>
-                  <input id="colaboradorPaisResidencia" class="form-control" />
-              </div>
-          </div>
-      </div>
-      <div class="row">
-          <div class="col-md-6 mb-3">
-              <label class="form-label">Atividade Principal</label>
-              <input id="colaboradorAtividadePrincipal" class="form-control" />
-          </div>
-          <div class="col-md-6 mb-3">
-              <label class="form-label">Faixa de Renda Mensal</label>
-              <input id="colaboradorFaixaRenda" class="form-control" />
-          </div>
-      </div>
-      <div class="row">
-          <div class="col-md-4 mb-3">
-            <label class="form-label">Email *</label>
-            <input type="email" id="emailColaborador" class="form-control" required/>
-            <div class="invalid-feedback">Informe o email.</div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <label class="form-label">Telefone *</label>
-            <input id="telColaborador" class="form-control" required/>
-            <div class="invalid-feedback">Informe o telefone.</div>
-          </div>
-      </div>
-      <div class="row">
-          <div class="col-md-4 mb-3">
-            <label class="form-label">Email Adicional</label>
-            <input type="email" id="emailColaboradorAux" class="form-control"/>
-          </div>
-          <div class="col-md-4 mb-3">
-            <label class="form-label">Telefone Adicional</label>
-            <input id="telColaboradorAux" class="form-control"/>
-          </div>
-          <div class="col-md-4 mb-3">
-              <label class="form-label">Pessoa Politicamente Exposta? *</label>
-              <div class="d-flex gap-3">
-                  <div class="form-check">
-                      <input class="form-check-input" type="radio" name="colaboradorPPE" id="colaboradorPPESim" value="sim" required />
-                      <label class="form-check-label" for="colaboradorPPESim">Sim</label>
-                  </div>
-                  <div class="form-check">
-                      <input class="form-check-input" type="radio" name="colaboradorPPE" id="colaboradorPPENao" value="nao" required checked />
-                      <label class="form-check-label" for="colaboradorPPENao">Não</label>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <div id="colaboradorBlocoPPE" style="display: none;">
-          <div class="row">
-              <div class="col-md-4 mb-3">
-                  <label class="form-label">Nome</label>
-                  <input id="colaboradorPPENome" class="form-control" />
-              </div>
-              <div class="col-md-4 mb-3">
-                  <label class="form-label">CPF</label>
-                  <input id="colaboradorPPECPF" class="form-control" />
-              </div>
-              <div class="col-md-4 mb-3">
-                  <label class="form-label">Grau de Relacionamento</label>
-                  <input id="colaboradorPPEGrauRelacionamento" class="form-control" />
-              </div>
-          </div>
-      </div>
-      <h5 class="mt-4">Endereço do Colaborador</h5>
-      <div class="row">
-        <div class="col-md-4 mb-3">
-          <label for="colaborador_cep" class="form-label">CEP *</label>
-          <div class="input-group">
-            <input id="colaborador_cep" class="form-control" placeholder="00000-000" required>
-            <button class="btn btn-outline-secondary" type="button" onclick="buscarCep('colaborador')"><i class="bi bi-search"></i></button>
-            <div class="invalid-feedback">Informe um CEP válido.</div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-8 mb-3">
-          <label class="form-label">Logradouro</label>
-          <input id="colaborador_logradouro" class="form-control" readonly>
-        </div>
-        <div class="col-md-4 mb-3">
-          <label class="form-label">Número</label>
-          <input type="number" required id="colaborador_numero" class="form-control">
-          <div class="invalid-feedback">Informe o número.</div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Bairro</label>
-          <input id="colaborador_bairro" class="form-control" readonly>
-        </div>
-        <div class="col-md-4 mb-3">
-          <label class="form-label">Cidade</label>
-          <input id="colaborador_cidade" class="form-control" readonly>
-        </div>
-        <div class="col-md-2 mb-3">
-          <label class="form-label">Estado</label>
-          <input id="colaborador_estado" class="form-control" readonly>
-        </div>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Upload CNH (PDF/JPG/PNG) *</label>
-        <input id="cnhColaborador" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
-        <div class="invalid-feedback">Faça o upload da CNH.</div>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Upload Comprovante de Residência (PDF/JPG/PNG) *</label>
-        <input id="comprovanteResidenciaColaborador" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
-        <div class="invalid-feedback">Faça o upload do Comprovante.</div>
-      </div>
-      <div class="btn-group-navigation">
-        <button type="button" class="btn btn-secondary" onclick="prevStep()">
-          <i class="bi bi-arrow-left"></i> Voltar
-        </button>
-        <button type="button" class="btn btn-primary" onclick="nextStep()">
-          Próximo <i class="bi bi-arrow-right"></i>
-        </button>
-      </div>
-    </div>
-  `,
   veiculo: `
     <div class="form-step" data-step="5">
       <h4 class="mb-4">Dados do veículo</h4>
@@ -1797,7 +1571,6 @@ function nextStep() {
         personSteps.push({ label: "Estipulante", template: "estipulante" });
         personSteps.push({ label: "Segurado", template: "segurado" });
     } else {
-        personSteps.push({ label: "Dados", template: "colaborador_dados" });
         personSteps.push({ label: "Segurado", template: "segurado" });
     }
 
@@ -2017,326 +1790,267 @@ function addListenersAndMasks() {
     submitButton.disabled = true;
     submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...';
 
-    // const powerAutomateUrls = {
-    //   nova: 'https://e1b82d98c0c4efb7972bac26ccc599.ed.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/284cd1c4bf544f5f8055542fec59e994/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WwYcTkLu_T9Eql_7xF4KomGHvNCuewnGP1kXdXLIDDg',
-    //   renovacao: 'https://e1b82d98c0c4efb7972bac26ccc599.ed.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/284cd1c4bf544f5f8055542fec59e994/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WwYcTkLu_T9Eql_7xF4KomGHvNCuewnGP1kXdXLIDDg',
-    //   endosso: 'URL_DO_FLUXO_DE_ENDOSSO_AQUI',
-    //   segunda_via: 'URL_DO_FLUXO_DE_SEGUNDA_VIA_AQUI',
-    //   financeiro_regularizacao: 'URL_DO_FLUXO_DE_FINANCEIRO_REGULARIZACAO_AQUI',
-    // };
+    const formData = new FormData();
 
-    let formData = {};
-    let targetUrl = 'https://e1b82d98c0c4efb7972bac26ccc599.ed.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/284cd1c4bf544f5f8055542fec59e994/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WwYcTkLu_T9Eql_7xF4KomGHvNCuewnGP1kXdXLIDDg';
+    // Funções auxiliares para popular o FormData
+    const appendValue = (key, id) => {
+        const el = document.getElementById(id);
+        if (el && el.value) formData.append(key, el.value);
+    };
+    const appendFile = (key, id) => {
+        const el = document.getElementById(id);
+        if (el && el.files[0]) formData.append(key, el.files[0]);
+    };
+    const appendChecked = (key, id) => {
+        const el = document.getElementById(id);
+        formData.append(key, el ? el.checked : false);
+    };
+    const appendRadio = (key, name) => {
+        const el = document.querySelector(`input[name="${name}"]:checked`);
+        if (el) formData.append(key, el.value);
+    };
+    const appendInt = (key, id) => {
+        const el = document.getElementById(id);
+        if (el && el.value) formData.append(key, parseInt(el.value, 10) || 0);
+    };
 
-    // Funções auxiliares para obter valores dos campos
-    const getValue = (id) => document.getElementById(id)?.value || null;
-    const getFile = (id) => document.getElementById(id)?.files[0]?.name || null;
-    const getChecked = (id) => document.getElementById(id)?.checked || false;
-    const getRadio = (name) => document.querySelector(`input[name="${name}"]:checked`)?.value || null;
-    const getIntValue = (id) => parseInt(getValue(id), 10) || 0;
+    // Adiciona dados que não estão em campos de input
+    formData.append('tipo', currentFluxo);
+    formData.append('tipoSolicitante', formDataStorage.tipoSolicitante || '');
 
     switch (currentFluxo) {
-      case 'nova':
-        const rcfPolicySelect = document.getElementById('rcf_policy_select');
-        const appPolicySelect = document.getElementById('app_policy_select');
-        const rcfData = rcfPolicySelect ? JSON.parse(rcfPolicySelect.value) : {};
-        const appData = appPolicySelect ? JSON.parse(appPolicySelect.value) : {};
+        case 'nova':
+            const rcfPolicySelect = document.getElementById('rcf_policy_select');
+            const appPolicySelect = document.getElementById('app_policy_select');
+            const rcfData = rcfPolicySelect && rcfPolicySelect.value ? JSON.parse(rcfPolicySelect.value) : {};
+            const appData = appPolicySelect && appPolicySelect.value ? JSON.parse(appPolicySelect.value) : {};
 
-        formData = {
-          // Identificação
-          tipoSolicitante: formDataStorage.tipoSolicitante,
-          tipo: currentFluxo,
+            appendValue('solicitanteNome', 'estipNome');
+            appendValue('estipulanteCNPJ', 'cnpj');
+            formData.append('estipulanteApoliceRCF', rcfData.apolice || '');
+            formData.append('estipulantePremioRCF', rcfData.premio || '');
+            formData.append('estipulanteDanoMaterialRCF', rcfData.dano_material_DM || '');
+            formData.append('estipulanteDanoCorporalRCF', rcfData.dano_corporal_DC || '');
+            formData.append('estipulanteProLaboreRCF', rcfData.pro_labore || '');
+            formData.append('estipulanteFatorRCF', rcfData.fator || '');
+            formData.append('estipulanteApoliceAPP', appData.apolice || '');
+            formData.append('estipulantePremioAPP', appData.premio || '');
+            formData.append('estipulanteIpaCondutorAPP', appData.ipa_condutor || '');
+            formData.append('estipulanteMaCondutorAPP', appData.ma_condutor || '');
+            formData.append('estipulanteProLaboreAPP', appData.pro_labore || '');
+            formData.append('estipulanteFatorAPP', appData.fator || '');
+            formData.append('estipulanteIpaPassageiroAPP', appData.ipa_passageiro || '');
+            formData.append('estipulanteMaPassageiroAPP', appData.ma_passageiro || '');
 
-          // Colaborador (se aplicável)
-          solicitanteNome: getValue('estipNome'),
+            appendValue('produtos', 'produtos');
+            const valorRCFSelect = document.getElementById('valorRCF_select');
+            if (valorRCFSelect && valorRCFSelect.value === 'outro') {
+                appendInt('valorRCF', 'valorRCF_outro');
+            } else {
+                appendInt('valorRCF', 'valorRCF_select');
+            }
+            const valorAPPSelect = document.getElementById('valorAPP_select');
+            if (valorAPPSelect && valorAPPSelect.value === 'outro') {
+                appendInt('valorAPP', 'valorAPP_outro');
+            } else {
+                appendInt('valorAPP', 'valorAPP_select');
+            }
+            
+            appendValue('qtdParcelas', 'qtdParcelas');
+            appendValue('seguradoNome', 'seguradoNome');
+            appendValue('seguradoNomeSocial', 'seguradoNomeSocial');
+            appendValue('seguradoTipoPessoa', 'seguradoTipoPessoa');
+            appendValue('seguradoDocumento', 'seguradoDocumento');
+            appendValue('seguradoDataNascimento', 'seguradoDataNascimento');
+            appendValue('seguradoEstadoCivil', 'seguradoEstadoCivil');
+            appendValue('seguradoSexo', 'seguradoSexo');
+            appendValue('seguradoTipoIdentidade', 'seguradoTipoIdentidade');
+            appendValue('seguradoNumIdentidade', 'seguradoNumIdentidade');
+            appendValue('seguradoOrgaoEmissor', 'seguradoOrgaoEmissor');
+            appendValue('seguradoDataEmissao', 'seguradoDataEmissao');
+            appendRadio('seguradoEstrangeiro', 'seguradoEstrangeiro');
+            appendValue('seguradoPais', 'seguradoPais');
+            appendValue('seguradoTempoPais', 'seguradoTempoPais');
+            appendValue('seguradoPaisResidencia', 'seguradoPaisResidencia');
+            appendValue('seguradoAtividadePrincipal', 'seguradoAtividadePrincipal');
+            appendValue('seguradoFaixaRenda', 'seguradoFaixaRenda');
+            appendRadio('seguradoPPE', 'seguradoPPE');
+            appendValue('seguradoPPENome', 'seguradoPPENome');
+            appendValue('seguradoPPECPF', 'seguradoPPECPF');
+            appendValue('seguradoPPEGrauRelacionamento', 'seguradoPPEGrauRelacionamento');
+            appendValue('seguradoCEP', 'segurado_cep');
+            appendValue('seguradoLogradouro', 'segurado_logradouro');
+            appendValue('seguradoNumero', 'segurado_numero');
+            appendValue('seguradoBairro', 'segurado_bairro');
+            appendValue('seguradoCidade', 'segurado_cidade');
+            appendValue('seguradoEstado', 'segurado_estado');
+            appendValue('seguradoEmail', 'emailSeg');
+            appendValue('seguradoTelefone', 'telSeg');
+            appendValue('seguradoEmailAdicional', 'emailSegAux');
+            appendValue('seguradoTelefoneAdicional', 'telSegAux');
+            appendFile('seguradoCNH', 'cnhSeg');
+            appendFile('seguradoComprovanteResidencia', 'comprovanteResidenciaSeg');
 
-          // Estipulante (se aplicável)
-          estipulanteCNPJ: getValue('cnpj'),
-          estipulanteApoliceRCF: rcfData.apolice,
-          estipulantePremioRCF: rcfData.premio,
-          estipulanteDanoMaterialRCF: rcfData.dano_material_DM,
-          estipulanteDanoCorporalRCF: rcfData.dano_corporal_DC,
-          estipulanteProLaboreRCF: rcfData.pro_labore,
-          estipulanteFatorRCF: rcfData.fator,
+            appendValue('veiculoPlaca', 'veiPlaca');
+            appendValue('veiculoChassi', 'veiChassi');
+            appendValue('veiculoRenavam', 'veiRenavam');
+            appendValue('veiculoFabricante', 'veiFab');
+            appendValue('veiculoModelo', 'veiModelo');
+            appendValue('veiculoAno', 'veiAno');
+            appendValue('veiculoUso', 'veiUso');
+            appendInt('veiculoLotacao', 'veiLotacao');
+            appendFile('veiculoCRLV', 'veiCNH');
+            appendRadio('tigoClube', 'tigoClube');
+            appendFile('tigoClubeAdesao', 'tigoClubeAdesao');
 
-          estipulanteApoliceAPP: appData.apolice,
-          estipulantePremioAPP: appData.premio,
-          estipulanteIpaCondutorAPP: appData.ipa_condutor,
-          estipulanteMaCondutorAPP: appData.ma_condutor,
-          estipulanteProLaboreAPP: appData.pro_labore,
-          estipulanteFatorAPP: appData.fator,
-          estipulanteIpaPassageiroAPP: appData.ipa_passageiro,
-          estipulanteMaCondutorAPP: appData.ma_passageiro,
-          
-          // Produtos e Coberturas
-          produtos: getValue('produtos'),
-          valorRCF: getValue('valorRCF_select') === 'outro' ? getIntValue('valorRCF_outro') : getIntValue('valorRCF_select'),
-          valorAPP: getValue('valorAPP_select') === 'outro' ? getIntValue('valorAPP_outro') : getIntValue('valorAPP_select'),
+            appendChecked('adicionarAuxiliar', 'addAuxiliar');
+            appendValue('auxiliar1Nome', 'aux1Nome');
+            appendValue('auxiliar1CPF', 'aux1CPF');
+            appendFile('auxiliar1CNH', 'aux1CNH');
+            appendChecked('adicionarAuxiliar2', 'addAuxiliar2');
+            appendValue('auxiliar2Nome', 'aux2Nome');
+            appendValue('auxiliar2CPF', 'aux2CPF');
+            appendFile('auxiliar2CNH', 'aux2CNH');
 
-          // Parcelas
-          qtdParcelas: getValue('qtdParcelas'),
+            appendValue('infoAdicionais', 'infoAdicionais');
+            appendChecked('termos', 'termos');
 
-          // Segurado
-          seguradoNome: getValue('seguradoNome'),
-          seguradoNomeSocial: getValue('seguradoNomeSocial'),
-          seguradoTipoPessoa: getValue('seguradoTipoPessoa'),
-          seguradoDocumento: getValue('seguradoDocumento'),
-          seguradoDataNascimento: getValue('seguradoDataNascimento'),
-          seguradoEstadoCivil: getValue('seguradoEstadoCivil'),
-          seguradoSexo: getValue('seguradoSexo'),
-          seguradoTipoIdentidade: getValue('seguradoTipoIdentidade'),
-          seguradoNumIdentidade: getValue('seguradoNumIdentidade'),
-          seguradoOrgaoEmissor: getValue('seguradoOrgaoEmissor'),
-          seguradoDataEmissao: getValue('seguradoDataEmissao'),
-          seguradoEstrangeiro: getRadio('seguradoEstrangeiro'),
-          seguradoPais: getValue('seguradoPais'),
-          seguradoTempoPais: getValue('seguradoTempoPais'),
-          seguradoPaisResidencia: getValue('seguradoPaisResidencia'),
-          seguradoAtividadePrincipal: getValue('seguradoAtividadePrincipal'),
-          seguradoFaixaRenda: getValue('seguradoFaixaRenda'),
-          seguradoPPE: getRadio('seguradoPPE'),
-          seguradoPPENome: getValue('seguradoPPENome'),
-          seguradoPPECPF: getValue('seguradoPPECPF'),
-          seguradoPPEGrauRelacionamento: getValue('seguradoPPEGrauRelacionamento'),
-          seguradoCEP: getValue('segurado_cep'),
-          seguradoLogradouro: getValue('segurado_logradouro'),
-          seguradoNumero: getValue('segurado_numero'),
-          seguradoBairro: getValue('segurado_bairro'),
-          seguradoCidade: getValue('segurado_cidade'),
-          seguradoEstado: getValue('segurado_estado'),
-          seguradoEmail: getValue('emailSeg'),
-          seguradoTelefone: getValue('telSeg'),
-          seguradoEmailAdicional: getValue('emailSegAux'),
-          seguradoTelefoneAdicional: getValue('telSegAux'),
-          seguradoCNH: getFile('cnhSeg'),
-          seguradoComprovanteResidencia: getFile('comprovanteResidenciaSeg'),
-
-          // Veículo
-          veiculoPlaca: getValue('veiPlaca'),
-          veiculoChassi: getValue('veiChassi'),
-          veiculoRenavam: getValue('veiRenavam'),
-          veiculoFabricante: getValue('veiFab'),
-          veiculoModelo: getValue('veiModelo'),
-          veiculoAno: getValue('veiAno'),
-          veiculoUso: getValue('veiUso'),
-          veiculoLotacao: getIntValue('veiLotacao'),
-          veiculoCRLV: getFile('veiCNH'), // ID no HTML é veiCNH
-          tigoClube: getRadio('tigoClube'),
-          tigoClubeAdesao: getFile('tigoClubeAdesao'),
-
-          // Auxiliares
-          adicionarAuxiliar: getChecked('addAuxiliar'),
-          auxiliar1Nome: getValue('aux1Nome'),
-          auxiliar1CPF: getValue('aux1CPF'),
-          auxiliar1CNH: getFile('aux1CNH'),
-          adicionarAuxiliar2: getChecked('addAuxiliar2'),
-          auxiliar2Nome: getValue('aux2Nome'),
-          auxiliar2CPF: getValue('aux2CPF'),
-          auxiliar2CNH: getFile('aux2CNH'),
-
-          // Consentimento
-          infoAdicionais: getValue('infoAdicionais'),
-          termos: getChecked('termos'),
-        };
-
-        const hasColaboradorDados = activeSteps.some(step => step.template === 'colaborador_dados');
-        if (hasColaboradorDados) {
-            Object.assign(formData, {
-                colaboradorTipoPessoa: getValue('colaboradorTipoPessoa'),
-                colaboradorDocumento: getValue('colaboradorDocumento'),
-                colaboradorDataNascimento: getValue('colaboradorDataNascimento'),
-                colaboradorEstadoCivil: getValue('colaboradorEstadoCivil'),
-                colaboradorSexo: getValue('colaboradorSexo'),
-                colaboradorTipoIdentidade: getValue('colaboradorTipoIdentidade'),
-                colaboradorNumIdentidade: getValue('colaboradorNumIdentidade'),
-                colaboradorOrgaoEmissor: getValue('colaboradorOrgaoEmissor'),
-                colaboradorDataEmissao: getValue('colaboradorDataEmissao'),
-                colaboradorEstrangeiro: getRadio('colaboradorEstrangeiro'),
-                colaboradorPais: getValue('colaboradorPais'),
-                colaboradorTempoPais: getValue('colaboradorTempoPais'),
-                colaboradorPaisResidencia: getValue('colaboradorPaisResidencia'),
-                colaboradorAtividadePrincipal: getValue('colaboradorAtividadePrincipal'),
-                colaboradorFaixaRenda: getValue('colaboradorFaixaRenda'),
-                colaboradorPPE: getRadio('colaboradorPPE'),
-                colaboradorPPENome: getValue('colaboradorPPENome'),
-                colaboradorPPECPF: getValue('colaboradorPPECPF'),
-                colaboradorPPEGrauRelacionamento: getValue('colaboradorPPEGrauRelacionamento'),
-                colaboradorCEP: getValue('colaborador_cep'),
-                colaboradorLogradouro: getValue('colaborador_logradouro'),
-                colaboradorNumero: getValue('colaborador_numero'),
-                colaboradorBairro: getValue('colaborador_bairro'),
-                colaboradorCidade: getValue('colaborador_cidade'),
-                colaboradorEstado: getValue('colaborador_estado'),
-                colaboradorEmail: getValue('emailColaborador'),
-                colaboradorTelefone: getValue('telColaborador'),
-                colaboradorEmailAdicional: getValue('emailColaboradorAux'),
-                colaboradorTelefoneAdicional: getValue('telColaboradorAux'),
-                colaboradorCNH: getFile('cnhColaborador'),
-                colaboradorComprovanteResidencia: getFile('comprovanteResidenciaColaborador'),
-            });
-        }
-        break;
-      case 'renovacao':
-        formData = {
-          tipo: currentFluxo,
-          // Apólice Anterior
-          numeroApoliceAnterior: getValue('renovApolice'),
-          dataVencimentoAnterior: getValue('renovVencimento'),
-          seguradoraAnterior: getValue('renovSeguradora'),
-          outraSeguradoraAnterior: getValue('outraSeguradoraNome'),
-          // Segurado (mapeamento completo)
-          seguradoNome: getValue('seguradoNome'),
-          seguradoNomeSocial: getValue('seguradoNomeSocial'),
-          seguradoTipoPessoa: getValue('seguradoTipoPessoa'),
-          seguradoDocumento: getValue('seguradoDocumento'),
-          seguradoDataNascimento: getValue('seguradoDataNascimento'),
-          seguradoEstadoCivil: getValue('seguradoEstadoCivil'),
-          seguradoSexo: getValue('seguradoSexo'),
-          seguradoTipoIdentidade: getValue('seguradoTipoIdentidade'),
-          seguradoNumIdentidade: getValue('seguradoNumIdentidade'),
-          seguradoOrgaoEmissor: getValue('seguradoOrgaoEmissor'),
-          seguradoDataEmissao: getValue('seguradoDataEmissao'),
-          seguradoEstrangeiro: getRadio('seguradoEstrangeiro'),
-          seguradoPais: getValue('seguradoPais'),
-          seguradoTempoPais: getValue('seguradoTempoPais'),
-          seguradoPaisResidencia: getValue('seguradoPaisResidencia'),
-          seguradoAtividadePrincipal: getValue('seguradoAtividadePrincipal'),
-          seguradoFaixaRenda: getValue('seguradoFaixaRenda'),
-          seguradoPPE: getRadio('seguradoPPE'),
-          seguradoPPENome: getValue('seguradoPPENome'),
-          seguradoPPECPF: getValue('seguradoPPECPF'),
-          seguradoPPEGrauRelacionamento: getValue('seguradoPPEGrauRelacionamento'),
-          seguradoCEP: getValue('segurado_cep'),
-          seguradoLogradouro: getValue('segurado_logradouro'),
-          seguradoNumero: getValue('segurado_numero'),
-          seguradoBairro: getValue('segurado_bairro'),
-          seguradoCidade: getValue('segurado_cidade'),
-          seguradoEstado: getValue('segurado_estado'),
-          seguradoCNH: getFile('cnhSeg'),
-          seguradoComprovanteResidencia: getFile('comprovanteResidenciaSeg'),
-          // Confirmação
-          confirmado: getChecked('renovConfirm'),
-        };
-        break;
-      case 'endosso':
-        formData = {
-          tipo: currentFluxo,
-          nomeOuRazao: getValue('endossoNome'),
-          documento: getValue('endossoDocumento'),
-          seguradora: getValue('endossoSeguradora'),
-          outraSeguradora: getValue('endossoOutraSeguradoraNome'),
-          apoliceAPP: getValue('endossoApoliceAPP'),
-          apoliceRCF: getValue('endossoApoliceRCF'),
-          tipoSolicitacao: getValue('endossoTipo'),
-        };
-        switch (formData.tipoSolicitacao) {
-          case 'substituicao_veiculo':
-            Object.assign(formData, {
-              placaAtual: getValue('endossoVeiculoPlacaAtual'),
-              placaNova: getValue('endossoVeiculoPlacaNova'),
-              chassi: getValue('endossoVeiculoChassi'),
-              renavam: getValue('endossoVeiculoRenavam'),
-              fabricante: getValue('endossoVeiculoFab'),
-              modelo: getValue('endossoVeiculoModelo'),
-              ano: getValue('endossoVeiculoAno'),
-              lotacao: getIntValue('endossoVeiculoLotacao'),
-              crlv: getFile('endossoVeiculoCRLV'),
-            });
             break;
-          case 'inclusao_condutor':
-            Object.assign(formData, {
-              qaInicial: getValue('endossoQaInicial'),
-              acaoCondutor: getValue('endossoAcao'),
-              condutor1RetirarNome: getValue('endossoCondutor1RetirarNome'),
-              condutor1RetirarCPF: getValue('endossoCondutor1RetirarCPF'),
-              condutor2RetirarNome: getValue('endossoCondutor2RetirarNome'),
-              condutor2RetirarCPF: getValue('endossoCondutor2RetirarCPF'),
-              condutor1Nome: getValue('endossoCondutor1Nome'),
-              condutor1CPF: getValue('endossoCondutor1CPF'),
-              condutor1CNH: getFile('endossoCondutor1CNH'),
-              condutor2Nome: getValue('endossoCondutor2Nome'),
-              condutor2CPF: getValue('endossoCondutor2CPF'),
-              condutor2CNH: getFile('endossoCondutor2CNH'),
-            });
+        case 'renovacao':
+            appendValue('numeroApoliceAnterior', 'renovApolice');
+            appendValue('dataVencimentoAnterior', 'renovVencimento');
+            appendValue('seguradoraAnterior', 'renovSeguradora');
+            appendValue('outraSeguradoraAnterior', 'outraSeguradoraNome');
+            appendValue('seguradoNome', 'seguradoNome');
+            appendValue('seguradoNomeSocial', 'seguradoNomeSocial');
+            appendValue('seguradoTipoPessoa', 'seguradoTipoPessoa');
+            appendValue('seguradoDocumento', 'seguradoDocumento');
+            appendValue('seguradoDataNascimento', 'seguradoDataNascimento');
+            appendValue('seguradoEstadoCivil', 'seguradoEstadoCivil');
+            appendValue('seguradoSexo', 'seguradoSexo');
+            appendValue('seguradoTipoIdentidade', 'seguradoTipoIdentidade');
+            appendValue('seguradoNumIdentidade', 'seguradoNumIdentidade');
+            appendValue('seguradoOrgaoEmissor', 'seguradoOrgaoEmissor');
+            appendValue('seguradoDataEmissao', 'seguradoDataEmissao');
+            appendRadio('seguradoEstrangeiro', 'seguradoEstrangeiro');
+            appendValue('seguradoPais', 'seguradoPais');
+            appendValue('seguradoTempoPais', 'seguradoTempoPais');
+            appendValue('seguradoPaisResidencia', 'seguradoPaisResidencia');
+            appendValue('seguradoAtividadePrincipal', 'seguradoAtividadePrincipal');
+            appendValue('seguradoFaixaRenda', 'seguradoFaixaRenda');
+            appendRadio('seguradoPPE', 'seguradoPPE');
+            appendValue('seguradoPPENome', 'seguradoPPENome');
+            appendValue('seguradoPPECPF', 'seguradoPPECPF');
+            appendValue('seguradoPPEGrauRelacionamento', 'seguradoPPEGrauRelacionamento');
+            appendValue('seguradoCEP', 'segurado_cep');
+            appendValue('seguradoLogradouro', 'segurado_logradouro');
+            appendValue('seguradoNumero', 'segurado_numero');
+            appendValue('seguradoBairro', 'segurado_bairro');
+            appendValue('seguradoCidade', 'segurado_cidade');
+            appendValue('seguradoEstado', 'segurado_estado');
+            appendFile('seguradoCNH', 'cnhSeg');
+            appendFile('seguradoComprovanteResidencia', 'comprovanteResidenciaSeg');
+            appendChecked('confirmado', 'renovConfirm');
             break;
-          case 'alteracao_endereco':
-            Object.assign(formData, {
-              novoEndereco: getValue('endossoNovoEndereco'),
-              novoEmail: getValue('endossoNovoEmail'),
-              novoTelefone: getValue('endossoNovoTelefone'),
-              comprovanteEndereco: getFile('endossoNovoEnderecoComp'),
-            });
+        case 'endosso':
+            appendValue('nomeOuRazao', 'endossoNome');
+            appendValue('documento', 'endossoDocumento');
+            appendValue('seguradora', 'endossoSeguradora');
+            appendValue('outraSeguradora', 'endossoOutraSeguradoraNome');
+            appendValue('apoliceAPP', 'endossoApoliceAPP');
+            appendValue('apoliceRCF', 'endossoApoliceRCF');
+            const tipoSolicitacao = document.getElementById('endossoTipo')?.value;
+            if (tipoSolicitacao) formData.append('tipoSolicitacao', tipoSolicitacao);
+
+            switch (tipoSolicitacao) {
+                case 'substituicao_veiculo':
+                    appendValue('placaAtual', 'endossoVeiculoPlacaAtual');
+                    appendValue('placaNova', 'endossoVeiculoPlacaNova');
+                    appendValue('chassi', 'endossoVeiculoChassi');
+                    appendValue('renavam', 'endossoVeiculoRenavam');
+                    appendValue('fabricante', 'endossoVeiculoFab');
+                    appendValue('modelo', 'endossoVeiculoModelo');
+                    appendValue('ano', 'endossoVeiculoAno');
+                    appendInt('lotacao', 'endossoVeiculoLotacao');
+                    appendFile('crlv', 'endossoVeiculoCRLV');
+                    break;
+                case 'inclusao_condutor':
+                    appendValue('qaInicial', 'endossoQaInicial');
+                    appendValue('acaoCondutor', 'endossoAcao');
+                    appendValue('condutor1RetirarNome', 'endossoCondutor1RetirarNome');
+                    appendValue('condutor1RetirarCPF', 'endossoCondutor1RetirarCPF');
+                    appendValue('condutor2RetirarNome', 'endossoCondutor2RetirarNome');
+                    appendValue('condutor2RetirarCPF', 'endossoCondutor2RetirarCPF');
+                    appendValue('condutor1Nome', 'endossoCondutor1Nome');
+                    appendValue('condutor1CPF', 'endossoCondutor1CPF');
+                    appendFile('condutor1CNH', 'endossoCondutor1CNH');
+                    appendValue('condutor2Nome', 'endossoCondutor2Nome');
+                    appendValue('condutor2CPF', 'endossoCondutor2CPF');
+                    appendFile('condutor2CNH', 'endossoCondutor2CNH');
+                    break;
+                case 'alteracao_endereco':
+                    appendValue('novoEndereco', 'endossoNovoEndereco');
+                    appendValue('novoEmail', 'endossoNovoEmail');
+                    appendValue('novoTelefone', 'endossoNovoTelefone');
+                    appendFile('comprovanteEndereco', 'endossoNovoEnderecoComp');
+                    break;
+                case 'correcao_cadastral':
+                    appendRadio('tipoPessoa', 'tipoPessoa');
+                    appendValue('segNomePF', 'segNomePF');
+                    appendValue('segCPF', 'segCPF');
+                    appendValue('segRazao', 'segRazao');
+                    appendValue('segCNPJ', 'segCNPJ');
+                    appendFile('cnhSegurado', 'endossoCorrecaoCNH');
+                    break;
+            }
             break;
-          case 'correcao_cadastral':
-            Object.assign(formData, {
-              tipoPessoa: getRadio('tipoPessoa'),
-              segNomePF: getValue('segNomePF'),
-              segCPF: getValue('segCPF'),
-              segRazao: getValue('segRazao'),
-              segCNPJ: getValue('segCNPJ'),
-              cnhSegurado: getFile('endossoCorrecaoCNH'),
-            });
+        case 'segunda_via':
+            appendValue('nomeOuRazao', 'segundaViaNome');
+            appendValue('documento', 'segundaViaDocumento');
+            appendValue('tipoDocumento', 'segundaViaTipoDoc');
+            appendValue('outroDocumento', 'segundaViaOutroNome');
+            appendValue('responsavel', 'segundaViaResponsavel');
+            appendValue('observacoes', 'segundaViaObs');
             break;
-        }
-        break;
-      case 'segunda_via':
-        formData = {
-          tipo: currentFluxo,
-          nomeOuRazao: getValue('segundaViaNome'),
-          documento: getValue('segundaViaDocumento'),
-          tipoDocumento: getValue('segundaViaTipoDoc'),
-          outroDocumento: getValue('segundaViaOutroNome'),
-          responsavel: getValue('segundaViaResponsavel'),
-          observacoes: getValue('segundaViaObs'),
-        };
-        break;
-      case 'financeiro_regularizacao':
-        formData = {
-          tipo: currentFluxo,
-          nomeOuRazao: getValue('finRegNome'),
-          documento: getValue('finRegDocumento'),
-          dataVencimento: getValue('finRegDataVencimento'),
-          parcelaAberta: getValue('finRegParcela'),
-          apoliceRCF: getValue('finRegApoliceRCF'),
-          motivoInadimplencia: getValue('finRegMotivo'),
-          responsavel: getValue('finRegResponsavel'),
-          observacoes: getValue('finRegObs'),
-        };
-        break;
-      default:
-        alert("Tipo de solicitação não configurado para envio.");
-        submitButton.disabled = false;
-        submitButton.innerHTML = originalButtonText;
-        return;
+        case 'financeiro_regularizacao':
+            appendValue('nomeOuRazao', 'finRegNome');
+            appendValue('documento', 'finRegDocumento');
+            appendValue('dataVencimento', 'finRegDataVencimento');
+            appendValue('parcelaAberta', 'finRegParcela');
+            appendValue('apoliceRCF', 'finRegApoliceRCF');
+            appendValue('motivoInadimplencia', 'finRegMotivo');
+            appendValue('responsavel', 'finRegResponsavel');
+            appendValue('observacoes', 'finRegObs');
+            break;
+        default:
+            alert("Tipo de solicitação não configurado para envio.");
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+            return;
     }
 
-    if (!targetUrl || targetUrl.includes('URL_DO_FLUXO')) {
-      alert(`A URL para o fluxo '${currentFluxo}' não foi configurada.`);
-      submitButton.disabled = false;
-      submitButton.innerHTML = originalButtonText;
-      return;
-    }
-
-    console.log('Enviando para o servidor:', JSON.stringify(formData, null, 2));
+    // console.log('Enviando para o servidor:');
+    // for (let [key, value] of formData.entries()) {
+    //     console.log(key, value);
+    // }
 
     try {
-      const response = await fetch(targetUrl, {
+      const response = await fetch("/submit-form", {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: formData,
       });
+
+      console.log(response.status, response.statusText);
 
       if (response.ok) {
         console.log(`Formulário do fluxo '${currentFluxo}' enviado com sucesso!`);
         document.getElementById("multiStepForm").style.display = "none";
         document.getElementById("successMessageText").textContent = `Recebemos sua ${tipoText}. Entraremos em contato em breve.`;
         document.getElementById("successMessage").classList.add("active");
-      } else {
-        throw new Error(`Erro do servidor: ${response.status} ${response.statusText}`);
       }
+
     } catch (error) {
       console.error("Falha ao enviar o formulário:", error);
-      alert("Houve um erro ao enviar sua solicitação. Por favor, tente novamente mais tarde.");
     } finally {
       submitButton.disabled = false;
       submitButton.innerHTML = originalButtonText;
