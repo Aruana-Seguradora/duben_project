@@ -468,10 +468,17 @@ const stepTemplates = {
       <h4 class="mb-4">Dados do Colaborador</h4>
       <div class="row">
         <div class="col-md-6 mb-3">
-          <label class="form-label">Nome *</label>
-          <input id="estipNome" class="form-control" required />
-          <div class="invalid-feedback">Informe o nome.</div>
+          <label for="colaboradorCodigo" class="form-label">Código *</label>
+          <input id="colaboradorCodigo" class="form-control" required />
+          <div class="invalid-feedback">Informe um código válido.</div>
+          <div id="colaboradorNomeDisplay" class="form-text text-success fw-bold mt-2"></div>
         </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Nome</label>
+          <input id="estipNome" class="form-control" readonly />
+        </div>
+      </div>
+      <div class="row">
         <div class="col-md-6 mb-3">
           <label class="form-label">Trabalha com estipulantes?</label>
           <select id="estipuQuestion" class="form-select" required>
@@ -1300,6 +1307,7 @@ const fluxosConfig = {
     description: "Siga as 4 etapas para solicitar a Renovação",
     steps: [
       { label: "Tipo", template: "tipo" },
+      { label: "Veículo", template: "veiculo" },
       { label: "Apólice", template: "renovacao_apolice" },
       { label: "Segurado", template: "segurado" },
       { label: "Confirmar", template: "renovacao_confirmar" },
@@ -1496,6 +1504,25 @@ function validateStep(step) {
     input.classList.toggle("is-invalid", !fieldValid);
   });
 
+  // Validação especial para a etapa 'solicitante' (colaborador)
+  if (activeSteps[step]?.template === 'solicitante') {
+    const codigoInput = document.getElementById('colaboradorCodigo');
+    const colaborador = colaboradoresData.find(c => c.codigo.toUpperCase() === codigoInput.value.trim().toUpperCase());
+
+    if (!colaborador) {
+      isValid = false;
+      codigoInput.classList.add('is-invalid');
+      // Also clear the name field in case user corrected a valid code to an invalid one
+      document.getElementById('estipNome').value = '';
+      document.getElementById('colaboradorNomeDisplay').textContent = '';
+    } else {
+      // It's valid, ensure fields are correctly populated before proceeding
+      document.getElementById('estipNome').value = colaborador.name;
+      document.getElementById('colaboradorNomeDisplay').textContent = `Olá, ${colaborador.name}!`;
+      codigoInput.classList.remove('is-invalid');
+    }
+  }
+
   // Validação especial para a etapa 'estipulante'
   if (activeSteps[step]?.template === 'estipulante') {
     const resultadoDiv = document.getElementById('resultadoEstipulante');
@@ -1658,17 +1685,17 @@ function nextStep() {
     renderForm();
 
     // 2. Restaura o estado do formulário
-    // Object.keys(formDataBeforeRender).forEach(id => {
-    //   const input = document.getElementById(id);
-    //   if (input) {
-    //     const value = formDataBeforeRender[id];
-    //     if (input.type === 'checkbox' || input.type === 'radio') {
-    //       input.checked = value;
-    //     } else {
-    //       input.value = value;
-    //     }
-    //   }
-    // });
+    Object.keys(formDataBeforeRender).forEach(id => {
+      const input = document.getElementById(id);
+      if (input) {
+        const value = formDataBeforeRender[id];
+        if (input.type === 'checkbox' || input.type === 'radio') {
+          input.checked = value;
+        } else {
+          input.value = value;
+        }
+      }
+    });
 
     // Re-executa a lógica de visibilidade para campos condicionais
     toggleOutraSeguradora();
@@ -1688,6 +1715,52 @@ function prevStep() {
     currentStep--;
     updateProgress();
   }
+}
+
+let colaboradoresData = [];
+
+async function fetchColaboradores() {
+  try {
+    const response = await fetch('db.json');
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    colaboradoresData = data.colaboradores || [];
+  } catch (error) {
+    console.error('Falha ao buscar dados dos colaboradores:', error);
+    colaboradoresData = []; // Ensure it's an empty array on failure
+  }
+}
+
+
+function handleColaboradorValidation() {
+  const codigoInput = document.getElementById('colaboradorCodigo');
+  if (!codigoInput) return;
+
+  codigoInput.addEventListener('blur', () => {
+    const codigo = codigoInput.value.trim().toUpperCase();
+    const nomeDisplay = document.getElementById('colaboradorNomeDisplay');
+    const nomeInput = document.getElementById('estipNome'); // The readonly input
+
+    if (!nomeDisplay || !nomeInput) return;
+
+    const colaborador = colaboradoresData.find(c => c.codigo.toUpperCase() === codigo);
+
+    if (colaborador) {
+      nomeInput.value = colaborador.name;
+      nomeDisplay.textContent = `Olá, ${colaborador.name}!`;
+      codigoInput.classList.remove('is-invalid');
+      codigoInput.classList.add('is-valid');
+      nomeInput.classList.add('is-valid');
+    } else {
+      nomeInput.value = '';
+      nomeDisplay.textContent = '';
+      codigoInput.classList.add('is-invalid');
+      codigoInput.classList.remove('is-valid');
+      nomeInput.classList.remove('is-valid');
+    }
+  });
 }
 
 function resetForm() {
@@ -1770,6 +1843,9 @@ function addListenersAndMasks() {
       event.preventDefault();
     }
   });
+
+  // Adiciona o listener para a busca de veículo por placa
+  buscaVeiculo();
 
   // Para evitar listeners duplicados, removemos o antigo antes de adicionar um novo
   if (window.formSubmitHandler) {
@@ -2058,6 +2134,8 @@ function addListenersAndMasks() {
   };
 
   form.addEventListener("submit", window.formSubmitHandler);
+
+  handleColaboradorValidation();
 
   // Lógica condicional da UI
   const produtosSelect = document.getElementById("produtos");
@@ -2557,6 +2635,102 @@ async function buscar() {
     }
 }
 
+// =================================================================
+// 8. BUSCA VEICULO POR PLACA (API EXTERNA)
+// =================================================================
+
+// Validação (antigo padrão + Mercosul)
+const PLATE_REGEX = /^(?:[A-Z]{3}\d{4}|[A-Z]{3}\d[A-Z]\d{2})$/i;
+
+// cache na aba (evita pagar por requisições repetidas na mesma sessão)
+const plateCache = new Map(); 
+let lastPlateSuccess = null;  
+
+function normalizePlate(str) {
+  return (str || '').replace(/[^A-Z0-9]/gi, '').toUpperCase();
+}
+
+function isValidPlate(placa) {
+  return PLATE_REGEX.test(placa);
+}
+
+function setVal(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.value = val ?? '';
+}
+
+function fillFromApiData(apiData) {
+  const dv = apiData?.dados?.informacoes_veiculo?.dados_veiculo ?? {};
+  setVal('veiChassi', dv.chassi);
+  setVal('veiFab', dv.marca);
+  setVal('veiModelo', dv.modelo);
+  setVal('veiAno', dv.ano_modelo ?? dv.ano_fabricacao ?? dv.ano_frabricacao ?? '');
+}
+
+function buscaVeiculo() {
+  const veiculoInput = document.getElementById('veiPlaca');
+  if (!veiculoInput) return;
+  if (veiculoInput.dataset.listenerAttached) return;
+
+  // quando o usuário alterar a placa, marcamos como "desatualizado"
+  veiculoInput.addEventListener('input', () => {
+    const placaAtual = normalizePlate(veiculoInput.value);
+    if (placaAtual !== lastPlateSuccess) {
+      // opcional: limpar campos para sinalizar que precisa consultar de novo
+      setVal('veiChassi', '');
+      setVal('veiFab', '');
+      setVal('veiModelo', '');
+      setVal('veiAno', '');
+    }
+  });
+
+  veiculoInput.addEventListener('blur', async () => {
+    const placa = normalizePlate(veiculoInput.value);
+    if (!isValidPlate(placa)) return;             
+
+    const parent = veiculoInput.parentElement;
+    const oldFeedback = parent.querySelector('.form-text');
+    if (oldFeedback) oldFeedback.remove();
+
+    const feedbackEl = document.createElement('div');
+    feedbackEl.className = 'form-text text-muted ms-2';
+    feedbackEl.textContent = 'Buscando dados...';
+    parent.appendChild(feedbackEl);
+
+    try {
+      // 1) tenta pegar do cache do front
+      if (plateCache.has(placa)) {
+        const cached = plateCache.get(placa);
+        fillFromApiData(cached);
+        lastPlateSuccess = placa;
+        feedbackEl.remove();
+        return;
+      }
+
+      const response = await fetch(`/consulta_placa?placa=${encodeURIComponent(placa)}`);
+      const data = await response.json();
+
+      if (response.ok && data?.status === 'ok') {
+        plateCache.set(placa, data); 
+        fillFromApiData(data);
+        lastPlateSuccess = placa;
+        feedbackEl.remove();
+      } else {
+        feedbackEl.textContent = (data?.mensagem || data?.message || 'Placa não encontrada.');
+        feedbackEl.className = 'form-text text-danger ms-2';
+      }
+    } catch (error) {
+      console.error('Falha na requisição para buscar veículo:', error);
+      feedbackEl.textContent = 'Erro na consulta.';
+      feedbackEl.className = 'form-text text-danger ms-2';
+    }
+  });
+
+  veiculoInput.dataset.listenerAttached = 'true';
+}
+
+
+
 // Listener inicial para o tipo de solicitação
 document.getElementById("tipoSolicitacao").addEventListener("change", (e) => {
   renderizarFluxo(e.target.value);
@@ -2564,6 +2738,7 @@ document.getElementById("tipoSolicitacao").addEventListener("change", (e) => {
 
 // Inicialização da página
 function inicializarFormulario(fluxoInicial = null) {
+  fetchColaboradores();
   resetForm(); // Garante que o estado está limpo
   if (fluxoInicial && fluxosConfig[fluxoInicial]) {
     document.getElementById('tipoSolicitacao').value = fluxoInicial;

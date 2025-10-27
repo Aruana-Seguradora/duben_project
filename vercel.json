@@ -1,7 +1,0 @@
-{
-  "version": 2,
-  "rewrites": [
-    { "source": "/submit-form", "destination": "/api/server" },
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
-}

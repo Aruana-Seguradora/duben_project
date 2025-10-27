@@ -7,8 +7,10 @@ yarn-error.log*
 
 # Dependency directories
 node_modules/
+vercel.json
 retorno_placas.json
 email.html
+
 
 # Environment variables
 .env
