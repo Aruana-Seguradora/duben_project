@@ -13,7 +13,6 @@ const stepTemplates = {
           <option value="estipulante">Estipulante</option>
           <option value="colaborador">Colaborador</option>
         </select>
-        <div class="invalid-feedback">Informe o tipo de solicitante.</div>
       </div>
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="resetForm()">
@@ -38,20 +37,6 @@ const stepTemplates = {
         </button>
       </div>
     </div>`,
-  tipo_para_nova: `
-    <div class="form-step">
-      <h4 class="mb-4">Tipo de Solicitação</h4>
-      <p>Você selecionou: <strong><span id="tipoSelecionado">Nova Transmissão</span></strong>.</p>
-      <p class="text-muted">Clique em próximo para continuar ou volte para alterar o tipo.</p>
-      <div class="btn-group-navigation">
-        <button type="button" class="btn btn-secondary" onclick="prevStep()">
-          <i class="bi bi-arrow-left"></i> Voltar
-        </button>
-        <button type="button" class="btn btn-primary" onclick="nextStep()">
-          Próximo <i class="bi bi-arrow-right"></i>
-        </button>
-      </div>
-    </div>`,
   produtos_coberturas: `
     <div class="form-step">
       <h4 class="mb-4">Produtos e Coberturas</h4>
@@ -64,7 +49,6 @@ const stepTemplates = {
           <option value="app">Somente APP</option>
           <option value="auto">Seguro Auto Compreensivo</option>
         </select>
-        <div class="invalid-feedback">Informe os produtos desejados.</div>
       </div>
 
       <div id="rcf_app_fields">
@@ -80,7 +64,6 @@ const stepTemplates = {
             <option value="outro">Outro Valor</option>
           </select>
           <input type="number" class="form-control mt-2" id="valorRCF_outro" step="1000" style="display: none;" placeholder="Digite o valor desejado" />
-          <div class="invalid-feedback">Informe o valor de RCF.</div>
         </div>
 
         <div id="coberturaAPP" class="mb-4" style="display: none;">
@@ -93,7 +76,6 @@ const stepTemplates = {
             <option value="outro">Outro Valor</option>
           </select>
           <input type="number" class="form-control mt-2" id="valorAPP_outro" step="1000" style="display: none;" placeholder="Digite o valor desejado" />
-          <div class="invalid-feedback">Informe o valor de APP.</div>
         </div>
         
         <hr>
@@ -109,26 +91,23 @@ const stepTemplates = {
               <option value="" disabled selected>Selecione</option>
               <option>1x</option> <option>2x</option> <option>3x</option> <option>4x</option> <option>5x</option> <option>6x</option> <option>7x</option> <option>8x</option> <option>9x</option> <option>10x</option> 
             </select>
-            <div class="invalid-feedback">Informe a quantidade de parcelas.</div>
           </div>
         </div>
 
-        <hr>
-
-        <h4 id="segs_trabalhadas" class="mb-4">Seguradoras Trabalhadas</h4>
-        <div class="row">
-          <div class="col-md-12 mb-3">
-            <label for="segTrabalhadas" class="form-label">Seguradoras *</label>
-            <select id="segTrabalhadas" class="form-select" required>
-              <option value="" disabled selected>Selecione</option>
-              <option>Aruana</option> <option>Porto Seguro</option> <option>Azul</option> <option>Allianz</option> <option>Tokio Marine</option> <option>HDI</option> <option>Sompo</option> <option>Bradesco</option> <option>Suhai</option> <option>Mapfre</option> <option>MBM</option> <option>Outra</option>
-            </select>
-            <div class="invalid-feedback">Informe a seguradora.</div>
-          </div>
-          <div class="mb-3" id="seguradoraContainer" style="display: none;">
-            <label for="seguradoraNome" class="form-label">Nome da outra seguradora *</label>
-            <input type="text" id="seguradoraNome" class="form-control" />
-            <div class="invalid-feedback">Por favor, informe o nome da outra seguradora.</div>
+        <div id="segs_trabalhadas_container" class="d-none">
+          <h4 id="segs_trabalhadas" class="mb-4">Seguradoras Trabalhadas</h4>
+          <div class="row">
+            <div class="col-md-12 mb-3">
+              <label for="segTrabalhadas" class="form-label">Seguradoras *</label>
+              <select id="segTrabalhadas" class="form-select" required>
+                <option value="" disabled selected>Selecione</option>
+                <option>Aruana</option> <option>Porto Seguro</option> <option>Azul</option> <option>Allianz</option> <option>Tokio Marine</option> <option>HDI</option> <option>Sompo</option> <option>Bradesco</option> <option>Suhai</option> <option>Mapfre</option> <option>MBM</option> <option>Outra</option>
+              </select>
+            </div>
+            <div class="mb-3" id="seguradoraContainer" style="display: none;">
+              <label for="seguradoraNome" class="form-label">Nome da outra seguradora *</label>
+              <input type="text" id="seguradoraNome" class="form-control" />
+            </div>
           </div>
         </div>
       </div>
@@ -144,7 +123,21 @@ const stepTemplates = {
     </div>`,
   auto_compreensivo: `
     <div class="form-step">
-      <h4 class="mb-4">Detalhes do Seguro Auto Compreensivo</h4>
+
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Nome Completo *</label>
+          <input id="nomeCompleto" placeholder="Nome" class="form-control" required>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">CPF/CNPJ *</label>
+          <input id="auto_doc" class="form-control" placeholder="CPF ou CNPJ"  required/>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Placa *</label>
+          <input id="auto_placa" placeholder="Placa" class="form-control" required>
+        </div>
+      </div>
 
       <div class="row">
         <div class="col-md-6 mb-3">
@@ -170,7 +163,7 @@ const stepTemplates = {
         <div class="col-md-6 mb-3">
           <label class="form-label">Isenção Fiscal? *</label>
           <select id="isencaoFiscal" class="form-select" required onchange="toggleConditionalField(this.value !== 'nao', 'notaFiscalIsencaoContainer')">
-            <option value="">Selecione</option>
+            <option value="" disabled selected>Selecione</option>
             <option value="nao">Não</option>
             <option value="ipi">IPI</option>
             <option value="icms">ICMS</option>
@@ -444,14 +437,191 @@ const stepTemplates = {
       </div>
     </div>`,
 
+  aviso_sinistro: `
+    <div class="form-step">
+      <h4 class="mb-4">Aviso de Sinistro</h4>
+
+      <!-- Corretor -->
+      <div class="mb-3">
+        <label for="sinistroCorretor" class="form-label">Corretor:</label>
+        <input type="text" id="sinistroCorretor" class="form-control" />
+      </div>
+
+      <!-- Segurado -->
+      <h5 class="mt-4 mb-3">Dados do Segurado</h5>
+      <div class="mb-3">
+        <label for="sinistroNomeSegurado" class="form-label">Nome do Segurado: *</label>
+        <input type="text" id="sinistroNomeSegurado" class="form-control"  />
+      </div>
+      <div class="mb-3">
+        <label for="sinistroEmailSegurado" class="form-label">E-mail do Segurado: *</label>
+        <input type="email" id="sinistroEmailSegurado" class="form-control"  />
+      </div>
+      <div class="mb-3">
+        <label for="sinistroNumeroApolice" class="form-label">Número da apólice: *</label>
+        <input type="text" id="sinistroNumeroApolice" class="form-control"  />
+      </div>
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label for="sinistroMarcaVeiculo" class="form-label">Marca do veículo: *</label>
+          <input type="text" id="sinistroMarcaVeiculo" class="form-control"  />
+        </div>
+        <div class="col-md-4 mb-3">
+          <label for="sinistroModeloVeiculo" class="form-label">Modelo do veículo: *</label>
+          <input type="text" id="sinistroModeloVeiculo" class="form-control"  />
+        </div>
+        <div class="col-md-4 mb-3">
+          <label for="sinistroAnoFabricacaoVeiculo" class="form-label">Ano de fabricação: *</label>
+          <input type="number" id="sinistroAnoFabricacaoVeiculo" class="form-control"  />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="sinistroAnoModeloVeiculo" class="form-label">Ano do modelo do veículo: *</label>
+          <input type="number" id="sinistroAnoModeloVeiculo" class="form-control"  />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="sinistroPlacaSegurado" class="form-label">Placa: *</label>
+          <input type="text" id="sinistroPlacaSegurado" class="form-control"  />
+        </div>
+      </div>
+
+      <div class="btn-group-navigation">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">
+          Próximo <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>`,
+    aviso_sinistro_terceiro: `
+    <div class="form-step">
+      <!-- Terceiro -->
+      <h5 class="mt-4 mb-3">Dados do Terceiro</h5>
+      <div class="mb-3">
+        <label for="sinistroCategoriaDano" class="form-label">Categoria do dano: *</label>
+        <select id="sinistroCategoriaDano" class="form-select" >
+          <option value="">Selecione</option>
+          <option value="danos_materiais">Danos Materiais</option>
+          <option value="danos_corporais">Danos Corporais</option>
+          <option value="ambos">Danos Materiais / Danos Corporais</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="sinistroNomeTerceiro" class="form-label">Nome do Terceiro:</label>
+        <input type="text" id="sinistroNomeTerceiro" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label for="sinistroEnderecoTerceiro" class="form-label">Endereço do Terceiro:</label>
+        <input type="text" id="sinistroEnderecoTerceiro" class="form-control" />
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="sinistroTelefoneTerceiro" class="form-label">Telefone do Terceiro com DDD:</label>
+          <input type="text" id="sinistroTelefoneTerceiro" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="sinistroEmailTerceiro" class="form-label">E-mail do Terceiro:</label>
+          <input type="email" id="sinistroEmailTerceiro" class="form-control" />
+        </div>
+      </div>
+
+      <div class="btn-group-navigation">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">
+          Próximo <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>`,
+  aviso_sinistro_ocorrencia: `
+    <div class="form-step">
+      <!-- Ocorrência -->
+      <h5 class="mt-4 mb-3">Dados da Ocorrência</h5>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="sinistroPais" class="form-label">País do sinistro: *</label>
+          <input type="text" id="sinistroPais" class="form-control" value="Brasil" readonly  />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="sinistroEstado" class="form-label">Estado do sinistro: *</label>
+          <input type="text" id="sinistroEstado" class="form-control"  />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="sinistroCidade" class="form-label">Cidade do sinistro: *</label>
+          <input type="text" id="sinistroCidade" class="form-control"  />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="sinistroCep" class="form-label">CEP do local do sinistro: *</label>
+          <input type="text" id="sinistroCep" class="form-control"  />
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="sinistroNumeroLocal" class="form-label">Número do local do sinistro: *</label>
+        <input type="text" id="sinistroNumeroLocal" class="form-control"  />
+      </div>
+      <div class="mb-3">
+        <label for="sinistroEnderecoEvento" class="form-label">Endereço do evento: *</label>
+        <input type="text" id="sinistroEnderecoEvento" class="form-control"  />
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="sinistroDataHoraOcorrencia" class="form-label">Data e hora da ocorrência: *</label>
+          <input type="datetime-local" id="sinistroDataHoraOcorrencia" class="form-control"  />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="sinistroDescricao" class="form-label">Descrição do sinistro: *</label>
+          <textarea id="sinistroDescricao" class="form-control" rows="3" ></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="sinistroNumeroBoletim" class="form-label">Número do boletim de ocorrência:</label>
+          <input type="text" id="sinistroNumeroBoletim" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="sinistroDataHoraBoletim" class="form-label">Data e hora do boletim:</label>
+          <input type="datetime-local" id="sinistroDataHoraBoletim" class="form-control" />
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">O segurado assume a responsabilidade?: *</label>
+        <div class="d-flex gap-3">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="sinistroResponsabilidade" id="sinistroResponsabilidadeSim" value="sim"  onchange="toggleConditionalField(this.value === 'sim', 'sinistroMotivoResponsabilidadeContainer')" />
+            <label class="form-check-label" for="sinistroResponsabilidadeSim">Sim</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="sinistroResponsabilidade" id="sinistroResponsabilidadeNao" value="nao"  onchange="toggleConditionalField(this.value === 'sim', 'sinistroMotivoResponsabilidadeContainer')" />
+            <label class="form-check-label" for="sinistroResponsabilidadeNao">Não</label>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3" id="sinistroMotivoResponsabilidadeContainer" style="display: none;">
+        <label for="sinistroMotivoResponsabilidade" class="form-label">Se sim, qual o motivo?: *</label>
+        <textarea id="sinistroMotivoResponsabilidade" class="form-control" rows="2"></textarea>
+      </div>
+
+      <div class="btn-group-navigation">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">
+          Próximo <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>`,
   segurado: `
     <div class="form-step" data-step="5">
       <h4 class="mb-4">Dados do Segurado</h4>
       <div class="row">
         <div class="col-md-6 mb-3">
           <label class="form-label">Nome *</label>
-          <input id="seguradoNome" class="form-control" required />
-          <div class="invalid-feedback">Informe o nome.</div>
+          <input id="seguradoNome" class="form-control"  />
         </div>
         <div class="col-md-6 mb-3">
           <label class="form-label">Nome Social</label>
@@ -461,50 +631,45 @@ const stepTemplates = {
       <div class="row">
         <div class="col-md-6 mb-3">
           <label for="seguradoTipoPessoa" class="form-label">Tipo de pessoa *</label>
-          <select id="seguradoTipoPessoa" class="form-select" required>
+          <select id="seguradoTipoPessoa" class="form-select" >
             <option value="">Selecione</option>
             <option value="pf">Pessoa Física</option>
             <option value="pj">Pessoa Jurídica</option>
           </select>
-          <div class="invalid-feedback">Informe o tipo</div>
         </div>
         <div class="col-md-6 mb-3">
           <label class="form-label">CPF/CNPJ *</label>
-          <input id="seguradoDocumento" class="form-control" placeholder="CPF ou CNPJ" required />
-          <div class="invalid-feedback">Documento inválido.</div>
+          <input id="seguradoDocumento" class="form-control" placeholder="CPF ou CNPJ"  />
         </div>
       </div>
       <div class="row">
           <div class="col-md-4 mb-3">
               <label class="form-label">Data de Nascimento *</label>
-              <input id="seguradoDataNascimento" type="date" class="form-control" required />
-              <div class="invalid-feedback">Informe a data de nascimento.</div>
+              <input id="seguradoDataNascimento" type="date" class="form-control"  />
           </div>
           <div class="col-md-4 mb-3">
               <label class="form-label">Estado Civil *</label>
-              <select id="seguradoEstadoCivil" class="form-select" required>
+              <select id="seguradoEstadoCivil" class="form-select" >
                   <option value="">Selecione</option>
                   <option>Solteiro(a)</option>
                   <option>Casado(a)</option>
                   <option>Divorciado(a)</option>
                   <option>Viúvo(a)</option>
               </select>
-              <div class="invalid-feedback">Informe o estado civil.</div>
           </div>
           <div class="col-md-4 mb-3">
               <label class="form-label">Sexo *</label>
-              <select id="seguradoSexo" class="form-select" required>
+              <select id="seguradoSexo" class="form-select" >
                   <option value="">Selecione</option>
                   <option>Masculino</option>
                   <option>Feminino</option>
               </select>
-              <div class="invalid-feedback">Informe o sexo.</div>
           </div>
       </div>
       <div class="row">
           <div class="col-md-4 mb-3">
               <label class="form-label">Tipo Identidade *</label>
-              <select id="seguradoTipoIdentidade" class="form-select" required>
+              <select id="seguradoTipoIdentidade" class="form-select" >
                   <option value="">Selecione</option>
                   <option>CNH</option>
                   <option>CREA</option>
@@ -515,34 +680,30 @@ const stepTemplates = {
                   <option>RG</option>
                   <option>OUTROS</option>
               </select>
-              <div class="invalid-feedback">Informe o tipo de identidade.</div>
           </div>
           <div class="col-md-4 mb-3">
               <label class="form-label">Nº Identidade *</label>
-              <input type="number" id="seguradoNumIdentidade" class="form-control" required />
-              <div class="invalid-feedback">Informe o nº da identidade.</div>
+              <input type="number" id="seguradoNumIdentidade" class="form-control"  />
           </div>
           <div class="col-md-4 mb-3">
               <label class="form-label">Órgão Emissor *</label>
-              <input id="seguradoOrgaoEmissor" class="form-control" required />
-              <div class="invalid-feedback">Informe o órgão emissor.</div>
+              <input id="seguradoOrgaoEmissor" class="form-control"  />
           </div>
       </div>
       <div class="row">
           <div class="col-md-6 mb-3">
               <label class="form-label">Data de Emissão *</label>
-              <input id="seguradoDataEmissao" type="date" class="form-control" required />
-              <div class="invalid-feedback">Informe a data de emissão.</div>
+              <input id="seguradoDataEmissao" type="date" class="form-control"  />
           </div>
           <div class="col-md-6 mb-3">
               <label class="form-label">Estrangeiro? *</label>
               <div class="d-flex gap-3">
                   <div class="form-check">
-                      <input class="form-check-input" type="radio" name="seguradoEstrangeiro" id="seguradoEstrangeiroSim" value="sim" required />
+                      <input class="form-check-input" type="radio" name="seguradoEstrangeiro" id="seguradoEstrangeiroSim" value="sim"  />
                       <label class="form-check-label" for="seguradoEstrangeiroSim">Sim</label>
                   </div>
                   <div class="form-check">
-                      <input class="form-check-input" type="radio" name="seguradoEstrangeiro" id="seguradoEstrangeiroNao" value="nao" required checked />
+                      <input class="form-check-input" type="radio" name="seguradoEstrangeiro" id="seguradoEstrangeiroNao" value="nao"  checked />
                       <label class="form-check-label" for="seguradoEstrangeiroNao">Não</label>
                   </div>
               </div>
@@ -595,13 +756,11 @@ const stepTemplates = {
       <div class="row">
           <div class="col-md-4 mb-3">
             <label class="form-label">Email *</label>
-            <input type="email" id="emailSeg" class="form-control" required/>
-            <div class="invalid-feedback">Informe o email.</div>
+            <input type="email" id="emailSeg" class="form-control" />
           </div>
           <div class="col-md-4 mb-3">
             <label class="form-label">Telefone *</label>
-            <input id="telSeg" class="form-control" required/>
-            <div class="invalid-feedback">Informe o telefone.</div>
+            <input id="telSeg" class="form-control" />
           </div>
       </div>
 
@@ -618,11 +777,11 @@ const stepTemplates = {
               <label class="form-label">Pessoa Politicamente Exposta? *</label>
               <div class="d-flex gap-3">
                   <div class="form-check">
-                      <input class="form-check-input" type="radio" name="seguradoPPE" id="seguradoPPESim" value="sim" required />
+                      <input class="form-check-input" type="radio" name="seguradoPPE" id="seguradoPPESim" value="sim"  />
                       <label class="form-check-label" for="seguradoPPESim">Sim</label>
                   </div>
                   <div class="form-check">
-                      <input class="form-check-input" type="radio" name="seguradoPPE" id="seguradoPPENao" value="nao" required checked />
+                      <input class="form-check-input" type="radio" name="seguradoPPE" id="seguradoPPENao" value="nao"  checked />
                       <label class="form-check-label" for="seguradoPPENao">Não</label>
                   </div>
               </div>
@@ -651,9 +810,8 @@ const stepTemplates = {
         <div class="col-md-4 mb-3">
           <label for="segurado_cep" class="form-label">CEP *</label>
           <div class="input-group">
-            <input id="segurado_cep" class="form-control" placeholder="00000-000" required>
+            <input id="segurado_cep" class="form-control" placeholder="00000-000" >
             <button class="btn btn-outline-secondary" type="button" onclick="buscarCep()"><i class="bi bi-search"></i></button>
-            <div class="invalid-feedback">Informe um CEP válido.</div>
           </div>
         </div>
       </div>
@@ -664,8 +822,7 @@ const stepTemplates = {
         </div>
         <div class="col-md-4 mb-3">
           <label class="form-label">Número</label>
-          <input type="number" required id="segurado_numero" class="form-control">
-          <div class="invalid-feedback">Informe o número.</div>
+          <input type="number"  id="segurado_numero" class="form-control">
         </div>
       </div>
       <div class="row">
@@ -685,14 +842,12 @@ const stepTemplates = {
       
       <div class="mb-3">
         <label class="form-label">Upload CNH (PDF/JPG/PNG) *</label>
-        <input id="cnhSeg" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
-        <div class="invalid-feedback">Faça o upload da CNH.</div>
+        <input id="cnhSeg" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png"  />
       </div>
 
       <div class="mb-3">
         <label class="form-label">Upload Comprovante de Residência (PDF/JPG/PNG) *</label>
-        <input id="comprovanteResidenciaSeg" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
-        <div class="invalid-feedback">Faça o upload do Comprovante.</div>
+        <input id="comprovanteResidenciaSeg" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png"  />
       </div>
 
       <div class="btn-group-navigation">
@@ -710,8 +865,7 @@ const stepTemplates = {
       <div class="row">
         <div class="col-md-6 mb-3">
           <label for="colaboradorCodigo" class="form-label">Código *</label>
-          <input id="colaboradorCodigo" class="form-control" required />
-          <div class="invalid-feedback">Informe um código válido.</div>
+          <input id="colaboradorCodigo" class="form-control"  />
           <div id="colaboradorNomeDisplay" class="form-text text-success fw-bold mt-2"></div>
         </div>
         <div class="col-md-6 mb-3">
@@ -722,12 +876,11 @@ const stepTemplates = {
       <div class="row">
         <div class="col-md-6 mb-3">
           <label class="form-label">Trabalha com estipulantes?</label>
-          <select id="estipuQuestion" class="form-select" required>
+          <select id="estipuQuestion" class="form-select" >
             <option disabled selected value="">Selecione</option>
             <option>Sim</option>
             <option>Não</option>
           </select>
-          <div class="invalid-feedback">Informe se trabalha.</div>
         </div>
       </div>
       
@@ -746,51 +899,43 @@ const stepTemplates = {
       <div class="row">
         <div class="col-md-4 mb-3">
           <label class="form-label">Placa *</label>
-          <input id="veiPlaca" class="form-control" placeholder="ABC1D23" required />
-          <div class="invalid-feedback">Placa inválida.</div>
+          <input id="veiPlaca" class="form-control" placeholder="ABC1D23"  />
         </div>
         <div class="col-md-4 mb-3">
           <label class="form-label">Chassi *</label>
-          <input id="veiChassi" class="form-control" minlength="5" required />
-          <div class="invalid-feedback">Informe o chassi.</div>
+          <input id="veiChassi" class="form-control" minlength="5"  />
         </div>
         <div class="col-md-4 mb-3">
           <label class="form-label">Renavam *</label>
-          <input id="veiRenavam" class="form-control" required />
-          <div class="invalid-feedback">Informe o Renavam.</div>
+          <input id="veiRenavam" class="form-control"  />
         </div>
       </div>
       <div class="row">
         <div class="col-md-4 mb-3">
           <label class="form-label">Fabricante *</label>
-          <input id="veiFab" class="form-control" required />
-          <div class="invalid-feedback">Informe o fabricante.</div>
+          <input id="veiFab" class="form-control"  />
         </div>
         <div class="col-md-4 mb-3">
           <label class="form-label">Modelo *</label>
-          <input id="veiModelo" class="form-control" required />
-          <div class="invalid-feedback">Informe o modelo.</div>
+          <input id="veiModelo" class="form-control"  />
         </div>
         <div class="col-md-4 mb-3">
           <label class="form-label">Ano *</label>
-          <input id="veiAno" type="number" class="form-control" min="1980" max="2099" required />
-          <div class="invalid-feedback">Informe o ano.</div>
+          <input id="veiAno" type="number" class="form-control" min="1980" max="2099"  />
         </div>
       </div>
       <div class="row">
         <div class="col-md-6 mb-3">
           <label class="form-label">Uso *</label>
-          <select id="veiUso" class="form-select" required>
+          <select id="veiUso" class="form-select" >
             <option value="" disabled selected>Selecione</option>
             <option>Moto</option><option>Van Turismo</option><option>Van Escolar</option><option>Van Urbano</option><<option>Táxi/Aplicativos</option> <option>Policiamento/Bombeiro</option> <option>Comercial/Profissional</option><option>Particular/Passeio</option>
             <option>Casa Locadora - Uso Comercial/Industrial, S/Veículo por Aplicativo</option> <option>Casa Locadora - Uso Veículo por Aplicativos</option> <option>Chapa de Fabricante</option> <option>Auto Escola</option>
           </select>
-          <div class="invalid-feedback">Informe o uso.</div>
         </div>
         <div class="col-md-6 mb-3">
           <label class="form-label">Lotação *</label>
-          <input id="veiLotacao" type="number" class="form-control" min="1" required />
-          <div class="invalid-feedback">Informe a lotação.</div>
+          <input id="veiLotacao" type="number" class="form-control" min="1"  />
         </div>
       </div>
       <div class="row">
@@ -798,11 +943,11 @@ const stepTemplates = {
             <label class="form-label">Contrato com adesão ao TIGO CLUBE? *</label>
             <div class="d-flex gap-3">
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="tigoClube" id="tigoClubeSim" value="sim" required />
+                    <input class="form-check-input" type="radio" name="tigoClube" id="tigoClubeSim" value="sim"  />
                     <label class="form-check-label" for="tigoClubeSim">Sim</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="tigoClube" id="tigoClubeNao" value="nao" required checked />
+                    <input class="form-check-input" type="radio" name="tigoClube" id="tigoClubeNao" value="nao"  checked />
                     <label class="form-check-label" for="tigoClubeNao">Não</label>
                 </div>
             </div>
@@ -811,12 +956,10 @@ const stepTemplates = {
       <div id="tigoClubeAdesaoContainer" class="mb-3" style="display: none;">
         <label class="form-label">Upload do documento de adesão assinado (PDF/JPG/PNG) *</label>
         <input id="tigoClubeAdesao" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" />
-        <div class="invalid-feedback">Faça o upload do documento de adesão.</div>
       </div>
       <div class="mb-3">
         <label class="form-label">Upload CLRV (PDF/JPG/PNG) *</label>
-        <input id="veiCNH" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
-        <div class="invalid-feedback">Faça o upload do CLRV.</div>
+        <input id="veiCNH" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png"  />
       </div>
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()">
@@ -844,18 +987,15 @@ const stepTemplates = {
             <div class="col-md-6 mb-3">
               <label class="form-label">Nome Completo *</label>
               <input id="aux1Nome" class="form-control" />
-              <div class="invalid-feedback">Informe o nome.</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">CPF *</label>
               <input id="aux1CPF" class="form-control" placeholder="000.000.000-00" />
-              <div class="invalid-feedback">CPF inválido.</div>
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label">Upload CNH (PDF/JPG/PNG) *</label>
             <input id="aux1CNH" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" />
-            <div class="invalid-feedback">Faça o upload da CNH.</div>
           </div>
         </div>
 
@@ -872,18 +1012,15 @@ const stepTemplates = {
             <div class="col-md-6 mb-3">
               <label class="form-label">Nome Completo *</label>
               <input id="aux2Nome" class="form-control" />
-              <div class="invalid-feedback">Informe o nome.</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">CPF *</label>
               <input id="aux2CPF" class="form-control" placeholder="000.000.000-00" />
-              <div class="invalid-feedback">CPF inválido.</div>
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label">Upload CNH (PDF/JPG/PNG) *</label>
             <input id="aux2CNH" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" />
-            <div class="invalid-feedback">Faça o upload da CNH.</div>
           </div>
         </div>
       </div>
@@ -903,8 +1040,7 @@ const stepTemplates = {
       <div class="row">
         <div class="col-md-12 mb-3">
           <label for="codigo" class="form-label">Código Estipulante *</label>
-          <input id="codigo" class="form-control" placeholder="10L4" required>
-           <div class="invalid-feedback">Informe um código válido.</div>
+          <input id="codigo" class="form-control" placeholder="10L4" >
         </div>
       </div>
 
@@ -928,11 +1064,10 @@ const stepTemplates = {
         <textarea id="infoAdicionais" class="form-control" rows="4" placeholder="Observações relevantes (ex.: restrições, perícia, etc.)"></textarea>
       </div>
       <div class="form-check mb-3">
-        <input class="form-check-input" type="checkbox" id="termos" required />
+        <input class="form-check-input" type="checkbox" id="termos"  />
         <label class="form-check-label" for="termos">
           Li e concordo com os termos e condições. *
         </label>
-        <div class="invalid-feedback">Você deve aceitar os termos.</div>
       </div>
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()">
@@ -963,28 +1098,24 @@ const stepTemplates = {
       <div class="row">
         <div class="col-md-6 mb-3">
           <label for="renovApolice" class="form-label">Número da Apólice *</label>
-          <input id="renovApolice" class="form-control" required placeholder="Ex: 938-..." />
-          <div class="invalid-feedback">Informe a apólice anterior.</div>
+          <input id="renovApolice" class="form-control"  placeholder="Ex: 938-..." />
         </div>
         <div class="col-md-6 mb-3">
           <label for="renovVencimento" class="form-label">Data de Vencimento *</label>
-          <input type="date" id="renovVencimento" class="form-control" required />
-          <div class="invalid-feedback">Informe a data de vencimento.</div>
+          <input type="date" id="renovVencimento" class="form-control"  />
         </div>
       </div>
       <div class="mb-3">
         <label for="renovSeguradora" class="form-label">Seguradora Vencendo *</label>
-        <select id="renovSeguradora" class="form-select" required>
+        <select id="renovSeguradora" class="form-select" >
           <option value="">Selecione</option>
           <option value="aruana">Aruana</option>
           <option value="outra">Outra</option>
         </select>
-        <div class="invalid-feedback">Informe a seguradora.</div>
       </div>
       <div class="mb-3" id="outraSeguradoraContainer" style="display: none;">
         <label for="outraSeguradoraNome" class="form-label">Nome da outra seguradora *</label>
         <input type="text" id="outraSeguradoraNome" class="form-control" />
-        <div class="invalid-feedback">Por favor, informe o nome da outra seguradora.</div>
       </div>
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
@@ -999,12 +1130,10 @@ const stepTemplates = {
             <div class="col-md-6 mb-3">
               <label class="form-label">Nome Completo ou Razão Social *</label>
               <input id="endossoNome" class="form-control" required />
-              <div class="invalid-feedback">Informe o nome ou a razão social.</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">CPF ou CNPJ *</label>
               <input id="endossoDocumento" class="form-control" placeholder="CPF ou CNPJ" required />
-              <div class="invalid-feedback">Documento inválido.</div>
             </div>
           </div>
 
@@ -1016,12 +1145,10 @@ const stepTemplates = {
               <option value="mbm">MBM</option>
               <option value="outra">Outra</option>
             </select>
-            <div class="invalid-feedback">Informe a seguradora.</div>
           </div>
           <div class="mb-3" id="endossoOutraSeguradoraContainer" style="display: none;">
             <label for="endossoOutraSeguradoraNome" class="form-label">Nome da outra seguradora *</label>
             <input type="text" id="endossoOutraSeguradoraNome" class="form-control" />
-            <div class="invalid-feedback">Informe o nome da outra seguradora.</div>
           </div>
 
           <div class="row">
@@ -1045,7 +1172,6 @@ const stepTemplates = {
               <option value="correcao_cadastral">Correção de dados cadastrais (nome, CPF, etc.)</option>
               <option value="cancel_req">Pedidos de Cancelamento</option>
             </select>
-            <div class="invalid-feedback">Selecione o tipo de solicitação.</div>
           </div>
 
           <div class="btn-group-navigation">
@@ -1060,54 +1186,45 @@ const stepTemplates = {
             <div class="col-md-6 mb-3">
               <label class="form-label">Placa na Apólice *</label>
               <input id="endossoVeiculoPlacaAtual" class="form-control" required />
-              <div class="invalid-feedback">Informe a placa atual.</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Placa Nova *</label>
               <input id="endossoVeiculoPlacaNova" class="form-control" required />
-              <div class="invalid-feedback">Informe a nova placa.</div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">CHASSI *</label>
               <input id="endossoVeiculoChassi" class="form-control" required />
-              <div class="invalid-feedback">Informe o chassi.</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">RENAVAM *</label>
               <input id="endossoVeiculoRenavam" class="form-control" required />
-              <div class="invalid-feedback">Informe o RENAVAM.</div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Fabricante *</label>
               <input id="endossoVeiculoFab" class="form-control" required />
-              <div class="invalid-feedback">Informe o fabricante.</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Modelo *</label>
               <input id="endossoVeiculoModelo" class="form-control" required />
-              <div class="invalid-feedback">Informe o modelo.</div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Ano - Fabricação/Modelo *</label>
               <input id="endossoVeiculoAno" class="form-control" placeholder="Ex: 2023/2024" required />
-              <div class="invalid-feedback">Informe o ano.</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Lotação *</label>
               <input id="endossoVeiculoLotacao" type="number" class="form-control" required />
-              <div class="invalid-feedback">Informe a lotação.</div>
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label">Upload CRLV (PDF/JPG/PNG) *</label>
             <input id="endossoVeiculoCRLV" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
-            <div class="invalid-feedback">Faça o upload do CRLV.</div>
           </div>
           <div class="btn-group-navigation">
             <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
@@ -1125,7 +1242,6 @@ const stepTemplates = {
               <option value="1">1 condutor</option>
               <option value="2">2 condutores</option>
             </select>
-            <div class="invalid-feedback">Selecione a quantidade atual.</div>
           </div>
           <div class="btn-group-navigation">
             <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
@@ -1142,7 +1258,6 @@ const stepTemplates = {
               <option value="add_1">Adicionar 1 auxiliar</option>
               <option value="add_2">Adicionar 2 auxiliares</option>
             </select>
-            <div class="invalid-feedback">Selecione uma ação.</div>
           </div>
           <div class="btn-group-navigation">
             <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
@@ -1160,7 +1275,6 @@ const stepTemplates = {
               <option value="retirar_incluir_novo">Retirar o atual e incluir novo</option>
               <option value="manter_add_outro">Manter o atual e adicionar outro</option>
             </select>
-            <div class="invalid-feedback">Selecione uma ação.</div>
           </div>
           <div class="btn-group-navigation">
             <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
@@ -1180,7 +1294,6 @@ const stepTemplates = {
               <option value="retirar_2_incluir_1">Retirar 2 e incluir 1 novo</option>
               <option value="retirar_2_incluir_2">Retirar 2 e incluir 2 novos</option>
             </select>
-            <div class="invalid-feedback">Selecione uma ação.</div>
           </div>
           <div class="btn-group-navigation">
             <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
@@ -1199,7 +1312,6 @@ const stepTemplates = {
             <div class="col-md-6 mb-3">
               <label class="form-label">Novo E-mail</label>
               <input id="endossoNovoEmail" type="email" class="form-control" />
-              <div class="invalid-feedback">E-mail inválido.</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Novo Telefone</label>
@@ -1209,7 +1321,6 @@ const stepTemplates = {
           <div class="mb-3">
             <label class="form-label">Upload Comprovante de Endereço (PDF/JPG/PNG) *</label>
             <input id="endossoNovoEnderecoComp" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
-            <div class="invalid-feedback">Faça o upload do comprovante de endereço.</div>
           </div>
           <div class="btn-group-navigation">
             <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
@@ -1231,19 +1342,16 @@ const stepTemplates = {
                 <label class="form-check-label" for="pj">Pessoa Jurídica</label>
               </div>
             </div>
-            <div class="invalid-feedback">Escolha PF ou PJ.</div>
           </div>
           <div id="blocoPF">
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label">Nome completo *</label>
                 <input id="segNomePF" class="form-control" />
-                <div class="invalid-feedback">Informe o nome.</div>
               </div>
               <div class="col-md-6 mb-3">
                 <label class="form-label">CPF *</label>
                 <input id="segCPF" class="form-control" placeholder="000.000.000-00" />
-                <div class="invalid-feedback">CPF inválido.</div>
               </div>
             </div>
           </div>
@@ -1252,19 +1360,16 @@ const stepTemplates = {
               <div class="col-md-6 mb-3">
                 <label class="form-label">Razão Social *</label>
                 <input id="segRazao" class="form-control" />
-                <div class="invalid-feedback">Informe a razão social.</div>
               </div>
               <div class="col-md-6 mb-3">
                 <label class="form-label">CNPJ *</label>
                 <input id="segCNPJ" class="form-control" placeholder="00000000000000" />
-                <div class="invalid-feedback">CNPJ inválido.</div>
               </div>
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label">Upload CNH do Segurado (PDF/JPG/PNG) *</label>
             <input id="endossoCorrecaoCNH" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
-            <div class="invalid-feedback">Faça o upload da CNH.</div>
           </div>
           <div class="btn-group-navigation">
             <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
@@ -1280,12 +1385,10 @@ const stepTemplates = {
                 <div class="col-md-8 mb-3">
                     <label for="endossoCondutor1RetirarNome" class="form-label">Nome Completo *</label>
                     <input id="endossoCondutor1RetirarNome" class="form-control" required />
-                    <div class="invalid-feedback">Informe o nome do condutor a retirar.</div>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="endossoCondutor1RetirarCPF" class="form-label">CPF *</label>
                     <input id="endossoCondutor1RetirarCPF" class="form-control" placeholder="000.000.000-00" required />
-                    <div class="invalid-feedback">CPF inválido.</div>
                 </div>
             </div>
             <div class="btn-group-navigation">
@@ -1303,12 +1406,10 @@ const stepTemplates = {
                     <div class="col-md-8 mb-3">
                         <label for="endossoCondutor1RetirarNome" class="form-label">Nome Completo *</label>
                         <input id="endossoCondutor1RetirarNome" class="form-control" required />
-                        <div class="invalid-feedback">Informe o nome do condutor 1.</div>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="endossoCondutor1RetirarCPF" class="form-label">CPF *</label>
                         <input id="endossoCondutor1RetirarCPF" class="form-control" placeholder="000.000.000-00" required />
-                        <div class="invalid-feedback">CPF inválido.</div>
                     </div>
                 </div>
             </div>
@@ -1320,12 +1421,10 @@ const stepTemplates = {
                     <div class="col-md-8 mb-3">
                         <label for="endossoCondutor2RetirarNome" class="form-label">Nome Completo *</label>
                         <input id="endossoCondutor2RetirarNome" class="form-control" required />
-                        <div class="invalid-feedback">Informe o nome do condutor 2.</div>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="endossoCondutor2RetirarCPF" class="form-label">CPF *</label>
                         <input id="endossoCondutor2RetirarCPF" class="form-control" placeholder="000.000.000-00" required />
-                        <div class="invalid-feedback">CPF inválido.</div>
                     </div>
                 </div>
             </div>
@@ -1360,7 +1459,6 @@ const stepTemplates = {
       <div class="form-check mb-3">
         <input class="form-check-input" type="checkbox" id="renovConfirm" required />
         <label class="form-check-label" for="renovConfirm">Os dados estão corretos. *</label>
-        <div class="invalid-feedback">Você deve confirmar que os dados estão corretos.</div>
       </div>
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
@@ -1374,18 +1472,15 @@ const stepTemplates = {
                 <div class="col-md-8 mb-3">
                   <label class="form-label">Nome Completo *</label>
                   <input id="endossoCondutor1Nome" class="form-control" required />
-                  <div class="invalid-feedback">Informe o nome do condutor.</div>
                 </div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">CPF *</label>
                   <input id="endossoCondutor1CPF" class="form-control" placeholder="00000000000" required />
-                  <div class="invalid-feedback">CPF inválido.</div>
                 </div>
               </div>
               <div class="mb-3">
                 <label class="form-label">Upload CNH (PDF/JPG/PNG) *</label>
                 <input id="endossoCondutor1CNH" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
-                <div class="invalid-feedback">Faça o upload da CNH.</div>
               </div>
               <div class="btn-group-navigation">
                 <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
@@ -1400,18 +1495,15 @@ const stepTemplates = {
                 <div class="col-md-8 mb-3">
                   <label class="form-label">Nome Completo *</label>
                   <input id="endossoCondutor1Nome" class="form-control" required />
-                  <div class="invalid-feedback">Informe o nome do condutor 1.</div>
                 </div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">CPF *</label>
                   <input id="endossoCondutor1CPF" class="form-control" placeholder="000000000-00" required />
-                  <div class="invalid-feedback">CPF inválido.</div>
                 </div>
               </div>
               <div class="mb-3">
                 <label class="form-label">Upload CNH Condutor 1 (PDF/JPG/PNG) *</label>
                 <input id="endossoCondutor1CNH" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
-                <div class="invalid-feedback">Faça o upload da CNH do condutor 1.</div>
               </div>
               <hr>
               <p class="text-muted">Condutor 2</p>
@@ -1419,18 +1511,15 @@ const stepTemplates = {
                 <div class="col-md-8 mb-3">
                   <label class="form-label">Nome Completo *</label>
                   <input id="endossoCondutor2Nome" class="form-control" required />
-                  <div class="invalid-feedback">Informe o nome do condutor 2.</div>
                 </div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">CPF *</label>
                   <input id="endossoCondutor2CPF" class="form-control" placeholder="00000000000" required />
-                  <div class="invalid-feedback">CPF inválido.</div>
                 </div>
               </div>
               <div class="mb-3">
                 <label class="form-label">Upload CNH Condutor 2 (PDF/JPG/PNG) *</label>
                 <input id="endossoCondutor2CNH" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
-                <div class="invalid-feedback">Faça o upload da CNH do condutor 2.</div>
               </div>
               <div class="btn-group-navigation">
                 <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
@@ -1443,7 +1532,6 @@ const stepTemplates = {
           <div class="mb-3">
             <label class="form-label">Carta de Cancelamento (PDF/JPG/PNG) *</label>
             <input id="endossoCartaCancel" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
-            <div class="invalid-feedback">Faça o upload da carta de cancelamento</div>
           </div>
           <div class="btn-group-navigation">
             <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
@@ -1457,12 +1545,10 @@ const stepTemplates = {
             <div class="col-md-6 mb-3">
               <label class="form-label">Nome Completo ou Razão Social *</label>
               <input id="segundaViaNome" class="form-control" required />
-              <div class="invalid-feedback">Informe o nome ou a razão social.</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">CPF ou CNPJ *</label>
               <input id="segundaViaDocumento" class="form-control" placeholder="CPF ou CNPJ" required />
-              <div class="invalid-feedback">Documento inválido.</div>
             </div>
           </div>
           <div class="mb-3">
@@ -1479,12 +1565,10 @@ const stepTemplates = {
           <div class="mb-3" id="segundaViaOutroContainer" style="display: none;">
             <label for="segundaViaOutroNome" class="form-label">Especifique o documento *</label>
             <input type="text" id="segundaViaOutroNome" class="form-control" />
-            <div class="invalid-feedback">Especifique o tipo de documento.</div>
           </div>
           <div class="mb-3">
             <label class="form-label">Responsável pelo Pedido *</label>
             <input id="segundaViaResponsavel" class="form-control" required />
-            <div class="invalid-feedback">Informe o nome do responsável.</div>
           </div>
           <div class="mb-3">
             <label class="form-label">Observações complementares</label>
@@ -1502,25 +1586,21 @@ const stepTemplates = {
             <div class="col-md-6 mb-3">
               <label class="form-label">Nome Completo ou Razão Social *</label>
               <input id="finRegNome" class="form-control" required />
-              <div class="invalid-feedback">Informe o nome ou a razão social.</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">CPF ou CNPJ *</label>
               <input id="finRegDocumento" class="form-control" placeholder="CPF ou CNPJ" required />
-              <div class="invalid-feedback">Documento inválido.</div>
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label">Data de vencimento em aberto *</label>
             <input type="date" id="finRegDataVencimento" class="form-control" required />
             <div class="form-text text-muted" style="text-align: justify;">Após a data máxima de pagamento indicada no boleto, os pedidos de atualização de parcelas serão avaliados individualmente pela Seguradora, podendo ser aceitos ou negados. O prazo médio de retorno é de até 48 horas úteis, podendo variar conforme a demanda da seguradora parceira.</div>
-            <div class="invalid-feedback">Informe a data de vencimento em aberto.</div>
           </div>
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Parcela em Aberto *</label>
               <input type="text" id="finRegParcela" class="form-control" required />
-              <div class="invalid-feedback">Informe a parcela em aberto.</div>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Número Apólice RCF</label>
@@ -1530,12 +1610,10 @@ const stepTemplates = {
           <div class="mb-3">
             <label class="form-label">Motivo Inadimplência *</label>
             <textarea id="finRegMotivo" class="form-control" rows="3" required></textarea>
-            <div class="invalid-feedback">Informe o motivo da inadimplência.</div>
           </div>
           <div class="mb-3">
             <label class="form-label">Responsável pelo Pedido *</label>
             <input id="finRegResponsavel" class="form-control" required />
-            <div class="invalid-feedback">Informe o nome do responsável pelo pedido.</div>
           </div>
           <div class="mb-3">
             <label class="form-label">Observações Complementares</label>
@@ -1595,6 +1673,20 @@ const fluxosConfig = {
     description: "Solicite uma cotação",
     steps: [
       { label: "Tipo", template: "tipo" },
+      { label: "Segurado", template: "segurado" },
+      { label: "Veiculo", template: "veiculo" },
+      { label: "Cotação", template: "auto_compreensivo" },
+      { label: "Enviar", template: "enviar" },
+    ],
+  },
+  aviso_sinistro: {
+    description: "Preencha os dados para Aviso de Sinistro",
+    steps: [
+      { label: "Tipo", template: "tipo" },
+      { label: "Aviso Segurado", template: "aviso_sinistro" },
+      { label: "Aviso Terceiro", template: "aviso_sinistro_terceiro" },
+      { label: "Aviso Ocorrência", template: "aviso_sinistro_ocorrencia" },
+      { label: "Info & Consent.", template: "consentimento" },
       { label: "Enviar", template: "enviar" },
     ],
   },
@@ -1835,7 +1927,7 @@ function nextStep() {
         dynamicSteps.push({ label: "Estipulante", template: "estipulante" });
         dynamicSteps.push({ label: "Segurado", template: "segurado" });
     } else if (tipoSolicitante === 'colaborador') {
-        // dynamicSteps.push({ label: "Colaborador", template: "solicitante" });
+        dynamicSteps.push({ label: "Colaborador", template: "solicitante" });
     } else if (tipoSolicitante === 'segurado'){
       dynamicSteps.push({ label: "Segurado", template: "segurado" })
     }
@@ -1979,6 +2071,16 @@ function nextStep() {
     toggleOutroCampo('segTrabalhadas', 'seguradoraContainer', 'seguradoraNome', 'Outra');
     handleRcfVisibility();
     handleAppVisibility();
+
+    // Lógica para mostrar/esconder segs_trabalhadas_container
+    const segsTrabalhadasContainer = document.getElementById('segs_trabalhadas_container');
+    if (segsTrabalhadasContainer) {
+      if (formDataStorage.tipoSolicitante === 'colaborador') {
+        segsTrabalhadasContainer.classList.remove('d-none');
+      } else {
+        segsTrabalhadasContainer.classList.add('d-none');
+      }
+    }
   }
 
   if (currentStep < activeSteps.length - 1) {
@@ -2305,6 +2407,34 @@ function addListenersAndMasks() {
             appendFile('seguradoComprovanteResidencia', 'comprovanteResidenciaSeg');
             appendChecked('confirmado', 'renovConfirm');
             break;
+        case 'aviso_sinistro':
+            appendValue('corretor', 'sinistroCorretor');
+            appendValue('nomeSegurado', 'sinistroNomeSegurado');
+            appendValue('emailSegurado', 'sinistroEmailSegurado');
+            appendValue('numeroApolice', 'sinistroNumeroApolice');
+            appendValue('marcaVeiculo', 'sinistroMarcaVeiculo');
+            appendValue('modeloVeiculo', 'sinistroModeloVeiculo');
+            appendInt('anoFabricacaoVeiculo', 'sinistroAnoFabricacaoVeiculo');
+            appendInt('anoModeloVeiculo', 'sinistroAnoModeloVeiculo');
+            appendValue('placaSegurado', 'sinistroPlacaSegurado');
+            appendValue('categoriaDano', 'sinistroCategoriaDano');
+            appendValue('nomeTerceiro', 'sinistroNomeTerceiro');
+            appendValue('enderecoTerceiro', 'sinistroEnderecoTerceiro');
+            appendValue('telefoneTerceiro', 'sinistroTelefoneTerceiro');
+            appendValue('emailTerceiro', 'sinistroEmailTerceiro');
+            formData.append('paisSinistro', 'Brasil'); // Campo readonly
+            appendValue('estadoSinistro', 'sinistroEstado');
+            appendValue('cidadeSinistro', 'sinistroCidade');
+            appendValue('cepSinistro', 'sinistroCep');
+            appendValue('numeroLocalSinistro', 'sinistroNumeroLocal');
+            appendValue('enderecoEvento', 'sinistroEnderecoEvento');
+            appendValue('dataHoraOcorrencia', 'sinistroDataHoraOcorrencia');
+            appendValue('descricaoSinistro', 'sinistroDescricao');
+            appendValue('numeroBoletim', 'sinistroNumeroBoletim');
+            appendValue('dataHoraBoletim', 'sinistroDataHoraBoletim');
+            appendRadio('responsabilidadeSegurado', 'sinistroResponsabilidade');
+            appendValue('motivoResponsabilidade', 'sinistroMotivoResponsabilidade');
+            break;
         case 'endosso':
             appendValue('nomeOuRazao', 'endossoNome');
             appendValue('documento', 'endossoDocumento');
@@ -2489,7 +2619,7 @@ function addListenersAndMasks() {
   handleRcfVisibility();
   handleAppVisibility();
   applyEstipulanteVisibility();
-  toggleTigoClubeAdesao();
+  toggleTigoClubeAdesao(); 
 
   if (activeSteps[currentStep]?.template === 'renovacao_confirmar') {
     populateRenovacaoConfirmacao();
