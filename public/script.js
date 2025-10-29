@@ -441,12 +441,6 @@ const stepTemplates = {
     <div class="form-step">
       <h4 class="mb-4">Aviso de Sinistro</h4>
 
-      <!-- Corretor -->
-      <div class="mb-3">
-        <label for="sinistroCorretor" class="form-label">Corretor:</label>
-        <input type="text" id="sinistroCorretor" class="form-control" />
-      </div>
-
       <!-- Segurado -->
       <h5 class="mt-4 mb-3">Dados do Segurado</h5>
       <div class="mb-3">
