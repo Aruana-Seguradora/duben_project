@@ -55,154 +55,395 @@ const stepTemplates = {
   produtos_coberturas: `
     <div class="form-step">
       <h4 class="mb-4">Produtos e Coberturas</h4>
-      <div class="mb-3">
+      <div class="mb-4">
         <label class="form-label">Selecione os produtos desejados *</label>
         <select id="produtos" class="form-select" required>
-          <option value="">Selecione</option>
+          <option value="" disabled selected>Selecione</option>
           <option value="rcf_app">RCF e APP</option>
           <option value="rcf">Somente RCF</option>
           <option value="app">Somente APP</option>
+          <option value="auto">Seguro Auto Compreensivo</option>
         </select>
         <div class="invalid-feedback">Informe os produtos desejados.</div>
       </div>
 
-      <div id="coberturaRCF" class="mb-3" style="display: none;">
-        <label for="valorRCF_select" class="form-label">Valor RCF (R$) *</label>
-        <div id="rcfApoliceInfo" class="text-muted mb-2"></div>
-        <select id="valorRCF_select" class="form-select">
-          <option value="">Selecione</option>
-          <option value="50000">R$ 50.000</option>
-          <option value="100000">R$ 100.000</option>
-          <option value="150000">R$ 150.000</option>
-          <option value="outro">Outro Valor</option>
-        </select>
-        <input type="number" class="form-control mt-2" id="valorRCF_outro" step="1000" style="display: none;" placeholder="Digite o valor desejado" />
-        <div class="invalid-feedback">Informe o valor de RCF.</div>
+      <div id="rcf_app_fields">
+        <div id="coberturaRCF" class="mb-4" style="display: none;">
+          <label for="valorRCF_select" class="form-label">Valor RCF (R$) *</label>
+          <div id="rcfApoliceInfo" class="text-muted mb-2"></div>
+          <select id="valorRCF_select" class="form-select">
+            <option value="" disabled selected>Selecione</option>
+            <option value="50000">R$ 50.000</option>
+            <option value="100000">R$ 100.000</option>
+            <option value="150000">R$ 150.000</option>
+            <option value="200000">R$ 200.000</option>
+            <option value="outro">Outro Valor</option>
+          </select>
+          <input type="number" class="form-control mt-2" id="valorRCF_outro" step="1000" style="display: none;" placeholder="Digite o valor desejado" />
+          <div class="invalid-feedback">Informe o valor de RCF.</div>
+        </div>
+
+        <div id="coberturaAPP" class="mb-4" style="display: none;">
+          <label for="valorAPP_select" class="form-label">Valor APP por pessoa (R$) *</label>
+          <div id="appApoliceInfo" class="text-muted mb-2"></div>
+          <select id="valorAPP_select" class="form-select">
+            <option value="" disabled selected>Selecione</option>
+            <option value="5000">R$ 5.000</option>
+            <option value="10000">R$ 10.000</option>
+            <option value="outro">Outro Valor</option>
+          </select>
+          <input type="number" class="form-control mt-2" id="valorAPP_outro" step="1000" style="display: none;" placeholder="Digite o valor desejado" />
+          <div class="invalid-feedback">Informe o valor de APP.</div>
+        </div>
+        
+        <hr>
+
+        <h4 class="mb-4">Parcelamento</h4>
+        <div id="observacaoAPP" class="alert alert-info">
+          <strong>Atenção:</strong> O produto APP (Acidentes Pessoais de Passageiros) é sempre pago à vista. O parcelamento se aplica apenas ao RCF.
+        </div>
+        <div class="row">
+          <div class="col-md-12 mb-3">
+            <label for="qtdParcelas" class="form-label">Quantidade de parcelas *</label>
+            <select id="qtdParcelas" class="form-select" required>
+              <option value="" disabled selected>Selecione</option>
+              <option>1x</option> <option>2x</option> <option>3x</option> <option>4x</option> <option>5x</option> <option>6x</option> <option>7x</option> <option>8x</option> <option>9x</option> <option>10x</option> 
+            </select>
+            <div class="invalid-feedback">Informe a quantidade de parcelas.</div>
+          </div>
+        </div>
+
+        <hr>
+
+        <h4 id="segs_trabalhadas" class="mb-4">Seguradoras Trabalhadas</h4>
+        <div class="row">
+          <div class="col-md-12 mb-3">
+            <label for="segTrabalhadas" class="form-label">Seguradoras *</label>
+            <select id="segTrabalhadas" class="form-select" required>
+              <option value="" disabled selected>Selecione</option>
+              <option>Aruana</option> <option>Porto Seguro</option> <option>Azul</option> <option>Allianz</option> <option>Tokio Marine</option> <option>HDI</option> <option>Sompo</option> <option>Bradesco</option> <option>Suhai</option> <option>Mapfre</option> <option>MBM</option> <option>Outra</option>
+            </select>
+            <div class="invalid-feedback">Informe a seguradora.</div>
+          </div>
+          <div class="mb-3" id="seguradoraContainer" style="display: none;">
+            <label for="seguradoraNome" class="form-label">Nome da outra seguradora *</label>
+            <input type="text" id="seguradoraNome" class="form-control" />
+            <div class="invalid-feedback">Por favor, informe o nome da outra seguradora.</div>
+          </div>
+        </div>
+      </div>
+        
+      <div class="btn-group-navigation">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">
+          Próximo <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>`,
+  auto_compreensivo: `
+    <div class="form-step">
+      <h4 class="mb-4">Detalhes do Seguro Auto Compreensivo</h4>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Veículo é 0km? *</label>
+          <div class="d-flex gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="veiculo0km" id="veiculo0kmSim" value="sim" required onchange="toggleConditionalField(this.value === 'sim', 'notaFiscal0kmContainer')">
+              <label class="form-check-label" for="veiculo0kmSim">Sim</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="veiculo0km" id="veiculo0kmNao" value="nao" required onchange="toggleConditionalField(this.value === 'sim', 'notaFiscal0kmContainer')">
+              <label class="form-check-label" for="veiculo0kmNao">Não</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3" id="notaFiscal0kmContainer" style="display: none;">
+          <label class="form-label">Nota Fiscal do Veículo (PDF/JPG/PNG)</label>
+          <input id="notaFiscal0km" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
+        </div>
       </div>
 
-      <div id="coberturaAPP" class="mb-3" style="display: none;">
-        <label for="valorAPP_select" class="form-label">Valor APP por pessoa (R$) *</label>
-        <div id="appApoliceInfo" class="text-muted mb-2"></div>
-        <select id="valorAPP_select" class="form-select">
-          <option value="">Selecione</option>
-          <option value="5000">R$ 5.000</option>
-          <option value="10000">R$ 10.000</option>
-          <option value="outro">Outro Valor</option>
-        </select>
-        <input type="number" class="form-control mt-2" id="valorAPP_outro" step="1000" style="display: none;" placeholder="Digite o valor desejado" />
-        <div class="invalid-feedback">Informe o valor de APP.</div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Isenção Fiscal? *</label>
+          <select id="isencaoFiscal" class="form-select" required onchange="toggleConditionalField(this.value !== 'nao', 'notaFiscalIsencaoContainer')">
+            <option value="">Selecione</option>
+            <option value="nao">Não</option>
+            <option value="ipi">IPI</option>
+            <option value="icms">ICMS</option>
+            <option value="ipi_icms">IPI e ICMS</option>
+            <option value="pcd">PCD</option>
+          </select>
+        </div>
+        <div class="col-md-6 mb-3" id="notaFiscalIsencaoContainer" style="display: none;">
+          <label class="form-label">Documento de Isenção (PDF/JPG/PNG)</label>
+          <input id="notaFiscalIsencao" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Veículo com kit gás? *</label>
+          <div class="d-flex gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="kitGas" id="kitGasSim" value="sim" required>
+              <label class="form-check-label" for="kitGasSim">Sim</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="kitGas" id="kitGasNao" value="nao" required>
+              <label class="form-check-label" for="kitGasNao">Não</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Veículo blindado? *</label>
+          <div class="d-flex gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="blindado" id="blindadoSim" value="sim" required>
+              <label class="form-check-label" for="blindadoSim">Sim</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="blindado" id="blindadoNao" value="nao" required>
+              <label class="form-check-label" for="blindadoNao">Não</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Tipo de câmbio: *</label>
+          <select id="tipoCambio" class="form-select" required>
+            <option value="">Selecione</option>
+            <option value="manual">Manual</option>
+            <option value="automatico">Automático</option>
+          </select>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Possui rastreador? *</label>
+           <div class="d-flex gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="rastreador" id="rastreadorSim" value="sim" required>
+              <label class="form-check-label" for="rastreadorSim">Sim</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="rastreador" id="rastreadorNao" value="nao" required>
+              <label class="form-check-label" for="rastreadorNao">Não</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Possui alarme? *</label>
+          <div class="d-flex gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="alarme" id="alarmeSim" value="sim" required>
+              <label class="form-check-label" for="alarmeSim">Sim</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="alarme" id="alarmeNao" value="nao" required>
+              <label class="form-check-label" for="alarmeNao">Não</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Possui seguro atual? *</label>
+          <div class="d-flex gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="seguroAtual" id="seguroAtualSim" value="sim" required onchange="toggleConditionalField(this.value === 'sim', 'apoliceVigenteContainer')">
+              <label class="form-check-label" for="seguroAtualSim">Sim</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="seguroAtual" id="seguroAtualNao" value="nao" required onchange="toggleConditionalField(this.value === 'sim', 'apoliceVigenteContainer')">
+              <label class="form-check-label" for="seguroAtualNao">Não</label>
+            </div>
+          </div>
+        </div>
       </div>
       
-      <hr>
-
-      <h4 class="mb-4">Parcelamento</h4>
-      <div id="observacaoAPP" class="alert alert-info">
-        <strong>Atenção:</strong> O produto APP (Acidentes Pessoais de Passageiros) é sempre pago à vista. O parcelamento se aplica apenas ao RCF.
+      <div class="mb-3" id="apoliceVigenteContainer" style="display: none;">
+        <label class="form-label">Apólice Vigente (PDF/JPG/PNG)</label>
+        <input id="apoliceVigente" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
       </div>
+
       <div class="row">
-        <div class="col-md-12 mb-3">
-          <label for="qtdParcelas" class="form-label">Quantidade de parcelas *</label>
-          <select id="qtdParcelas" class="form-select" required>
-            <option value="">Selecione</option>
-            <option>1x</option> <option>2x</option> <option>3x</option> <option>4x</option> <option>5x</option> <option>6x</option> <option>7x</option> <option>8x</option> <option>9x</option> <option>10x</option> 
-          </select>
-          <div class="invalid-feedback">Informe a quantidade de parcelas.</div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Histórico de sinistros nos últimos 5 anos? *</label>
+            <div class="d-flex gap-3">
+                <div class="form-check">
+                <input class="form-check-input" type="radio" name="sinistro" id="sinistroSim" value="sim" required>
+                <label class="form-check-label" for="sinistroSim">Sim</label>
+                </div>
+                <div class="form-check">
+                <input class="form-check-input" type="radio" name="sinistro" id="sinistroNao" value="nao" required>
+                <label class="form-check-label" for="sinistroNao">Não</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Pernoite em garagem: *</label>
+            <div class="d-flex gap-3">
+                <div class="form-check">
+                <input class="form-check-input" type="radio" name="pernoiteGaragem" id="pernoiteGaragemSim" value="sim" required onchange="toggleConditionalField(this.value === 'sim', 'tipoGaragemContainer')">
+                <label class="form-check-label" for="pernoiteGaragemSim">Sim</label>
+                </div>
+                <div class="form-check">
+                <input class="form-check-input" type="radio" name="pernoiteGaragem" id="pernoiteGaragemNao" value="nao" required onchange="toggleConditionalField(this.value === 'sim', 'tipoGaragemContainer')">
+                <label class="form-check-label" for="pernoiteGaragemNao">Não</label>
+                </div>
+            </div>
         </div>
       </div>
 
-      <div class="btn-group-navigation">
-        <button type="button" class="btn btn-secondary" onclick="prevStep()">
-          <i class="bi bi-arrow-left"></i> Voltar
-        </button>
-        <button type="button" class="btn btn-primary" onclick="nextStep()">
-          Próximo <i class="bi bi-arrow-right"></i>
-        </button>
+      <div class="mb-3" id="tipoGaragemContainer" style="display: none;">
+        <label class="form-label">Tipo de garagem:</label>
+        <select id="tipoGaragem" class="form-select">
+          <option value="">Selecione</option>
+          <option value="fechada">Fechada</option>
+          <option value="aberta">Aberta</option>
+          <option value="estacionamento">Estacionamento</option>
+        </select>
       </div>
-    </div>`,
-  produtos: `
-    <div class="form-step" data-step="1">
-      <h4 class="mb-4">Produtos desejados</h4>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="distanciaMedia" class="form-label">Distância média percorrida por dia (km):</label>
+          <input type="number" id="distanciaMedia" class="form-control">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="frequenciaUso" class="form-label">Frequência de uso:</label>
+          <select id="frequenciaUso" class="form-select">
+            <option value="">Selecione</option>
+            <option value="diaria">Diária</option>
+            <option value="semanal">Semanal</option>
+            <option value="eventual">Eventual</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Permissionário dirige o veículo? *</label>
+            <div class="d-flex gap-3">
+                <div class="form-check">
+                <input class="form-check-input" type="radio" name="permissionarioDirige" id="permissionarioDirigeSim" value="sim" required>
+                <label class="form-check-label" for="permissionarioDirigeSim">Sim</label>
+                </div>
+                <div class="form-check">
+                <input class="form-check-input" type="radio" name="permissionarioDirige" id="permissionarioDirigeNao" value="nao" required>
+                <label class="form-check-label" for="permissionarioDirigeNao">Não</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Possui motorista auxiliar cadastrado? *</label>
+            <div class="d-flex gap-3">
+                <div class="form-check">
+                <input class="form-check-input" type="radio" name="motoristaAuxiliar" id="motoristaAuxiliarSim" value="sim" required onchange="toggleConditionalField(this.value === 'sim', 'motoristaAuxiliarContainer')">
+                <label class="form-check-label" for="motoristaAuxiliarSim">Sim</label>
+                </div>
+                <div class="form-check">
+                <input class="form-check-input" type="radio" name="motoristaAuxiliar" id="motoristaAuxiliarNao" value="nao" required onchange="toggleConditionalField(this.value === 'sim', 'motoristaAuxiliarContainer')">
+                <label class="form-check-label" for="motoristaAuxiliarNao">Não</label>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <div id="motoristaAuxiliarContainer" style="display: none;">
+        <h5 class="mb-3">Dados do Motorista Auxiliar</h5>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Nome Completo</label>
+            <input id="auxNome" class="form-control">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">CPF</label>
+            <input id="auxCPF" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Data de Nascimento</label>
+            <input type="date" id="auxDataNascimento" class="form-control">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Estado Civil</label>
+            <select id="auxEstadoCivil" class="form-select">
+              <option value="">Selecione</option>
+              <option>Solteiro(a)</option>
+              <option>Casado(a)</option>
+              <option>Divorciado(a)</option>
+              <option>Viúvo(a)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div class="mb-3">
-        <label class="form-label">Selecione *</label>
-        <select id="produtos" class="form-select" required>
-          <option value="">Selecione</option>
-          <option value="rcf_app">RCF e APP</option>
-          <option value="rcf">Somente RCF</option>
-          <option value="app">Somente APP</option>
-        </select>
-        <div class="invalid-feedback">Informe os produtos desejados.</div>
-      </div>
-      <div class="btn-group-navigation">
-        <button type="button" class="btn btn-secondary" onclick="prevStep()">
-          <i class="bi bi-arrow-left"></i> Voltar
-        </button>
-        <button type="button" class="btn btn-primary" onclick="nextStep()">
-          Próximo <i class="bi bi-arrow-right"></i>
-        </button>
-      </div>
-    </div>`,
-  coberturas: `
-    <div class="form-step" data-step="2">
-      <h4 class="mb-4">Coberturas</h4>
-      <div id="coberturaRCF" class="mb-3">
-        <label for="valorRCF_select" class="form-label">Valor RCF (R$) *</label>
-        <div id="rcfApoliceInfo" class="text-muted mb-2"></div>
-        <select id="valorRCF_select" class="form-select" required>
-          <option value="">Selecione</option>
-          <option value="50000">R$ 50.000</option>
-          <option value="100000">R$ 100.000</option>
-          <option value="150000">R$ 150.000</option>
-          <option value="outro">Outro Valor</option>
-        </select>
-        <input type="number" class="form-control mt-2" id="valorRCF_outro" step="1000" style="display: none;" placeholder="Digite o valor desejado" />
-        <div class="invalid-feedback">Informe o valor de RCF.</div>
-      </div>
-      <div id="coberturaAPP" class="mb-3">
-        <label for="valorAPP_select" class="form-label">Valor APP por pessoa (R$) *</label>
-        <div id="appApoliceInfo" class="text-muted mb-2"></div>
-        <select id="valorAPP_select" class="form-select" required>
-          <option value="">Selecione</option>
-          <option value="5000">R$ 5.000</option>
-          <option value="10000">R$ 10.000</option>
-          <option value="outro">Outro Valor</option>
-        </select>
-        <input type="number" class="form-control mt-2" id="valorAPP_outro" step="1000" style="display: none;" placeholder="Digite o valor desejado" />
-        <div class="invalid-feedback">Informe o valor de APP.</div>
-      </div>
-      <div class="btn-group-navigation">
-        <button type="button" class="btn btn-secondary" onclick="prevStep()">
-          <i class="bi bi-arrow-left"></i> Voltar
-        </button>
-        <button type="button" class="btn btn-primary" onclick="nextStep()">
-          Próximo <i class="bi bi-arrow-right"></i>
-        </button>
-      </div>
-    </div>`,
-  parcelas: `
-    <div class="form-step" data-step="3">
-      <h4 class="mb-4">Parcelamento</h4>
-      <div id="observacaoAPP" class="alert alert-info">
-        <strong>Atenção:</strong> O produto APP (Acidentes Pessoais de Passageiros) é sempre pago à vista. O parcelamento se aplica apenas ao RCF.
-      </div>
-      <div class="row">
-        <div class="col-md-12 mb-3">
-          <label for="qtdParcelas" class="form-label">Quantidade de parcelas *</label>
-          <select id="qtdParcelas" class="form-select" required>
-            <option value="">Selecione</option>
-            <option>1x</option> <option>2x</option> <option>3x</option> <option>4x</option> <option>5x</option> <option>6x</option> <option>7x</option> <option>8x</option> <option>9x</option> <option>10x</option> 
-          </select>
-          <div class="invalid-feedback">Informe a quantidade de parcelas.</div>
+        <label class="form-label">Deseja contratar cobertura para condutores na faixa de 18 a 25 anos? *</label>
+        <div class="d-flex gap-3">
+            <div class="form-check">
+            <input class="form-check-input" type="radio" name="coberturaJovem" id="coberturaJovemSim" value="sim" required>
+            <label class="form-check-label" for="coberturaJovemSim">Sim</label>
+            </div>
+            <div class="form-check">
+            <input class="form-check-input" type="radio" name="coberturaJovem" id="coberturaJovemNao" value="nao" required>
+            <label class="form-check-label" for="coberturaJovemNao">Não</label>
+            </div>
         </div>
       </div>
+
+      <h5 class="mt-4 mb-3">Coberturas Adicionais Desejadas</h5>
+      
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="coberturaDanosMateriais">
+            <label class="form-check-label" for="coberturaDanosMateriais">Danos materiais ao veículo</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="coberturaDanosCorporais">
+            <label class="form-check-label" for="coberturaDanosCorporais">Danos corporais</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="coberturaDanosTerceiros">
+            <label class="form-check-label" for="coberturaDanosTerceiros">Danos a terceiros</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="coberturaAPPCompreensivo">
+            <label class="form-check-label" for="coberturaAPPCompreensivo">APP</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="coberturaColisao">
+            <label class="form-check-label" for="coberturaColisao">Colisão Total/Parcial</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="coberturaRouboFurto">
+            <label class="form-check-label" for="coberturaRouboFurto">Roubo/Furto</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="coberturaIncendio">
+            <label class="form-check-label" for="coberturaIncendio">Incêndio</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="coberturaVidros">
+            <label class="form-check-label" for="coberturaVidros">Vidros, faróis e lanternas</label>
+        </div>
+        <div class="mb-3">
+            <label for="coberturasOutros" class="form-label">Outros:</label>
+            <input type="text" id="coberturasOutros" class="form-control">
+        </div>
+
       <div class="btn-group-navigation">
-        <button type="button" class="btn btn-secondary" onclick="prevStep()">
-          <i class="bi bi-arrow-left"></i> Voltar
-        </button>
-        <button type="button" class="btn btn-primary" onclick="nextStep()">
-          Próximo <i class="bi bi-arrow-right"></i>
-        </button>
+        <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
       </div>
     </div>`,
+
   segurado: `
     <div class="form-step" data-step="5">
       <h4 class="mb-4">Dados do Segurado</h4>
@@ -541,7 +782,7 @@ const stepTemplates = {
           <label class="form-label">Uso *</label>
           <select id="veiUso" class="form-select" required>
             <option value="" disabled selected>Selecione</option>
-            <option>Moto</option><option>Van Turismo</option><option>Van Escolar</option><option>Van Urbano</option><<option>Táxi/Aplicativos</option> <option>Policiamento/Bombeiro</option> <option>Comercial/Profissional</option>
+            <option>Moto</option><option>Van Turismo</option><option>Van Escolar</option><option>Van Urbano</option><<option>Táxi/Aplicativos</option> <option>Policiamento/Bombeiro</option> <option>Comercial/Profissional</option><option>Particular/Passeio</option>
             <option>Casa Locadora - Uso Comercial/Industrial, S/Veículo por Aplicativo</option> <option>Casa Locadora - Uso Veículo por Aplicativos</option> <option>Chapa de Fabricante</option> <option>Auto Escola</option>
           </select>
           <div class="invalid-feedback">Informe o uso.</div>
@@ -802,6 +1043,7 @@ const stepTemplates = {
               <option value="inclusao_condutor">Inclusão ou exclusão de condutor auxiliar</option>
               <option value="alteracao_endereco">Alteração de endereço, e-mail ou telefone</option>
               <option value="correcao_cadastral">Correção de dados cadastrais (nome, CPF, etc.)</option>
+              <option value="cancel_req">Pedidos de Cancelamento</option>
             </select>
             <div class="invalid-feedback">Selecione o tipo de solicitação.</div>
           </div>
@@ -1195,6 +1437,19 @@ const stepTemplates = {
                 <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
               </div>
             </div>`,
+      
+      carta_cancelamento: `
+        <div class="form-step" data-step="4">
+          <div class="mb-3">
+            <label class="form-label">Carta de Cancelamento (PDF/JPG/PNG) *</label>
+            <input id="endossoCartaCancel" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
+            <div class="invalid-feedback">Faça o upload da carta de cancelamento</div>
+          </div>
+          <div class="btn-group-navigation">
+            <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
+            <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
+          </div>
+        </div>`,
       segunda_via_docs: `
         <div class="form-step" data-step="1">
           <h4 class="mb-4">2ª Via de Documentos/Posição Financeira</h4>
@@ -1258,7 +1513,7 @@ const stepTemplates = {
           <div class="mb-3">
             <label class="form-label">Data de vencimento em aberto *</label>
             <input type="date" id="finRegDataVencimento" class="form-control" required />
-            <div class="form-text text-muted">Os pedidos de atualização de parcelas dependem de avaliação da Seguradora. Após a data máxima descrita no boleto, a apólice encontra-se automaticamente na esteira de envio ao processo de cancelamento.</div>
+            <div class="form-text text-muted" style="text-align: justify;">Após a data máxima de pagamento indicada no boleto, os pedidos de atualização de parcelas serão avaliados individualmente pela Seguradora, podendo ser aceitos ou negados. O prazo médio de retorno é de até 48 horas úteis, podendo variar conforme a demanda da seguradora parceira.</div>
             <div class="invalid-feedback">Informe a data de vencimento em aberto.</div>
           </div>
           <div class="row">
@@ -1307,9 +1562,9 @@ const fluxosConfig = {
     description: "Siga as 4 etapas para solicitar a Renovação",
     steps: [
       { label: "Tipo", template: "tipo" },
-      { label: "Veículo", template: "veiculo" },
       { label: "Apólice", template: "renovacao_apolice" },
       { label: "Segurado", template: "segurado" },
+      { label: "Veículo", template: "veiculo" },
       { label: "Confirmar", template: "renovacao_confirmar" },
     ],
   },
@@ -1333,6 +1588,13 @@ const fluxosConfig = {
     steps: [
       { label: "Tipo", template: "tipo" },
       { label: "Dados", template: "financeiro_regularizacao" },
+      { label: "Enviar", template: "enviar" },
+    ],
+  },
+  cotacao: {
+    description: "Solicite uma cotação",
+    steps: [
+      { label: "Tipo", template: "tipo" },
       { label: "Enviar", template: "enviar" },
     ],
   },
@@ -1539,6 +1801,17 @@ function validateStep(step) {
   return isValid;
 }
 
+function toggleConditionalField(show, containerId) {
+  const container = document.getElementById(containerId);
+  if (container) {
+    container.style.display = show ? 'block' : 'none';
+    const input = container.querySelector('input, select');
+    if (input) {
+      input.required = show;
+    }
+  }
+}
+
 function nextStep() {
   if (!validateStep(currentStep)) return;
 
@@ -1551,32 +1824,42 @@ function nextStep() {
     const tipoSolicitante = document.getElementById('tipoSolicitante').value;
     formDataStorage.tipoSolicitante = tipoSolicitante;
 
-    // const stepsAfterTipoSolicitante = [
-    //     { label: "Tipo", template: "tipo_para_nova" },  
-    // ];
-
     const baseStepsAfter = [
-        { label: "Veículo", template: "veiculo" },
         { label: "Produtos", template: "produtos_coberturas" },
-        // { label: "Parcelas", template: "parcelas"},
         { label: "Auxiliares", template: "auxiliares" },
         { label: "Info & Consent.", template: "consentimento" },
-        // { label: "Enviar", template: "enviar" }
     ];
 
     let dynamicSteps = [];
-    if (tipoSolicitante === 'segurado') {
-        dynamicSteps.push({ label: "Segurado", template: "segurado" });
-    } else if (tipoSolicitante === 'estipulante') {
+    if (tipoSolicitante === 'estipulante') {
         dynamicSteps.push({ label: "Estipulante", template: "estipulante" });
         dynamicSteps.push({ label: "Segurado", template: "segurado" });
     } else if (tipoSolicitante === 'colaborador') {
-        dynamicSteps.push({ label: "Colaborador", template: "solicitante" });
-        dynamicSteps.push({ label: "Segurado", template: "segurado" });
+        // dynamicSteps.push({ label: "Colaborador", template: "solicitante" });
+    } else if (tipoSolicitante === 'segurado'){
+      dynamicSteps.push({ label: "Segurado", template: "segurado" })
     }
 
-    // TALVEZ MEXER AQUI
     activeSteps.splice(currentStep + 1, activeSteps.length - currentStep - 1, ...dynamicSteps, ...baseStepsAfter);
+  }
+
+  if (currentFluxo === 'nova' && currentStepConfig.template === 'produtos_coberturas') {
+    const produtosSelect = document.getElementById('produtos');
+    const autoStepIndex = activeSteps.findIndex(step => step.template === 'auto_compreensivo');
+
+    if (produtosSelect.value === 'auto') {
+      if (autoStepIndex === -1) {
+        needsDynamicRender = true;
+        const currentIndex = activeSteps.findIndex(step => step.template === 'produtos_coberturas');
+        const autoStep = { label: "Auto Compreensivo", template: "auto_compreensivo" };
+        activeSteps.splice(currentIndex + 1, 0, autoStep);
+      }
+    } else {
+      if (autoStepIndex > -1) {
+        needsDynamicRender = true;
+        activeSteps.splice(autoStepIndex, 1);
+      }
+    }
   }
 
   if (currentFluxo === 'nova' && currentStepConfig.template === 'solicitante') {
@@ -1585,7 +1868,6 @@ function nextStep() {
 
     const solicitanteStepIndex = currentStep;
 
-    // Base steps that always come after the person-related steps
     const baseStepsAfter = [
         { label: "Veículo", template: "veiculo" },
         { label: "Produtos", template: "produtos_coberturas" },
@@ -1604,12 +1886,11 @@ function nextStep() {
     activeSteps.splice(solicitanteStepIndex + 1, Infinity, ...personSteps, ...baseStepsAfter);
   }
 
-  // Lógica para adicionar etapas dinâmicas
   if (currentFluxo === 'endosso') {
     if (currentStepConfig.template === 'endosso_dados') {
       needsDynamicRender = true;
       const tipoEndosso = document.getElementById('endossoTipo').value;
-      activeSteps.splice(currentStep + 1); // Limpa etapas futuras
+      activeSteps.splice(currentStep + 1); 
 
       if (tipoEndosso === 'substituicao_veiculo') {
         stepsToAdd.push({ label: "Veículo", template: "endosso_veiculo" });
@@ -1619,15 +1900,16 @@ function nextStep() {
         stepsToAdd.push({ label: "Contato", template: "endosso_alteracao_contato" });
       } else if (tipoEndosso === 'correcao_cadastral') {
         stepsToAdd.push({ label: "Correção", template: "endosso_correcao_cadastral" });
+      } else if (tipoEndosso === 'cancel_req') {
+        stepsToAdd.push({ label: "Carta", template: "carta_cancelamento" });
       }
 
-      // Todos os sub-fluxos de endosso terminam com a etapa de envio
       stepsToAdd.push({ label: "Enviar", template: "enviar" });
 
     } else if (currentStepConfig.template === 'endosso_qa_inicial') {
       needsDynamicRender = true;
       const qaInicial = document.getElementById('endossoQaInicial').value;
-      activeSteps.splice(currentStep + 1); // Limpa etapas futuras
+      activeSteps.splice(currentStep + 1); 
 
       let proximaEtapaTemplate = '';
       switch (qaInicial) {
@@ -1641,7 +1923,7 @@ function nextStep() {
     } else if (currentStepConfig.template.startsWith('endosso_acao_qa')) {
       needsDynamicRender = true;
       const acao = document.getElementById('endossoAcao').value;
-      activeSteps.splice(currentStep + 1); // Limpa etapas futuras
+      activeSteps.splice(currentStep + 1);
 
       const acoesRetirada1 = ['retirar_atual', 'retirar_incluir_novo', 'retirar_1_manter_1', 'retirar_1_incluir_1'];
       const acoesRetirada2 = ['retirar_2_ficar_sem', 'retirar_2_incluir_1', 'retirar_2_incluir_2'];
@@ -1652,21 +1934,17 @@ function nextStep() {
         stepsToAdd.push({ label: "Retirada", template: "endosso_retirada_2_condutores" });
       }
 
-      // Determina qual formulário de dados de inclusão mostrar
       if (['add_1', 'retirar_incluir_novo', 'manter_add_outro', 'retirar_1_incluir_1', 'retirar_2_incluir_1'].includes(acao)) {
         stepsToAdd.push({ label: "Dados Condutor", template: "endosso_dados_condutor_1" });
       } else if (['add_2', 'retirar_2_incluir_2'].includes(acao)) {
         stepsToAdd.push({ label: "Dados Condutores", template: "endosso_dados_condutor_2" });
       }
       
-      // Todas as ações levam para a etapa final de envio
       stepsToAdd.push({ label: "Enviar", template: "enviar" });
     }
   }
 
-  // Se uma etapa dinâmica precisa ser adicionada/renderizada
   if (needsDynamicRender) {
-    // 1. Salva o estado atual do formulário
     const formDataBeforeRender = {};
     const allInputs = document.getElementById('multiStepForm').querySelectorAll('input, select, textarea');
     allInputs.forEach(input => {
@@ -1679,12 +1957,10 @@ function nextStep() {
       }
     });
 
-    // Adiciona as novas etapas ao fluxo
     activeSteps.push(...stepsToAdd);
     
     renderForm();
 
-    // 2. Restaura o estado do formulário
     Object.keys(formDataBeforeRender).forEach(id => {
       const input = document.getElementById(id);
       if (input) {
@@ -1697,9 +1973,10 @@ function nextStep() {
       }
     });
 
-    // Re-executa a lógica de visibilidade para campos condicionais
-    toggleOutraSeguradora();
-    toggleEndossoOutraSeguradora();
+    toggleOutroCampo('renovSeguradora', 'outraSeguradoraContainer', 'outraSeguradoraNome');
+    toggleOutroCampo('endossoSeguradora', 'endossoOutraSeguradoraContainer', 'endossoOutraSeguradoraNome');
+    toggleOutroCampo('segundaViaTipoDoc', 'segundaViaOutroContainer', 'segundaViaOutroNome');
+    toggleOutroCampo('segTrabalhadas', 'seguradoraContainer', 'seguradoraNome', 'Outra');
     handleRcfVisibility();
     handleAppVisibility();
   }
@@ -1721,7 +1998,7 @@ let colaboradoresData = [];
 
 async function fetchColaboradores() {
   try {
-    const response = await fetch('db.json');
+    const response = await fetch('./data/db.json');
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
@@ -2078,6 +2355,9 @@ function addListenersAndMasks() {
                     appendValue('segCNPJ', 'segCNPJ');
                     appendFile('cnhSegurado', 'endossoCorrecaoCNH');
                     break;
+                case 'cancel_req':
+                    appendFile('endossoCartaCancel', 'endossoCartaCancel');
+                    break;
             }
             break;
         case 'segunda_via':
@@ -2137,7 +2417,26 @@ function addListenersAndMasks() {
 
   handleColaboradorValidation();
 
-  // Lógica condicional da UI
+  // --- Configuração dos Listeners ---
+
+  // Mapeia os IDs dos selects para suas respectivas configurações de toggle
+  const toggleConfigs = {
+    'renovSeguradora': { container: 'outraSeguradoraContainer', input: 'outraSeguradoraNome' },
+    'endossoSeguradora': { container: 'endossoOutraSeguradoraContainer', input: 'endossoOutraSeguradoraNome' },
+    'segundaViaTipoDoc': { container: 'segundaViaOutroContainer', input: 'segundaViaOutroNome' },
+    'segTrabalhadas': { container: 'seguradoraContainer', input: 'seguradoraNome', value: 'Outra' }
+  };
+
+  // Adiciona listeners para os campos de toggle
+  for (const selectId in toggleConfigs) {
+    const el = document.getElementById(selectId);
+    if (el) {
+      const config = toggleConfigs[selectId];
+      el.addEventListener('change', () => toggleOutroCampo(selectId, config.container, config.input, config.value || 'outra'));
+    }
+  }
+
+  // Outros listeners
   const produtosSelect = document.getElementById("produtos");
   if (produtosSelect) {
     produtosSelect.addEventListener("change", () => {
@@ -2145,12 +2444,6 @@ function addListenersAndMasks() {
       toggleObservacaoAPP();
     });
   }
-  const seguradoraSelect = document.getElementById("renovSeguradora");
-  if (seguradoraSelect) seguradoraSelect.addEventListener("change", toggleOutraSeguradora);
-  const endossoSeguradoraSelect = document.getElementById("endossoSeguradora");
-  if (endossoSeguradoraSelect) endossoSeguradoraSelect.addEventListener("change", toggleEndossoOutraSeguradora);
-  const segundaViaTipoDocSelect = document.getElementById("segundaViaTipoDoc");
-  if (segundaViaTipoDocSelect) segundaViaTipoDocSelect.addEventListener("change", toggleSegundaViaOutro);
   const rcfSelect = document.getElementById("valorRCF_select");
   if (rcfSelect) rcfSelect.addEventListener("change", handleRcfVisibility);
   const appSelect = document.getElementById("valorAPP_select");
@@ -2159,7 +2452,6 @@ function addListenersAndMasks() {
   document.querySelectorAll('input[name="seguradoPPE"]').forEach((r) => r.addEventListener("change", applyEstipulanteVisibility));
   document.querySelectorAll('input[name="tigoClube"]').forEach((r) => r.addEventListener("change", toggleTigoClubeAdesao));
   
-  // Listener para o campo CNPJ
   const codigo = document.getElementById('codigo');
   if (codigo) {
     codigo.addEventListener('blur', buscar);
@@ -2170,16 +2462,6 @@ function addListenersAndMasks() {
       }
     });
   }
-
-  // const cepInput = document.getElementById('cep');
-  // if (cepInput) {
-  //   cepInput.addEventListener('keydown', function(event) {
-  //     if (event.key === 'Enter') {
-  //       event.preventDefault();
-  //       buscar();
-  //     }
-  //   });
-  // }
 
   const seguradoCepInput = document.getElementById('segurado_cep');
   if (seguradoCepInput) {
@@ -2197,18 +2479,18 @@ function addListenersAndMasks() {
     input.addEventListener("change", () => input.classList.remove("is-invalid"));
   });
 
-  // Lógica que depende do DOM recém-criado
+  // --- Inicialização da UI ---
+  // Chama todas as funções de visibilidade para garantir o estado correto ao renderizar
   applyProductsVisibility();
-  toggleOutraSeguradora();
-  toggleEndossoOutraSeguradora();
-  toggleSegundaViaOutro();
+  for (const selectId in toggleConfigs) {
+      const config = toggleConfigs[selectId];
+      toggleOutroCampo(selectId, config.container, config.input, config.value || 'outra');
+  }
   handleRcfVisibility();
   handleAppVisibility();
-  // toggleObservacaoAPP();
   applyEstipulanteVisibility();
   toggleTigoClubeAdesao();
 
-  // Popula a etapa de confirmação da renovação se for a etapa ativa
   if (activeSteps[currentStep]?.template === 'renovacao_confirmar') {
     populateRenovacaoConfirmacao();
   }
@@ -2216,31 +2498,43 @@ function addListenersAndMasks() {
 
 function applyProductsVisibility() {
   const produtosSelect = document.getElementById("produtos");
-  const coberturaRCF = document.getElementById("coberturaRCF");
-  const coberturaAPP = document.getElementById("coberturaAPP");
-
-  if (!produtosSelect || !coberturaRCF || !coberturaAPP) return;
-
+  if (!produtosSelect) return;
   const selectedProduct = produtosSelect.value;
 
-  const showRCF = selectedProduct === 'rcf' || selectedProduct === 'rcf_app';
-  const showAPP = selectedProduct === 'app' || selectedProduct === 'rcf_app';
+  const fieldsContainer = document.getElementById("rcf_app_fields");
+  if (!fieldsContainer) return;
 
-  coberturaRCF.style.display = showRCF ? 'block' : 'none';
-  coberturaAPP.style.display = showAPP ? 'block' : 'none';
+  const coberturaRCF = document.getElementById("coberturaRCF");
+  const coberturaAPP = document.getElementById("coberturaAPP");
+  const qtdParcelas = document.getElementById("qtdParcelas");
+  const segTrabalhadas = document.getElementById("segTrabalhadas");
 
-  if (document.getElementById('valorRCF_select')) {
-      document.getElementById('valorRCF_select').required = showRCF;
-  }
-   if (document.getElementById('valorAPP_select')) {
-      document.getElementById('valorAPP_select').required = showAPP;
-  }
+  const isAuto = selectedProduct === 'auto';
 
-  if (showRCF) {
-    handleRcfVisibility();
-  }
-  if (showAPP) {
-    handleAppVisibility();
+  fieldsContainer.style.display = isAuto ? 'none' : 'block';
+  
+  if (qtdParcelas) qtdParcelas.required = !isAuto;
+  if (segTrabalhadas) segTrabalhadas.required = !isAuto;
+
+  if (!isAuto) {
+    const showRCF = selectedProduct === 'rcf' || selectedProduct === 'rcf_app';
+    const showAPP = selectedProduct === 'app' || selectedProduct === 'rcf_app';
+
+    if (coberturaRCF) {
+        coberturaRCF.style.display = showRCF ? 'block' : 'none';
+        document.getElementById('valorRCF_select').required = showRCF;
+        if (showRCF) handleRcfVisibility();
+    }
+    
+    if (coberturaAPP) {
+        coberturaAPP.style.display = showAPP ? 'block' : 'none';
+        document.getElementById('valorAPP_select').required = showAPP;
+        if (showAPP) handleAppVisibility();
+    }
+  } else {
+    // Garante que os campos de RCF e APP não sejam obrigatórios quando for auto
+    if (coberturaRCF) document.getElementById('valorRCF_select').required = false;
+    if (coberturaAPP) document.getElementById('valorAPP_select').required = false;
   }
 }
 
@@ -2316,56 +2610,33 @@ function handleRcfVisibility() {
   }
 }
 
-function toggleOutraSeguradora() {
-  const seguradoraSelect = document.getElementById("renovSeguradora");
-  const outraContainer = document.getElementById("outraSeguradoraContainer");
-  if (!seguradoraSelect || !outraContainer) return;
+/**
+ * Torna um campo de texto visível e obrigatório quando uma opção específica de um select é escolhida.
+ * @param {string} selectId - O ID do elemento <select>.
+ * @param {string} containerId - O ID do contêiner que envolve o campo de texto.
+ * @param {string} inputId - O ID do campo de texto <input>.
+ * @param {string} [triggerValue='outro'] - O valor do select que dispara a ação.
+ */
+function toggleOutroCampo(selectId, containerId, inputId, triggerValue = 'outro') {
+  const select = document.getElementById(selectId);
+  const container = document.getElementById(containerId);
+  const input = document.getElementById(inputId);
 
-  const outraInput = document.getElementById("outraSeguradoraNome");
+  if (!select || !container || !input) {
+    return;
+  }
 
-  if (seguradoraSelect.value === 'outra') {
-    outraContainer.style.display = 'block';
-    outraInput.required = true;
-  } else {
-    outraContainer.style.display = 'none';
-    outraInput.required = false;
-    outraInput.value = '';
+  const shouldShow = select.value === triggerValue;
+
+  container.style.display = shouldShow ? 'block' : 'none';
+  input.required = shouldShow;
+
+  if (!shouldShow) {
+    input.value = '';
+    input.classList.remove('is-invalid');
   }
 }
 
-function toggleEndossoOutraSeguradora() {
-  const seguradoraSelect = document.getElementById("endossoSeguradora");
-  const outraContainer = document.getElementById("endossoOutraSeguradoraContainer");
-  if (!seguradoraSelect || !outraContainer) return;
-
-  const outraInput = document.getElementById("endossoOutraSeguradoraNome");
-
-  if (seguradoraSelect.value === 'outra') {
-    outraContainer.style.display = 'block';
-    outraInput.required = true;
-  } else {
-    outraContainer.style.display = 'none';
-    outraInput.required = false;
-    outraInput.value = '';
-  }
-}
-
-function toggleSegundaViaOutro() {
-  const tipoDocSelect = document.getElementById("segundaViaTipoDoc");
-  const outraContainer = document.getElementById("segundaViaOutroContainer");
-  if (!tipoDocSelect || !outraContainer) return;
-
-  const outraInput = document.getElementById("segundaViaOutroNome");
-
-  if (tipoDocSelect.value === 'outra') {
-    outraContainer.style.display = 'block';
-    outraInput.required = true;
-  } else {
-    outraContainer.style.display = 'none';
-    outraInput.required = false;
-    outraInput.value = '';
-  }
-}
 
 function applyProductsVisibility() {
   const produtos = document.getElementById("produtos")?.value;
@@ -2561,8 +2832,8 @@ async function buscar() {
     try {
         // 1. Buscar e processar ambos os CSVs em paralelo
         const [rcfResponse, appResponse] = await Promise.all([
-            fetch('estipulantes_rcf.csv').catch(e => e),
-            fetch('estipulantes_app.csv').catch(e => e)
+            fetch('./data/estipulantes_rcf.csv').catch(e => e),
+            fetch('./data/estipulantes_app.csv').catch(e => e)
         ]);
 
         let achados_rcf = [];
