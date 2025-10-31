@@ -1119,7 +1119,7 @@ const stepTemplates = {
   enviar: `
     <div class="form-step" data-step="8">
       <h4 class="mb-3">Enviar solicitação</h4>
-      <p class="text-muted">Revise seus dados. Ao clicar em “Finalizar”, confirmaremos o envio.</p>
+      <p class="text-muted">Ao clicar em “Finalizar”, confirmaremos o envio.</p>
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()">
           <i class="bi bi-arrow-left"></i> Voltar
@@ -1688,14 +1688,12 @@ const fluxosConfig = {
     description: "Solicite 2ª Via de Documentos ou Posição Financeira",
     steps: [
       { label: "Dados", template: "segunda_via_docs" },
-      { label: "Enviar", template: "enviar" },
     ],
   },
   financeiro_regularizacao: {
     description: "Solicite Regularização Financeira",
     steps: [
       { label: "Dados", template: "financeiro_regularizacao" },
-      { label: "Enviar", template: "enviar" },
     ],
   },
   cotacao: {
@@ -1703,7 +1701,7 @@ const fluxosConfig = {
     steps: [
       { label: "Cliente", template: "cliente" },
       { label: "Cotação", template: "auto_compreensivo" },
-      { label: "Enviar", template: "enviar" },
+      // { label: "Enviar", template: "enviar" },
     ],
   },
   aviso_sinistro: {
