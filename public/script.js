@@ -1669,7 +1669,7 @@ const stepTemplates = {
 const fluxosConfig = {
   nova: {
     description: "Preencha os dados para Nova Transmissão",
-    steps: [], // Etapas agora são totalmente dinâmicas
+    steps: [],
   },
   renovacao: {
     description: "Siga as etapas para solicitar a Renovação",
@@ -1985,7 +1985,6 @@ function nextStep() {
 
     let personSteps = [];
     if (estipuQuestion === 'Sim') {
-      personSteps.push({ label: "Estipulante", template: "estipulante" });
       personSteps.push({ label: "Segurado", template: "segurado" });
     } else {
       personSteps.push({ label: "Segurado", template: "segurado" });
