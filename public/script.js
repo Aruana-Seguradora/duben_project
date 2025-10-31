@@ -1675,7 +1675,7 @@ const fluxosConfig = {
     description: "Siga as etapas para solicitar a Renovação",
     steps: [
       { label: "Apólice", template: "renovacao_apolice" },
-      { label: "Segurado", template: "segurado" },
+      // { label: "Segurado", template: "segurado" },
       { label: "Veículo", template: "veiculo" },
       { label: "Confirmar", template: "renovacao_confirmar" },
     ],
@@ -1943,6 +1943,10 @@ function nextStep() {
 
     let personSteps = [];
     if (tipoSolicitante === 'estipulante') {
+      // Para outros fluxos que não o 'nova', a etapa Estipulante ainda é necessária.
+      if (currentFluxo !== 'nova') {
+        personSteps.push({ label: "Estipulante", template: "estipulante" });
+      }
       personSteps.push({ label: "Segurado", template: "segurado" });
     } else if (tipoSolicitante === 'colaborador') {
       personSteps.push({ label: "Colaborador", template: "solicitante" });
@@ -1981,7 +1985,7 @@ function nextStep() {
 
     let personSteps = [];
     if (estipuQuestion === 'Sim') {
-      // personSteps.push({ label: "Estipulante", template: "estipulante" });
+      personSteps.push({ label: "Estipulante", template: "estipulante" });
       personSteps.push({ label: "Segurado", template: "segurado" });
     } else {
       personSteps.push({ label: "Segurado", template: "segurado" });
