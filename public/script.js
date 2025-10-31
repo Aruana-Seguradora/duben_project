@@ -39,6 +39,20 @@ const stepTemplates = {
     </div>`,
   produtos_coberturas: `
     <div class="form-step">
+      <div id="dados_estip" class="d-none">
+        <h4 class="mb-4">Dados do Estipulante</h4>
+        <div class="row">
+          <div class="col-md-12 mb-3">
+            <label for="codigo" class="form-label">Código Estipulante *</label>
+            <input id="codigo" class="form-control" placeholder="10L4" >
+          </div>
+        </div>
+
+        <div id="resultadoEstipulante" class="mt-3">
+          <!-- Os dados do estipulante serão exibidos aqui -->
+        </div>
+      </div>
+
       <h4 class="mb-4">Produtos e Coberturas</h4>
       <div class="mb-4">
         <label class="form-label">Selecione os produtos desejados *</label>
@@ -99,9 +113,8 @@ const stepTemplates = {
           <div class="row">
             <div class="col-md-12 mb-3">
               <label for="segTrabalhadas" class="form-label">Seguradoras *</label>
-              <select id="segTrabalhadas" class="form-select" required>
-                <option value="" disabled selected>Selecione</option>
-                <option>Aruana</option> <option>Porto Seguro</option> <option>Azul</option> <option>Allianz</option> <option>Tokio Marine</option> <option>HDI</option> <option>Sompo</option> <option>Bradesco</option> <option>Suhai</option> <option>Mapfre</option> <option>MBM</option> <option>Outra</option>
+              <select id="segTrabalhadas" class="form-select" multiple name="segTrabalhadas[]">
+                <option>Aruana</option> <option>Porto Seguro</option> <option>Azul</option> <option>Allianz</option> <option>Tokio Marine</option> <option>HDI</option> <option>Sompo</option> <option>Bradesco</option> <option>Suhai</option> <option>Mapfre</option> <option>MBM</option> <option>Sabemi</option> <option>Akad</option><option>Ezze</option> <option>Darwin</option><option>	Yelium</option> <option>Zurich</option> <option>Chubb</option> <option>Essor</option> <option>Sura</option> <option>Icatu</option> <option>Alfa</option><option>Fator</option><option>American Life</option><option>Excelsior</option><option>Kovr</option><option>ALM</option><option>AXA</option>
               </select>
             </div>
             <div class="mb-3" id="seguradoraContainer" style="display: none;">
@@ -111,7 +124,12 @@ const stepTemplates = {
           </div>
         </div>
       </div>
-        
+      
+      <div class="mb-3">
+        <label class="form-label">Upload Cotação </label>
+        <input id="cnhSeg" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"  />
+      </div>
+
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()">
           <i class="bi bi-arrow-left"></i> Voltar
@@ -123,22 +141,6 @@ const stepTemplates = {
     </div>`,
   auto_compreensivo: `
     <div class="form-step">
-
-      <div class="row">
-        <div class="col-md-4 mb-3">
-          <label class="form-label">Nome Completo *</label>
-          <input id="nomeCompleto" placeholder="Nome" class="form-control" required>
-        </div>
-        <div class="col-md-4 mb-3">
-          <label class="form-label">CPF/CNPJ *</label>
-          <input id="auto_doc" class="form-control" placeholder="CPF ou CNPJ"  required/>
-        </div>
-        <div class="col-md-4 mb-3">
-          <label class="form-label">Placa *</label>
-          <input id="auto_placa" placeholder="Placa" class="form-control" required>
-        </div>
-      </div>
-
       <div class="row">
         <div class="col-md-6 mb-3">
           <label class="form-label">Veículo é 0km? *</label>
@@ -600,6 +602,11 @@ const stepTemplates = {
         <textarea id="sinistroMotivoResponsabilidade" class="form-control" rows="2"></textarea>
       </div>
 
+      <div class="mb-3">
+        <label class="form-label">Upload Docs (BO/BRAT) *</label>
+        <input id="cnhSeg" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" multiple />
+      </div>
+
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()">
           <i class="bi bi-arrow-left"></i> Voltar
@@ -875,6 +882,43 @@ const stepTemplates = {
             <option>Sim</option>
             <option>Não</option>
           </select>
+        </div>
+      </div>
+      
+      <div class="btn-group-navigation">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">
+          Próximo <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>`,
+  cliente: `
+    <div class="form-step" data-step="5">
+      <h4 class="mb-4">Dados do Cliente</h4>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="nomeCliente" class="form-label">Nome *</label>
+          <input id="nomeCliente" class="form-control" placeholder="Nome Completo" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">CPF ou CNPJ *</label>
+          <input id="doc_cliente" class="form-control" placeholder="CPF ou CNPJ"  />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label for="emailCliente" class="form-label">Email *</label>
+          <input type="email" id="emailCliente" placeholder="Email" class="form-control"  />
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Telefone *</label>
+          <input type="phone" id="telefoneCliente" class="form-control" placeholder="Telefone"  />
+        </div>
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Placa*</label>
+          <input id="placaCliente" class="form-control" placeholder="Placa"  />
         </div>
       </div>
       
@@ -1625,15 +1669,11 @@ const stepTemplates = {
 const fluxosConfig = {
   nova: {
     description: "Preencha os dados para Nova Transmissão",
-    steps: [
-      { label: "Tipo", template: "tipo" },
-      { label: "Identificação", template: "tipo_solicitante" },
-    ],
+    steps: [], // Etapas agora são totalmente dinâmicas
   },
   renovacao: {
-    description: "Siga as 4 etapas para solicitar a Renovação",
+    description: "Siga as etapas para solicitar a Renovação",
     steps: [
-      { label: "Tipo", template: "tipo" },
       { label: "Apólice", template: "renovacao_apolice" },
       { label: "Segurado", template: "segurado" },
       { label: "Veículo", template: "veiculo" },
@@ -1642,15 +1682,11 @@ const fluxosConfig = {
   },
   endosso: {
     description: "Siga as etapas para solicitar o Endosso",
-    steps: [
-      { label: "Tipo", template: "tipo" },
-      { label: "Dados", template: "endosso_dados" },
-    ],
+    steps: [{ label: "Dados", template: "endosso_dados" }],
   },
   segunda_via: {
     description: "Solicite 2ª Via de Documentos ou Posição Financeira",
     steps: [
-      { label: "Tipo", template: "tipo" },
       { label: "Dados", template: "segunda_via_docs" },
       { label: "Enviar", template: "enviar" },
     ],
@@ -1658,7 +1694,6 @@ const fluxosConfig = {
   financeiro_regularizacao: {
     description: "Solicite Regularização Financeira",
     steps: [
-      { label: "Tipo", template: "tipo" },
       { label: "Dados", template: "financeiro_regularizacao" },
       { label: "Enviar", template: "enviar" },
     ],
@@ -1666,9 +1701,7 @@ const fluxosConfig = {
   cotacao: {
     description: "Solicite uma cotação",
     steps: [
-      { label: "Tipo", template: "tipo" },
-      { label: "Segurado", template: "segurado" },
-      { label: "Veiculo", template: "veiculo" },
+      { label: "Cliente", template: "cliente" },
       { label: "Cotação", template: "auto_compreensivo" },
       { label: "Enviar", template: "enviar" },
     ],
@@ -1676,7 +1709,6 @@ const fluxosConfig = {
   aviso_sinistro: {
     description: "Preencha os dados para Aviso de Sinistro",
     steps: [
-      { label: "Tipo", template: "tipo" },
       { label: "Aviso Segurado", template: "aviso_sinistro" },
       { label: "Aviso Terceiro", template: "aviso_sinistro_terceiro" },
       { label: "Aviso Ocorrência", template: "aviso_sinistro_ocorrencia" },
@@ -1691,24 +1723,23 @@ const fluxosConfig = {
 // =================================================================
 let currentStep = 0;
 let currentFluxo = "";
-let activeSteps = []; // Array de etapas ativas para o fluxo atual
-let formDataStorage = {}; // Objeto para armazenar os dados do formulário
-
+let activeSteps = [];
+let formDataStorage = {}; 
 function renderizarFluxo(tipo) {
   currentFluxo = tipo;
   const config = fluxosConfig[tipo];
 
-  if (!config || config.steps.length === 0) {
+  if (!config) {
     document.getElementById("formDescription").textContent =
-      config?.description || "Selecione um tipo de solicitação para começar";
+      "Selecione um tipo de solicitação para começar";
     document.querySelector(".progress-container").innerHTML = "";
     document.querySelector(".form-content").style.display = "none";
     activeSteps = []; // Limpa as etapas ativas
     return;
   }
 
-  // Clona as etapas iniciais do fluxo para o estado ativo
-  activeSteps = JSON.parse(JSON.stringify(config.steps));
+  // Força a primeira etapa a ser sempre a de identificação
+  activeSteps = [{ label: "Identificação", template: "tipo_solicitante" }];
   currentStep = 0;
 
   // Mostra containers e atualiza header
@@ -1903,80 +1934,66 @@ function nextStep() {
 
   const currentStepConfig = activeSteps[currentStep];
   let needsDynamicRender = false;
-  let stepsToAdd = [];
 
-  if (currentFluxo === 'nova' && currentStepConfig.template === 'tipo_solicitante') {
+  // Lógica generalizada para a etapa de identificação
+  if (currentStepConfig.template === 'tipo_solicitante') {
     needsDynamicRender = true;
     const tipoSolicitante = document.getElementById('tipoSolicitante').value;
     formDataStorage.tipoSolicitante = tipoSolicitante;
 
-    const baseStepsAfter = [
-        { label: "Produtos", template: "produtos_coberturas" },
-        { label: "Auxiliares", template: "auxiliares" },
-        { label: "Info & Consent.", template: "consentimento" },
-    ];
-
-    let dynamicSteps = [];
+    let personSteps = [];
     if (tipoSolicitante === 'estipulante') {
-        dynamicSteps.push({ label: "Estipulante", template: "estipulante" });
-        dynamicSteps.push({ label: "Segurado", template: "segurado" });
+      personSteps.push({ label: "Segurado", template: "segurado" });
     } else if (tipoSolicitante === 'colaborador') {
-        dynamicSteps.push({ label: "Colaborador", template: "solicitante" });
-    } else if (tipoSolicitante === 'segurado'){
-      dynamicSteps.push({ label: "Segurado", template: "segurado" })
+      personSteps.push({ label: "Colaborador", template: "solicitante" });
+    } else if (tipoSolicitante === 'segurado') {
+      personSteps.push({ label: "Segurado", template: "segurado" });
     }
 
-    activeSteps.splice(currentStep + 1, activeSteps.length - currentStep - 1, ...dynamicSteps, ...baseStepsAfter);
-  }
-
-  if (currentFluxo === 'nova' && currentStepConfig.template === 'produtos_coberturas') {
-    const produtosSelect = document.getElementById('produtos');
-    const autoStepIndex = activeSteps.findIndex(step => step.template === 'auto_compreensivo');
-
-    if (produtosSelect.value === 'auto') {
-      if (autoStepIndex === -1) {
-        needsDynamicRender = true;
-        const currentIndex = activeSteps.findIndex(step => step.template === 'produtos_coberturas');
-        const autoStep = { label: "Auto Compreensivo", template: "auto_compreensivo" };
-        activeSteps.splice(currentIndex + 1, 0, autoStep);
+    let flowSteps = [];
+    if (currentFluxo === 'nova') {
+      if (tipoSolicitante !== 'colaborador') {
+        flowSteps = [
+          { label: "Veículo", template: "veiculo" },
+          { label: "Produtos", template: "produtos_coberturas" },
+          { label: "Auxiliares", template: "auxiliares" },
+          { label: "Info & Consent.", template: "consentimento" },
+          { label: "Enviar", template: "enviar" },
+        ];
       }
     } else {
-      if (autoStepIndex > -1) {
-        needsDynamicRender = true;
-        activeSteps.splice(autoStepIndex, 1);
-      }
+      flowSteps = fluxosConfig[currentFluxo].steps;
     }
-  }
 
-  if (currentFluxo === 'nova' && currentStepConfig.template === 'solicitante') {
+    activeSteps.splice(currentStep + 1, Infinity, ...personSteps, ...flowSteps);
+  } else if (currentFluxo === 'nova' && currentStepConfig.template === 'solicitante') {
     needsDynamicRender = true;
     const estipuQuestion = document.getElementById('estipuQuestion').value;
-
     const solicitanteStepIndex = currentStep;
 
     const baseStepsAfter = [
-        { label: "Veículo", template: "veiculo" },
-        { label: "Produtos", template: "produtos_coberturas" },
-        { label: "Auxiliares", template: "auxiliares" },
-        { label: "Info & Consent.", template: "consentimento" },
+      { label: "Veículo", template: "veiculo" },
+      { label: "Produtos", template: "produtos_coberturas" },
+      { label: "Auxiliares", template: "auxiliares" },
+      { label: "Info & Consent.", template: "consentimento" },
+      { label: "Enviar", template: "enviar" },
     ];
 
     let personSteps = [];
     if (estipuQuestion === 'Sim') {
-        personSteps.push({ label: "Estipulante", template: "estipulante" });
-        personSteps.push({ label: "Segurado", template: "segurado" });
+      // personSteps.push({ label: "Estipulante", template: "estipulante" });
+      personSteps.push({ label: "Segurado", template: "segurado" });
     } else {
-        personSteps.push({ label: "Segurado", template: "segurado" });
+      personSteps.push({ label: "Segurado", template: "segurado" });
     }
 
     activeSteps.splice(solicitanteStepIndex + 1, Infinity, ...personSteps, ...baseStepsAfter);
-  }
-
-  if (currentFluxo === 'endosso') {
+  } else if (currentFluxo === 'endosso') {
+    let stepsToAdd = [];
     if (currentStepConfig.template === 'endosso_dados') {
       needsDynamicRender = true;
       const tipoEndosso = document.getElementById('endossoTipo').value;
-      activeSteps.splice(currentStep + 1); 
+      activeSteps.splice(currentStep + 1);
 
       if (tipoEndosso === 'substituicao_veiculo') {
         stepsToAdd.push({ label: "Veículo", template: "endosso_veiculo" });
@@ -1991,11 +2008,11 @@ function nextStep() {
       }
 
       stepsToAdd.push({ label: "Enviar", template: "enviar" });
-
+      activeSteps.push(...stepsToAdd);
     } else if (currentStepConfig.template === 'endosso_qa_inicial') {
       needsDynamicRender = true;
       const qaInicial = document.getElementById('endossoQaInicial').value;
-      activeSteps.splice(currentStep + 1); 
+      activeSteps.splice(currentStep + 1);
 
       let proximaEtapaTemplate = '';
       switch (qaInicial) {
@@ -2004,7 +2021,7 @@ function nextStep() {
         case '2': proximaEtapaTemplate = 'endosso_acao_qa2'; break;
       }
       if (proximaEtapaTemplate) {
-        stepsToAdd.push({ label: "Ação", template: proximaEtapaTemplate });
+        activeSteps.push({ label: "Ação", template: proximaEtapaTemplate });
       }
     } else if (currentStepConfig.template.startsWith('endosso_acao_qa')) {
       needsDynamicRender = true;
@@ -2025,8 +2042,9 @@ function nextStep() {
       } else if (['add_2', 'retirar_2_incluir_2'].includes(acao)) {
         stepsToAdd.push({ label: "Dados Condutores", template: "endosso_dados_condutor_2" });
       }
-      
+
       stepsToAdd.push({ label: "Enviar", template: "enviar" });
+      activeSteps.push(...stepsToAdd);
     }
   }
 
@@ -2043,9 +2061,9 @@ function nextStep() {
       }
     });
 
-    activeSteps.push(...stepsToAdd);
-    
     renderForm();
+
+
 
     Object.keys(formDataBeforeRender).forEach(id => {
       const input = document.getElementById(id);
@@ -2056,25 +2074,13 @@ function nextStep() {
         } else {
           input.value = value;
         }
+        // Trigger change event for selects to re-apply conditional logic
+        if (input.tagName === 'SELECT') {
+            const event = new Event('change');
+            input.dispatchEvent(event);
+        }
       }
     });
-
-    toggleOutroCampo('renovSeguradora', 'outraSeguradoraContainer', 'outraSeguradoraNome');
-    toggleOutroCampo('endossoSeguradora', 'endossoOutraSeguradoraContainer', 'endossoOutraSeguradoraNome');
-    toggleOutroCampo('segundaViaTipoDoc', 'segundaViaOutroContainer', 'segundaViaOutroNome');
-    toggleOutroCampo('segTrabalhadas', 'seguradoraContainer', 'seguradoraNome', 'Outra');
-    handleRcfVisibility();
-    handleAppVisibility();
-
-    // Lógica para mostrar/esconder segs_trabalhadas_container
-    const segsTrabalhadasContainer = document.getElementById('segs_trabalhadas_container');
-    if (segsTrabalhadasContainer) {
-      if (formDataStorage.tipoSolicitante === 'colaborador') {
-        segsTrabalhadasContainer.classList.remove('d-none');
-      } else {
-        segsTrabalhadasContainer.classList.add('d-none');
-      }
-    }
   }
 
   if (currentStep < activeSteps.length - 1) {
@@ -2262,6 +2268,14 @@ function addListenersAndMasks() {
         const el = document.getElementById(id);
         if (el && el.value) formData.append(key, parseInt(el.value, 10) || 0);
     };
+    const appendMultiSelect = (key, id) => {
+        const el = document.getElementById(id);
+        if (el) {
+            for (const option of el.selectedOptions) {
+                formData.append(key + ':', option.value);
+            }
+        }
+    };
 
     // Adiciona dados que não estão em campos de input
     formData.append('tipo', currentFluxo);
@@ -2306,6 +2320,7 @@ function addListenersAndMasks() {
             }
             
             appendValue('qtdParcelas', 'qtdParcelas');
+            appendMultiSelect('segTrabalhadas', 'segTrabalhadas');
             appendValue('seguradoNome', 'seguradoNome');
             appendValue('seguradoNomeSocial', 'seguradoNomeSocial');
             appendValue('seguradoTipoPessoa', 'seguradoTipoPessoa');
@@ -2509,10 +2524,12 @@ function addListenersAndMasks() {
             return;
     }
 
-    // console.log('Enviando para o servidor:');
-    // for (let [key, value] of formData.entries()) {
-    //     console.log(key, value);
-    // }
+    console.log('Enviando para o servidor:');
+    for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+    }
+
+    
 
     try {
       const response = await fetch("/submit-form", {
@@ -2561,6 +2578,11 @@ function addListenersAndMasks() {
   }
 
   // Outros listeners
+  const estipuQuestionSelect = document.getElementById("estipuQuestion");
+  if (estipuQuestionSelect) {
+    estipuQuestionSelect.addEventListener("change", handleDadosEstipVisibility);
+  }
+
   const produtosSelect = document.getElementById("produtos");
   if (produtosSelect) {
     produtosSelect.addEventListener("change", () => {
@@ -2613,10 +2635,30 @@ function addListenersAndMasks() {
   handleRcfVisibility();
   handleAppVisibility();
   applyEstipulanteVisibility();
-  toggleTigoClubeAdesao(); 
+  toggleTigoClubeAdesao();
+  handleDadosEstipVisibility(); // Adicionado para controlar a visibilidade dos dados do estipulante
+
+  // Lógica para mostrar/esconder segs_trabalhadas_container
+  const segsTrabalhadasContainer = document.getElementById('segs_trabalhadas_container');
+  if (segsTrabalhadasContainer) {
+    if (formDataStorage.tipoSolicitante === 'colaborador') {
+      segsTrabalhadasContainer.classList.remove('d-none');
+    } else {
+      segsTrabalhadasContainer.classList.add('d-none');
+    }
+  } 
 
   if (activeSteps[currentStep]?.template === 'renovacao_confirmar') {
     populateRenovacaoConfirmacao();
+  }
+
+  const segTrabalhadasSelect = document.getElementById('segTrabalhadas');
+  if (segTrabalhadasSelect) {
+    new MultiSelectTag('segTrabalhadas', {
+      maxSelection: 6,
+      required: true,
+      placeholder: 'Seguradoras'
+    });
   }
 }
 
@@ -2734,13 +2776,6 @@ function handleRcfVisibility() {
   }
 }
 
-/**
- * Torna um campo de texto visível e obrigatório quando uma opção específica de um select é escolhida.
- * @param {string} selectId - O ID do elemento <select>.
- * @param {string} containerId - O ID do contêiner que envolve o campo de texto.
- * @param {string} inputId - O ID do campo de texto <input>.
- * @param {string} [triggerValue='outro'] - O valor do select que dispara a ação.
- */
 function toggleOutroCampo(selectId, containerId, inputId, triggerValue = 'outro') {
   const select = document.getElementById(selectId);
   const container = document.getElementById(containerId);
@@ -2830,6 +2865,23 @@ function toggleTigoClubeAdesao() {
     const show = tigoClubeSim.checked;
     adesaoContainer.style.display = show ? 'block' : 'none';
     adesaoInput.required = show;
+  }
+}
+
+function handleDadosEstipVisibility() {
+  const dadosEstipDiv = document.getElementById('dados_estip');
+  if (!dadosEstipDiv) return;
+
+  const tipoSolicitante = formDataStorage.tipoSolicitante;
+  const estipuQuestion = document.getElementById('estipuQuestion')?.value;
+
+  const isEstipulante = (tipoSolicitante === 'estipulante');
+  const isColaboradorComEstip = (tipoSolicitante === 'colaborador' && estipuQuestion === 'Sim');
+
+  if (isEstipulante || isColaboradorComEstip) {
+    dadosEstipDiv.classList.remove('d-none');
+  } else {
+    dadosEstipDiv.classList.add('d-none');
   }
 }
 

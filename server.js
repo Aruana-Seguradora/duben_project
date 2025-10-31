@@ -45,8 +45,13 @@ app.post('/submit-form', upload.any(), async (req, res) => {
   const targetUrl = process.env.TARGET_URL;
 
   try {
-    const payload = { ...(req.body || {}) };
+    // if (req.body && req.body['segTrabalhadas[]'] && Array.isArray(req.body['segTrabalhadas[]'])) {
+    //   req.body.seguradorasTrabalhadas = req.body['segTrabalhadas[]'].join(', ');
+    //   delete req.body['segTrabalhadas[]'];
+    // }
 
+    const payload = { ...(req.body || {}) };
+    
     const byField = {};
     for (const f of (req.files || [])) {
 
@@ -72,7 +77,7 @@ app.post('/submit-form', upload.any(), async (req, res) => {
       payload[field] = value; 
     }
 
-    // console.log('Encaminhando payload: ', payload);
+    console.log('Encaminhando payload: ', payload);
 
     const forward = await fetch(targetUrl, {
       method: 'POST',
@@ -85,7 +90,7 @@ app.post('/submit-form', upload.any(), async (req, res) => {
     return typeof data === 'string'
       ? res.status(forward.status).send(data)
       : res.status(forward.status).json(data);
-
+    
   } catch (err) {
     console.error('Erro ao encaminhar formulário:', err);
     return res.status(500).json({ error: 'Erro interno do servidor ao processar formulário.' });

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Select com pesquisa - Choices.js</title>
+
+  <!-- CSS do Choices -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: #f7f7f7;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    #cidade {
+        width: 100px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <label for="cidade">Selecione uma cidade:</label>
+    <select id="cidade" class="form-select" multiple>
+      <option value="SP">São Paulo</option>
+      <option value="RJ">Rio de Janeiro</option>
+      <option value="MG">Belo Horizonte</option>
+      <option value="PR">Curitiba</option>
+      <option value="RS">Porto Alegre</option>
+      <option value="BA">Salvador</option>
+      <option value="PE">Recife</option>
+    </select>
+  </div>
+
+  <!-- Script da biblioteca Choices -->
+  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
+  <!-- Seu script JS -->
+  <script src="main.js"></script>
+</body>
+</html>
