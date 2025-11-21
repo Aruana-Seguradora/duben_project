@@ -1,7 +1,33 @@
-// =================================================================
-// 1. TEMPLATES PARA CADA ETAPA
-// =================================================================
 const stepTemplates = {
+  tipo_solicitacao_selecao: `
+    <div class="form-step" data-step="0">
+      <h4 class="mb-4">Tipo de Solicitação</h4>
+      <div class="mb-3">
+        <label for="tipoSolicitacao" class="form-label">Selecione *</label>
+        <select id="tipoSolicitacao" class="form-select" required>
+          <option value="" disabled selected>Selecione</option>
+          <option value="nova">Nova Transmissão</option>
+          <option value="renovacao">Renovação</option>
+          <option value="endosso">Endosso</option>
+          <option value="segunda_via">
+            2ª Via de Documentos/Posição Financeira
+          </option>
+          <option value="financeiro_regularizacao">
+            Financeiro Regularização
+          </option>
+          <option value="cotacao">Cotação</option>
+          <option value="aviso_sinistro">Aviso de Sinistro</option>
+        </select>
+      </div>
+      <div class="btn-group-navigation">
+        <button type="button" class="btn btn-secondary" onclick="resetForm()">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">
+          Próximo <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>`,
   tipo_solicitante: `
     <div class="form-step" data-step="0">
       <h4 class="mb-4">Identificação</h4>
@@ -9,7 +35,7 @@ const stepTemplates = {
         <label for="tipoSolicitante" class="form-label">Você é? *</label>
         <select id="tipoSolicitante" class="form-select" required>
           <option value="">Selecione</option>
-          <option value="segurado">Segurado</option>
+          <option value="parceiro">Parceiro</option>
           <option value="estipulante">Estipulante</option>
           <option value="colaborador">Colaborador</option>
         </select>
@@ -61,7 +87,7 @@ const stepTemplates = {
           <option value="rcf_app">RCF e APP</option>
           <option value="rcf">Somente RCF</option>
           <option value="app">Somente APP</option>
-          <option value="auto">Seguro Auto Compreensivo</option>
+          <option data-visible-when-solicitante="colaborador, parceiro" value="auto">Seguro Auto Compreensivo</option>
         </select>
       </div>
 
@@ -69,7 +95,7 @@ const stepTemplates = {
         <div id="coberturaRCF" class="mb-4" style="display: none;">
           <label for="valorRCF_select" class="form-label">Valor RCF (R$) *</label>
           <div id="rcfApoliceInfo" class="text-muted mb-2"></div>
-          <select id="valorRCF_select" class="form-select">
+          <select id="valorRCF_select" class="form-select" data-rule="valorRCF_outro:outro">
             <option value="" disabled selected>Selecione</option>
             <option value="50000">R$ 50.000</option>
             <option value="100000">R$ 100.000</option>
@@ -83,7 +109,7 @@ const stepTemplates = {
         <div id="coberturaAPP" class="mb-4" style="display: none;">
           <label for="valorAPP_select" class="form-label">Valor APP por pessoa (R$) *</label>
           <div id="appApoliceInfo" class="text-muted mb-2"></div>
-          <select id="valorAPP_select" class="form-select">
+          <select id="valorAPP_select" class="form-select" data-rule="valorAPP_outro:outro">
             <option value="" disabled selected>Selecione</option>
             <option value="5000">R$ 5.000</option>
             <option value="10000">R$ 10.000</option>
@@ -103,17 +129,17 @@ const stepTemplates = {
             <label for="qtdParcelas" class="form-label">Quantidade de parcelas *</label>
             <select id="qtdParcelas" class="form-select" required>
               <option value="" disabled selected>Selecione</option>
-              <option>1x</option> <option>2x</option> <option>3x</option> <option>4x</option> <option>5x</option> <option>6x</option> <option>7x</option> <option>8x</option> <option>9x</option> <option>10x</option> 
+              <option>1x</option> <option>2x</option> <option>3x</option> <option>4x</option> <option>5x</option> <option>6x</option> <option>7x</option> <option>8x</option> <option>9x</option> <option>10x</option> <option>11x</option>  <option>12x</option> 
             </select>
           </div>
         </div>
 
-        <div id="segs_trabalhadas_container" class="d-none">
+        <div data-visible-when-solicitante="colaborador">
           <h4 id="segs_trabalhadas" class="mb-4">Seguradoras Trabalhadas</h4>
           <div class="row">
             <div class="col-md-12 mb-3">
               <label for="segTrabalhadas" class="form-label">Seguradoras *</label>
-              <select id="segTrabalhadas" class="form-select" multiple name="segTrabalhadas[]">
+              <select id="segTrabalhadas" class="form-select" multiple name="segTrabalhadas[]" data-rule="seguradoraContainer:Outra">
                 <option>Aruana</option> <option>Porto Seguro</option> <option>Azul</option> <option>Allianz</option> <option>Tokio Marine</option> <option>HDI</option> <option>Sompo</option> <option>Bradesco</option> <option>Suhai</option> <option>Mapfre</option> <option>MBM</option> <option>Sabemi</option> <option>Akad</option><option>Ezze</option> <option>Darwin</option><option>	Yelium</option> <option>Zurich</option> <option>Chubb</option> <option>Essor</option> <option>Sura</option> <option>Icatu</option> <option>Alfa</option><option>Fator</option><option>American Life</option><option>Excelsior</option><option>Kovr</option><option>ALM</option><option>AXA</option>
               </select>
             </div>
@@ -125,7 +151,17 @@ const stepTemplates = {
         </div>
       </div>
       
-      <div class="mb-3">
+      <div class="row" data-visible-when-solicitante="colaborador, estipulante">
+        <div class="col-md-12 mb-3">
+          <label for="paymentMethod" class="form-label">Forma de pagamento *</label>
+          <select id="paymentMethod" class="form-select" required>
+            <option value="" disabled selected>Selecione</option>
+            <option>Boleto</option> <option>Cartão</option> <option>Débito em conta</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="cotacao-container" class="mb-3" data-visible-when-solicitante="colaborador, parceiro">
         <label class="form-label">Upload Cotação </label>
         <input id="cnhSeg" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"  />
       </div>
@@ -146,11 +182,11 @@ const stepTemplates = {
           <label class="form-label">Veículo é 0km? *</label>
           <div class="d-flex gap-3">
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="veiculo0km" id="veiculo0kmSim" value="sim" required onchange="toggleConditionalField(this.value === 'sim', 'notaFiscal0kmContainer')">
+              <input class="form-check-input" type="radio" name="veiculo0km" id="veiculo0kmSim" value="sim" required data-rule="notaFiscal0kmContainer:checked">
               <label class="form-check-label" for="veiculo0kmSim">Sim</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="veiculo0km" id="veiculo0kmNao" value="nao" required onchange="toggleConditionalField(this.value === 'sim', 'notaFiscal0kmContainer')">
+              <input class="form-check-input" type="radio" name="veiculo0km" id="veiculo0kmNao" value="nao" required>
               <label class="form-check-label" for="veiculo0kmNao">Não</label>
             </div>
           </div>
@@ -164,7 +200,7 @@ const stepTemplates = {
       <div class="row">
         <div class="col-md-6 mb-3">
           <label class="form-label">Isenção Fiscal? *</label>
-          <select id="isencaoFiscal" class="form-select" required onchange="toggleConditionalField(this.value !== 'nao', 'notaFiscalIsencaoContainer')">
+          <select id="isencaoFiscal" class="form-select" required data-rule="notaFiscalIsencaoContainer:ipi;notaFiscalIsencaoContainer:icms;notaFiscalIsencaoContainer:ipi_icms;notaFiscalIsencaoContainer:pcd">
             <option value="" disabled selected>Selecione</option>
             <option value="nao">Não</option>
             <option value="ipi">IPI</option>
@@ -250,11 +286,11 @@ const stepTemplates = {
           <label class="form-label">Possui seguro atual? *</label>
           <div class="d-flex gap-3">
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="seguroAtual" id="seguroAtualSim" value="sim" required onchange="toggleConditionalField(this.value === 'sim', 'apoliceVigenteContainer')">
+              <input class="form-check-input" type="radio" name="seguroAtual" id="seguroAtualSim" value="sim" required data-rule="apoliceVigenteContainer:checked">
               <label class="form-check-label" for="seguroAtualSim">Sim</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="seguroAtual" id="seguroAtualNao" value="nao" required onchange="toggleConditionalField(this.value === 'sim', 'apoliceVigenteContainer')">
+              <input class="form-check-input" type="radio" name="seguroAtual" id="seguroAtualNao" value="nao" required>
               <label class="form-check-label" for="seguroAtualNao">Não</label>
             </div>
           </div>
@@ -284,11 +320,11 @@ const stepTemplates = {
             <label class="form-label">Pernoite em garagem: *</label>
             <div class="d-flex gap-3">
                 <div class="form-check">
-                <input class="form-check-input" type="radio" name="pernoiteGaragem" id="pernoiteGaragemSim" value="sim" required onchange="toggleConditionalField(this.value === 'sim', 'tipoGaragemContainer')">
+                <input class="form-check-input" type="radio" name="pernoiteGaragem" id="pernoiteGaragemSim" value="sim" required data-rule="tipoGaragemContainer:checked">
                 <label class="form-check-label" for="pernoiteGaragemSim">Sim</label>
                 </div>
                 <div class="form-check">
-                <input class="form-check-input" type="radio" name="pernoiteGaragem" id="pernoiteGaragemNao" value="nao" required onchange="toggleConditionalField(this.value === 'sim', 'tipoGaragemContainer')">
+                <input class="form-check-input" type="radio" name="pernoiteGaragem" id="pernoiteGaragemNao" value="nao" required>
                 <label class="form-check-label" for="pernoiteGaragemNao">Não</label>
                 </div>
             </div>
@@ -339,11 +375,11 @@ const stepTemplates = {
             <label class="form-label">Possui motorista auxiliar cadastrado? *</label>
             <div class="d-flex gap-3">
                 <div class="form-check">
-                <input class="form-check-input" type="radio" name="motoristaAuxiliar" id="motoristaAuxiliarSim" value="sim" required onchange="toggleConditionalField(this.value === 'sim', 'motoristaAuxiliarContainer')">
+                <input class="form-check-input" type="radio" name="motoristaAuxiliar" id="motoristaAuxiliarSim" value="sim" required data-rule="motoristaAuxiliarContainer:checked">
                 <label class="form-check-label" for="motoristaAuxiliarSim">Sim</label>
                 </div>
                 <div class="form-check">
-                <input class="form-check-input" type="radio" name="motoristaAuxiliar" id="motoristaAuxiliarNao" value="nao" required onchange="toggleConditionalField(this.value === 'sim', 'motoristaAuxiliarContainer')">
+                <input class="form-check-input" type="radio" name="motoristaAuxiliar" id="motoristaAuxiliarNao" value="nao" required>
                 <label class="form-check-label" for="motoristaAuxiliarNao">Não</label>
                 </div>
             </div>
@@ -491,7 +527,7 @@ const stepTemplates = {
         </button>
       </div>
     </div>`,
-    aviso_sinistro_terceiro: `
+  aviso_sinistro_terceiro: `
     <div class="form-step">
       <!-- Terceiro -->
       <h5 class="mt-4 mb-3">Dados do Terceiro</h5>
@@ -588,11 +624,11 @@ const stepTemplates = {
         <label class="form-label">O segurado assume a responsabilidade?: *</label>
         <div class="d-flex gap-3">
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="sinistroResponsabilidade" id="sinistroResponsabilidadeSim" value="sim"  onchange="toggleConditionalField(this.value === 'sim', 'sinistroMotivoResponsabilidadeContainer')" />
+            <input class="form-check-input" type="radio" name="sinistroResponsabilidade" id="sinistroResponsabilidadeSim" value="sim" data-rule="sinistroMotivoResponsabilidadeContainer:checked" />
             <label class="form-check-label" for="sinistroResponsabilidadeSim">Sim</label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="sinistroResponsabilidade" id="sinistroResponsabilidadeNao" value="nao"  onchange="toggleConditionalField(this.value === 'sim', 'sinistroMotivoResponsabilidadeContainer')" />
+            <input class="form-check-input" type="radio" name="sinistroResponsabilidade" id="sinistroResponsabilidadeNao" value="nao" />
             <label class="form-check-label" for="sinistroResponsabilidadeNao">Não</label>
           </div>
         </div>
@@ -700,7 +736,7 @@ const stepTemplates = {
               <label class="form-label">Estrangeiro? *</label>
               <div class="d-flex gap-3">
                   <div class="form-check">
-                      <input class="form-check-input" type="radio" name="seguradoEstrangeiro" id="seguradoEstrangeiroSim" value="sim"  />
+                      <input class="form-check-input" type="radio" name="seguradoEstrangeiro" id="seguradoEstrangeiroSim" value="sim" data-rule="seguradoBlocoEstrangeiro:checked" />
                       <label class="form-check-label" for="seguradoEstrangeiroSim">Sim</label>
                   </div>
                   <div class="form-check">
@@ -778,7 +814,7 @@ const stepTemplates = {
               <label class="form-label">Pessoa Politicamente Exposta? *</label>
               <div class="d-flex gap-3">
                   <div class="form-check">
-                      <input class="form-check-input" type="radio" name="seguradoPPE" id="seguradoPPESim" value="sim"  />
+                      <input class="form-check-input" type="radio" name="seguradoPPE" id="seguradoPPESim" value="sim" data-rule="seguradoBlocoPPE:checked" />
                       <label class="form-check-label" for="seguradoPPESim">Sim</label>
                   </div>
                   <div class="form-check">
@@ -981,7 +1017,7 @@ const stepTemplates = {
             <label class="form-label">Contrato com adesão ao TIGO CLUBE? *</label>
             <div class="d-flex gap-3">
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="tigoClube" id="tigoClubeSim" value="sim"  />
+                    <input class="form-check-input" type="radio" name="tigoClube" id="tigoClubeSim" value="sim" data-rule="tigoClubeAdesaoContainer:checked" />
                     <label class="form-check-label" for="tigoClubeSim">Sim</label>
                 </div>
                 <div class="form-check">
@@ -1012,7 +1048,7 @@ const stepTemplates = {
     <div class="form-step" data-step="6">
       <h4 class="mb-4">Condutores Auxiliares</h4>
       <div class="form-check mb-3">
-        <input class="form-check-input" type="checkbox" id="addAuxiliar" onchange="toggleAuxiliares(this.checked)">
+        <input class="form-check-input" type="checkbox" id="addAuxiliar" data-rule="auxiliaresContainer:checked">
         <label class="form-check-label" for="addAuxiliar">
           Adicionar condutor auxiliar
         </label>
@@ -1038,7 +1074,7 @@ const stepTemplates = {
         </div>
 
         <div class="form-check mb-3">
-          <input class="form-check-input" type="checkbox" id="addAuxiliar2" onchange="toggleAuxiliar2(this.checked)">
+          <input class="form-check-input" type="checkbox" id="addAuxiliar2" data-rule="auxiliar2Container:checked">
           <label class="form-check-label" for="addAuxiliar2">
             Adicionar um segundo condutor auxiliar
           </label>
@@ -1143,24 +1179,25 @@ const stepTemplates = {
           <input type="date" id="renovVencimento" class="form-control"  />
         </div>
       </div>
-      <div class="mb-3">
-        <label for="renovSeguradora" class="form-label">Seguradora Vencendo *</label>
-        <select id="renovSeguradora" class="form-select" >
-          <option value="">Selecione</option>
-          <option value="aruana">Aruana</option>
-          <option value="outra">Outra</option>
-        </select>
-      </div>
-      <div class="mb-3" id="outraSeguradoraContainer" style="display: none;">
-        <label for="outraSeguradoraNome" class="form-label">Nome da outra seguradora *</label>
-        <input type="text" id="outraSeguradoraNome" class="form-control" />
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="renovSeguradora" class="form-label">Seguradora Vencendo *</label>
+          <select id="renovSeguradora" class="form-select">
+            <option value="" selected disabled>Selecione</option>
+            <option>Aruana</option> <option>Porto Seguro</option> <option>Azul</option> <option>Allianz</option> <option>Tokio Marine</option> <option>HDI</option> <option>Sompo</option> <option>Bradesco</option> <option>Suhai</option> <option>Mapfre</option> <option>MBM</option> <option>Sabemi</option> <option>Akad</option><option>Ezze</option> <option>Darwin</option><option>	Yelium</option> <option>Zurich</option> <option>Chubb</option> <option>Essor</option> <option>Sura</option> <option>Icatu</option> <option>Alfa</option><option>Fator</option><option>American Life</option><option>Excelsior</option><option>Kovr</option><option>ALM</option><option>AXA</option>
+          </select>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="codCI" class="form-label">Código CI</label>
+          <input id="codCI" class="form-control"  />
+        </div>
       </div>
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
         <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
       </div>
     </div>`,
-      endosso_dados: `
+  endosso_dados: `
         <div class="form-step" data-step="1">
           <h4 class="mb-4">Dados para Endosso</h4>
           
@@ -1177,7 +1214,7 @@ const stepTemplates = {
 
           <div class="mb-3">
             <label for="endossoSeguradora" class="form-label">Seguradora *</label>
-            <select id="endossoSeguradora" class="form-select" required>
+            <select id="endossoSeguradora" class="form-select" required data-rule="endossoOutraSeguradoraContainer:outra">
               <option value="">Selecione</option>
               <option value="aruana">Aruana</option>
               <option value="mbm">MBM</option>
@@ -1217,7 +1254,7 @@ const stepTemplates = {
             <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
           </div>
         </div>`,
-      endosso_veiculo: `
+  endosso_veiculo: `
         <div class="form-step" data-step="2">
           <h4 class="mb-4">Dados do Veículo para Substituição</h4>
           <div class="row">
@@ -1269,7 +1306,7 @@ const stepTemplates = {
             <button type="button" class="btn btn-primary" onclick="nextStep()"><i class="bi bi-arrow-right"></i> Próximo</button>
           </div>
         </div>`,
-      endosso_qa_inicial: `
+  endosso_qa_inicial: `
         <div class="form-step" data-step="2">
           <h4 class="mb-4">Inclusão/Exclusão de Condutor</h4>
           <div class="mb-3">
@@ -1286,7 +1323,7 @@ const stepTemplates = {
             <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
           </div>
         </div>`,
-      endosso_acao_qa0: `
+  endosso_acao_qa0: `
         <div class="form-step" data-step="3">
           <h4 class="mb-4">Ação Desejada (Nenhum condutor auxiliar)</h4>
           <div class="mb-3">
@@ -1302,7 +1339,7 @@ const stepTemplates = {
             <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
           </div>
         </div>`,
-      endosso_acao_qa1: `
+  endosso_acao_qa1: `
         <div class="form-step" data-step="3">
           <h4 class="mb-4">Ação Desejada (1 condutor auxiliar)</h4>
           <div class="mb-3">
@@ -1319,7 +1356,7 @@ const stepTemplates = {
             <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
           </div>
         </div>`,
-      endosso_acao_qa2: `
+  endosso_acao_qa2: `
         <div class="form-step" data-step="3">
           <h4 class="mb-4">Ação Desejada (2 condutores auxiliares)</h4>
           <div class="mb-3">
@@ -1338,7 +1375,7 @@ const stepTemplates = {
             <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
           </div>
         </div>`,
-      endosso_alteracao_contato: `
+  endosso_alteracao_contato: `
         <div class="form-step" data-step="2">
           <h4 class="mb-4">Alteração de Contato</h4>
           <p class="text-muted">Preencha apenas os campos que deseja alterar.</p>
@@ -1365,18 +1402,18 @@ const stepTemplates = {
             <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
           </div>
         </div>`,
-      endosso_correcao_cadastral: `
+  endosso_correcao_cadastral: `
         <div class="form-step" data-step="2">
           <h4 class="mb-4">Correção de Dados Cadastrais</h4>
           <div class="mb-3">
             <label class="form-label">Tipo de pessoa *</label>
             <div class="d-flex gap-3">
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="tipoPessoa" id="pf" value="pf" required checked />
+                <input class="form-check-input" type="radio" name="tipoPessoa" id="pf" value="pf" required checked data-rule="blocoPF:checked" />
                 <label class="form-check-label" for="pf">Pessoa Física</label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="tipoPessoa" id="pj" value="pj" required />
+                <input class="form-check-input" type="radio" name="tipoPessoa" id="pj" value="pj" required data-rule="blocoPJ:checked" />
                 <label class="form-check-label" for="pj">Pessoa Jurídica</label>
               </div>
             </div>
@@ -1415,7 +1452,7 @@ const stepTemplates = {
           </div>
         </div>`,
 
-      endosso_retirada_1_condutor: `
+  endosso_retirada_1_condutor: `
         <div class="form-step">
             <h4 class="mb-4">Identificação do Condutor a Retirar</h4>
             <p class="text-muted">Preencha os dados do condutor que você deseja retirar da apólice.</p>
@@ -1434,7 +1471,7 @@ const stepTemplates = {
                 <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
             </div>
         </div>`,
-      endosso_retirada_2_condutores: `
+  endosso_retirada_2_condutores: `
         <div class="form-step">
             <h4 class="mb-4">Identificação dos Condutores a Retirar</h4>
             
@@ -1503,7 +1540,7 @@ const stepTemplates = {
         <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Finalizar Renovação</button>
       </div>
     </div>`,
-          endosso_dados_condutor_1: `
+  endosso_dados_condutor_1: `
             <div class="form-step" data-step="4">
               <h4 class="mb-4">Dados do Novo Condutor Auxiliar</h4>
               <div class="row">
@@ -1525,7 +1562,7 @@ const stepTemplates = {
                 <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
               </div>
             </div>`,
-          endosso_dados_condutor_2: `
+  endosso_dados_condutor_2: `
             <div class="form-step" data-step="4">
               <h4 class="mb-4">Dados dos Novos Condutores Auxiliares</h4>
               <p class="text-muted">Condutor 1</p>
@@ -1564,8 +1601,8 @@ const stepTemplates = {
                 <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
               </div>
             </div>`,
-      
-      carta_cancelamento: `
+
+  carta_cancelamento: `
         <div class="form-step" data-step="4">
           <div class="mb-3">
             <label class="form-label">Carta de Cancelamento (PDF/JPG/PNG) *</label>
@@ -1576,7 +1613,7 @@ const stepTemplates = {
             <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
           </div>
         </div>`,
-      segunda_via_docs: `
+  segunda_via_docs: `
         <div class="form-step" data-step="1">
           <h4 class="mb-4">2ª Via de Documentos/Posição Financeira</h4>
           <div class="row">
@@ -1591,7 +1628,7 @@ const stepTemplates = {
           </div>
           <div class="mb-3">
             <label for="segundaViaTipoDoc" class="form-label">Tipo de Documento *</label>
-            <select id="segundaViaTipoDoc" class="form-select" required>
+            <select id="segundaViaTipoDoc" class="form-select" required data-rule="segundaViaOutroContainer:outra">
               <option value="">Selecione</option>
               <option value="kit_proposta">Kit proposta e cobrança</option>
               <option value="kit_apolice">Kit apólice e posição financeira</option>
@@ -1617,7 +1654,7 @@ const stepTemplates = {
             <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Enviar Solicitação</button>
           </div>
         </div>`,
-      financeiro_regularizacao: `
+  financeiro_regularizacao: `
         <div class="form-step" data-step="1">
           <h4 class="mb-4">Financeiro Regularização</h4>
           <div class="row">
@@ -1662,1538 +1699,4 @@ const stepTemplates = {
             <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Enviar Solicitação</button>
           </div>
         </div>`,
-    };
-// =================================================================
-// 2. CONFIGURAÇÃO DOS FLUXOS
-// =================================================================
-const fluxosConfig = {
-  nova: {
-    description: "Preencha os dados para Nova Transmissão",
-    steps: [],
-  },
-  renovacao: {
-    description: "Siga as etapas para solicitar a Renovação",
-    steps: [
-      { label: "Apólice", template: "renovacao_apolice" },
-      // { label: "Segurado", template: "segurado" },
-      { label: "Veículo", template: "veiculo" },
-      { label: "Confirmar", template: "renovacao_confirmar" },
-    ],
-  },
-  endosso: {
-    description: "Siga as etapas para solicitar o Endosso",
-    steps: [{ label: "Dados", template: "endosso_dados" }],
-  },
-  segunda_via: {
-    description: "Solicite 2ª Via de Documentos ou Posição Financeira",
-    steps: [
-      { label: "Dados", template: "segunda_via_docs" },
-    ],
-  },
-  financeiro_regularizacao: {
-    description: "Solicite Regularização Financeira",
-    steps: [
-      { label: "Dados", template: "financeiro_regularizacao" },
-    ],
-  },
-  cotacao: {
-    description: "Solicite uma cotação",
-    steps: [
-      { label: "Cliente", template: "cliente" },
-      { label: "Cotação", template: "auto_compreensivo" },
-      // { label: "Enviar", template: "enviar" },
-    ],
-  },
-  aviso_sinistro: {
-    description: "Preencha os dados para Aviso de Sinistro",
-    steps: [
-      { label: "Aviso Segurado", template: "aviso_sinistro" },
-      { label: "Aviso Terceiro", template: "aviso_sinistro_terceiro" },
-      { label: "Aviso Ocorrência", template: "aviso_sinistro_ocorrencia" },
-      { label: "Info & Consent.", template: "consentimento" },
-      { label: "Enviar", template: "enviar" },
-    ],
-  },
 };
-
-// =================================================================
-// 3. ESTADO GLOBAL E RENDERIZAÇÃO
-// =================================================================
-let currentStep = 0;
-let currentFluxo = "";
-let activeSteps = [];
-let formDataStorage = {}; 
-function renderizarFluxo(tipo) {
-  currentFluxo = tipo;
-  const config = fluxosConfig[tipo];
-
-  if (!config) {
-    document.getElementById("formDescription").textContent =
-      "Selecione um tipo de solicitação para começar";
-    document.querySelector(".progress-container").innerHTML = "";
-    document.querySelector(".form-content").style.display = "none";
-    activeSteps = []; // Limpa as etapas ativas
-    return;
-  }
-
-  // Força a primeira etapa a ser sempre a de identificação
-  activeSteps = [{ label: "Identificação", template: "tipo_solicitante" }];
-  currentStep = 0;
-
-  // Mostra containers e atualiza header
-  document.getElementById("initialStep").style.display = "none";
-  document.querySelector(".form-content").style.display = "block";
-  document.getElementById("formDescription").textContent = config.description;
-
-  renderForm(); // Chama a função que renderiza o formulário
-  updateProgress();
-}
-
-function renderForm() {
-  const progressContainer = document.querySelector(".progress-container");
-  progressContainer.innerHTML = `
-    <div class="step-indicator">
-      <div class="progress-line" id="progressLine"></div>
-      ${activeSteps.map((step, index) => `
-        <div class="step" data-step="${index}">
-          <div class="step-circle">${index}</div>
-          <div class="step-label">${step.label}</div>
-        </div>`
-      ).join("")}
-    </div>`;
-
-  const form = document.getElementById("multiStepForm");
-  form.innerHTML = activeSteps.map((step, index) => {
-      const template = stepTemplates[step.template];
-      // Injeta o data-step correto no template de forma mais robusta
-      return template.replace('<div class="form-step"', `<div class="form-step" data-step="${index}"`);
-    }).join("");
-
-  // Atualiza o nome do tipo selecionado na primeira etapa
-  const tipoSelecionadoEl = document.getElementById("tipoSelecionado");
-  if (tipoSelecionadoEl) {
-    const select = document.getElementById("tipoSolicitacao");
-    tipoSelecionadoEl.textContent = select.options[select.selectedIndex].text;
-  }
-  
-  // Adiciona listeners e máscaras novamente, pois o DOM foi recriado
-  addListenersAndMasks();
-}
-
-function updateProgress() {
-  const totalSteps = activeSteps.length;
-  if (totalSteps <= 1) {
-    document.getElementById("progressLine").style.width = "0%";
-  } else {
-    const percentage = (currentStep / (totalSteps - 1)) * 100;
-    document.getElementById("progressLine").style.width = percentage + "%";
-  }
-
-  document.querySelectorAll(".step").forEach((stepEl) => {
-    const stepNumber = Number(stepEl.dataset.step);
-    stepEl.classList.remove("active", "completed");
-    if (stepNumber < currentStep) {
-      stepEl.classList.add("completed");
-      stepEl.querySelector(".step-circle").innerHTML = 
-        '<i class="bi bi-check-lg"></i>';
-    } else if (stepNumber === currentStep) {
-      stepEl.classList.add("active");
-      stepEl.querySelector(".step-circle").textContent = stepNumber;
-    } else {
-      stepEl.querySelector(".step-circle").textContent = stepNumber;
-    }
-  });
-
-  document.querySelectorAll(".form-step").forEach((step) => {
-    step.classList.toggle("active", Number(step.dataset.step) === currentStep);
-  });
-
-  // Popula a etapa de confirmação da renovação se for a etapa ativa
-  if (currentFluxo === 'renovacao' && activeSteps[currentStep]?.template === 'renovacao_confirmar') {
-    populateRenovacaoConfirmacao();
-  }
-}
-
-// =================================================================
-// 4. VALIDAÇÃO E NAVEGAÇÃO
-// =================================================================
-function validateStep(step) {
-  const currentStepElement = document.querySelector(`.form-step[data-step="${step}"]`);
-  if (!currentStepElement) return true;
-
-  const inputs = currentStepElement.querySelectorAll("input[required], select[required], textarea[required]");
-  let isValid = true;
-
-  inputs.forEach((input) => {
-    let fieldValid = input.checkValidity();
-
-    // --- Início das Validações Customizadas ---
-    if (input.value) { // Só valida se houver valor
-
-      // Validação de Email
-      if (input.id === 'solEmail' && !isValidEmail(input.value)) {
-        fieldValid = false;
-      }
-
-      // Validação de Placa
-      if ((input.id === 'veiPlaca' || input.id === 'endossoVeiculoPlacaAtual' || input.id === 'endossoVeiculoPlacaNova') && !/^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$/.test(input.value.toUpperCase())) {
-        fieldValid = false;
-      }
-
-      // --- Validações de Documentos ---
-
-      // Campo condicional: CPF ou CNPJ dependendo do tipo de pessoa
-      if (input.id === 'seguradoDocumento') {
-        const tipoPessoa = currentStepElement.querySelector('#seguradoTipoPessoa')?.value;
-        if (tipoPessoa === 'pf' && !validaCPF(input.value)) {
-          fieldValid = false;
-        } else if (tipoPessoa === 'pj' && !validaCNPJ(input.value)) {
-          fieldValid = false;
-        }
-      }
-
-      // Campos que podem ser CPF ou CNPJ (detecção automática)
-      if (input.id === 'endossoDocumento' || input.id === 'segundaViaDocumento' || input.id === 'finRegDocumento') {
-        if (!(onlyDigits(input.value).length <= 11 ? validaCPF(input.value) : validaCNPJ(input.value))) {
-          fieldValid = false;
-        }
-      }
-
-      // Campos que são sempre CPF
-      if (['segCPF', 'seguradoPPECPF', 'aux1CPF', 'aux2CPF', 'endossoCondutor1CPF', 'endossoCondutor2CPF'].includes(input.id)) {
-        if (!validaCPF(input.value)) {
-          fieldValid = false;
-        }
-      }
-
-      // Campos que são sempre CNPJ
-      if (['cnpj', 'segCNPJ'].includes(input.id)) {
-        if (!validaCNPJ(input.value)) {
-          fieldValid = false;
-        }
-      }
-    }
-    // --- Fim das Validações Customizadas ---
-
-    if (!fieldValid) {
-      isValid = false;
-    }
-    input.classList.toggle("is-invalid", !fieldValid);
-  });
-
-  // Validação especial para a etapa 'solicitante' (colaborador)
-  if (activeSteps[step]?.template === 'solicitante') {
-    const codigoInput = document.getElementById('colaboradorCodigo');
-    const colaborador = colaboradoresData.find(c => c.codigo.toUpperCase() === codigoInput.value.trim().toUpperCase());
-
-    if (!colaborador) {
-      isValid = false;
-      codigoInput.classList.add('is-invalid');
-      // Also clear the name field in case user corrected a valid code to an invalid one
-      document.getElementById('estipNome').value = '';
-      document.getElementById('colaboradorNomeDisplay').textContent = '';
-    } else {
-      // It's valid, ensure fields are correctly populated before proceeding
-      document.getElementById('estipNome').value = colaborador.name;
-      document.getElementById('colaboradorNomeDisplay').textContent = `Olá, ${colaborador.name}!`;
-      codigoInput.classList.remove('is-invalid');
-    }
-  }
-
-  // Validação especial para a etapa 'estipulante'
-  if (activeSteps[step]?.template === 'estipulante') {
-    const resultadoDiv = document.getElementById('resultadoEstipulante');
-    if (!resultadoDiv.querySelector('select')) {
-      isValid = false;
-      const cnpjInput = document.getElementById('cnpj');
-      if (cnpjInput) {
-        cnpjInput.classList.add('is-invalid');
-      }
-      resultadoDiv.innerHTML = `<div class="alert alert-danger">É necessário buscar e selecionar uma apólice válida para o estipulante.</div>`;
-    }
-  }
-
-  return isValid;
-}
-
-function toggleConditionalField(show, containerId) {
-  const container = document.getElementById(containerId);
-  if (container) {
-    container.style.display = show ? 'block' : 'none';
-    const input = container.querySelector('input, select');
-    if (input) {
-      input.required = show;
-    }
-  }
-}
-
-function nextStep() {
-  if (!validateStep(currentStep)) return;
-
-  const currentStepConfig = activeSteps[currentStep];
-  let needsDynamicRender = false;
-
-  // Lógica generalizada para a etapa de identificação
-  if (currentStepConfig.template === 'tipo_solicitante') {
-    needsDynamicRender = true;
-    const tipoSolicitante = document.getElementById('tipoSolicitante').value;
-    formDataStorage.tipoSolicitante = tipoSolicitante;
-
-    let personSteps = [];
-    if (tipoSolicitante === 'estipulante') {
-      // Para outros fluxos que não o 'nova', a etapa Estipulante ainda é necessária.
-      if (currentFluxo !== 'nova') {
-        personSteps.push({ label: "Estipulante", template: "estipulante" });
-      }
-      personSteps.push({ label: "Segurado", template: "segurado" });
-    } else if (tipoSolicitante === 'colaborador') {
-      personSteps.push({ label: "Colaborador", template: "solicitante" });
-    } else if (tipoSolicitante === 'segurado') {
-      personSteps.push({ label: "Segurado", template: "segurado" });
-    }
-
-    let flowSteps = [];
-    if (currentFluxo === 'nova') {
-      if (tipoSolicitante !== 'colaborador') {
-        flowSteps = [
-          { label: "Veículo", template: "veiculo" },
-          { label: "Produtos", template: "produtos_coberturas" },
-          { label: "Auxiliares", template: "auxiliares" },
-          { label: "Info & Consent.", template: "consentimento" },
-          { label: "Enviar", template: "enviar" },
-        ];
-      }
-    } else {
-      flowSteps = fluxosConfig[currentFluxo].steps;
-    }
-
-    activeSteps.splice(currentStep + 1, Infinity, ...personSteps, ...flowSteps);
-  } else if (currentFluxo === 'nova' && currentStepConfig.template === 'solicitante') {
-    needsDynamicRender = true;
-    const estipuQuestion = document.getElementById('estipuQuestion').value;
-    const solicitanteStepIndex = currentStep;
-
-    const baseStepsAfter = [
-      { label: "Veículo", template: "veiculo" },
-      { label: "Produtos", template: "produtos_coberturas" },
-      { label: "Auxiliares", template: "auxiliares" },
-      { label: "Info & Consent.", template: "consentimento" },
-      { label: "Enviar", template: "enviar" },
-    ];
-
-    let personSteps = [];
-    if (estipuQuestion === 'Sim') {
-      personSteps.push({ label: "Segurado", template: "segurado" });
-    } else {
-      personSteps.push({ label: "Segurado", template: "segurado" });
-    }
-
-    activeSteps.splice(solicitanteStepIndex + 1, Infinity, ...personSteps, ...baseStepsAfter);
-  } else if (currentFluxo === 'endosso') {
-    let stepsToAdd = [];
-    if (currentStepConfig.template === 'endosso_dados') {
-      needsDynamicRender = true;
-      const tipoEndosso = document.getElementById('endossoTipo').value;
-      activeSteps.splice(currentStep + 1);
-
-      if (tipoEndosso === 'substituicao_veiculo') {
-        stepsToAdd.push({ label: "Veículo", template: "endosso_veiculo" });
-      } else if (tipoEndosso === 'inclusao_condutor') {
-        stepsToAdd.push({ label: "Condutores", template: "endosso_qa_inicial" });
-      } else if (tipoEndosso === 'alteracao_endereco') {
-        stepsToAdd.push({ label: "Contato", template: "endosso_alteracao_contato" });
-      } else if (tipoEndosso === 'correcao_cadastral') {
-        stepsToAdd.push({ label: "Correção", template: "endosso_correcao_cadastral" });
-      } else if (tipoEndosso === 'cancel_req') {
-        stepsToAdd.push({ label: "Carta", template: "carta_cancelamento" });
-      }
-
-      stepsToAdd.push({ label: "Enviar", template: "enviar" });
-      activeSteps.push(...stepsToAdd);
-    } else if (currentStepConfig.template === 'endosso_qa_inicial') {
-      needsDynamicRender = true;
-      const qaInicial = document.getElementById('endossoQaInicial').value;
-      activeSteps.splice(currentStep + 1);
-
-      let proximaEtapaTemplate = '';
-      switch (qaInicial) {
-        case '0': proximaEtapaTemplate = 'endosso_acao_qa0'; break;
-        case '1': proximaEtapaTemplate = 'endosso_acao_qa1'; break;
-        case '2': proximaEtapaTemplate = 'endosso_acao_qa2'; break;
-      }
-      if (proximaEtapaTemplate) {
-        activeSteps.push({ label: "Ação", template: proximaEtapaTemplate });
-      }
-    } else if (currentStepConfig.template.startsWith('endosso_acao_qa')) {
-      needsDynamicRender = true;
-      const acao = document.getElementById('endossoAcao').value;
-      activeSteps.splice(currentStep + 1);
-
-      const acoesRetirada1 = ['retirar_atual', 'retirar_incluir_novo', 'retirar_1_manter_1', 'retirar_1_incluir_1'];
-      const acoesRetirada2 = ['retirar_2_ficar_sem', 'retirar_2_incluir_1', 'retirar_2_incluir_2'];
-
-      if (acoesRetirada1.includes(acao)) {
-        stepsToAdd.push({ label: "Retirada", template: "endosso_retirada_1_condutor" });
-      } else if (acoesRetirada2.includes(acao)) {
-        stepsToAdd.push({ label: "Retirada", template: "endosso_retirada_2_condutores" });
-      }
-
-      if (['add_1', 'retirar_incluir_novo', 'manter_add_outro', 'retirar_1_incluir_1', 'retirar_2_incluir_1'].includes(acao)) {
-        stepsToAdd.push({ label: "Dados Condutor", template: "endosso_dados_condutor_1" });
-      } else if (['add_2', 'retirar_2_incluir_2'].includes(acao)) {
-        stepsToAdd.push({ label: "Dados Condutores", template: "endosso_dados_condutor_2" });
-      }
-
-      stepsToAdd.push({ label: "Enviar", template: "enviar" });
-      activeSteps.push(...stepsToAdd);
-    }
-  }
-
-  if (needsDynamicRender) {
-    const formDataBeforeRender = {};
-    const allInputs = document.getElementById('multiStepForm').querySelectorAll('input, select, textarea');
-    allInputs.forEach(input => {
-      if (input.id) {
-        if (input.type === 'checkbox' || input.type === 'radio') {
-          formDataBeforeRender[input.id] = input.checked;
-        } else {
-          formDataBeforeRender[input.id] = input.value;
-        }
-      }
-    });
-
-    renderForm();
-
-
-
-    Object.keys(formDataBeforeRender).forEach(id => {
-      const input = document.getElementById(id);
-      if (input) {
-        const value = formDataBeforeRender[id];
-        if (input.type === 'checkbox' || input.type === 'radio') {
-          input.checked = value;
-        } else {
-          input.value = value;
-        }
-        // Trigger change event for selects to re-apply conditional logic
-        if (input.tagName === 'SELECT') {
-            const event = new Event('change');
-            input.dispatchEvent(event);
-        }
-      }
-    });
-  }
-
-  if (currentStep < activeSteps.length - 1) {
-    currentStep++;
-    updateProgress();
-  }
-}
-
-function prevStep() {
-  if (currentStep > 0) {
-    currentStep--;
-    updateProgress();
-  }
-}
-
-let colaboradoresData = [];
-
-async function fetchColaboradores() {
-  try {
-    const response = await fetch('./data/db.json');
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    const data = await response.json();
-    colaboradoresData = data.colaboradores || [];
-  } catch (error) {
-    console.error('Falha ao buscar dados dos colaboradores:', error);
-    colaboradoresData = []; // Ensure it's an empty array on failure
-  }
-}
-
-
-function handleColaboradorValidation() {
-  const codigoInput = document.getElementById('colaboradorCodigo');
-  if (!codigoInput) return;
-
-  codigoInput.addEventListener('blur', () => {
-    const codigo = codigoInput.value.trim().toUpperCase();
-    const nomeDisplay = document.getElementById('colaboradorNomeDisplay');
-    const nomeInput = document.getElementById('estipNome'); // The readonly input
-
-    if (!nomeDisplay || !nomeInput) return;
-
-    const colaborador = colaboradoresData.find(c => c.codigo.toUpperCase() === codigo);
-
-    if (colaborador) {
-      nomeInput.value = colaborador.name;
-      nomeDisplay.textContent = `Olá, ${colaborador.name}!`;
-      codigoInput.classList.remove('is-invalid');
-      codigoInput.classList.add('is-valid');
-      nomeInput.classList.add('is-valid');
-    } else {
-      nomeInput.value = '';
-      nomeDisplay.textContent = '';
-      codigoInput.classList.add('is-invalid');
-      codigoInput.classList.remove('is-valid');
-      nomeInput.classList.remove('is-valid');
-    }
-  });
-}
-
-function resetForm() {
-  document.getElementById("multiStepForm").style.display = "block";
-  document.getElementById("successMessage").classList.remove("active");
-  
-  document.getElementById("initialStep").style.display = "block";
-  document.querySelector(".form-content").style.display = "none";
-  document.querySelector(".progress-container").innerHTML = "";
-  document.getElementById("tipoSolicitacao").value = "";
-  document.getElementById("formDescription").textContent = "Selecione um tipo de solicitação para começar";
-
-  currentStep = 0;
-  totalSteps = 0;
-  currentFluxo = "";
-}
-
-// =================================================================
-// 5. VALIDAÇÃO UTILITÁRIA E MÁSCARAS (sem alterações)
-// =================================================================
-const onlyDigits = (str) => str.replace(/\D/g, '');
-const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-const validaCPF = (cpf) => {
-  cpf = onlyDigits(cpf);
-  if (!cpf || cpf.length !== 11 || /^(\\d)\\1{10}$/.test(cpf)) return false;
-  let soma = 0, resto;
-  for (let i = 1; i <= 9; i++) soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
-  resto = (soma * 10) % 11;
-  if (resto === 10 || resto === 11) resto = 0;
-  if (resto !== parseInt(cpf.substring(9, 10))) return false;
-  soma = 0;
-  for (let i = 1; i <= 10; i++) soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
-  resto = (soma * 10) % 11;
-  if (resto === 10 || resto === 11) resto = 0;
-  return resto === parseInt(cpf.substring(10, 11));
-};
-
-const validaCNPJ = (cnpj) => {
-  cnpj = onlyDigits(cnpj);
-  // Verifica se tem 14 dígitos e não é repetido
-  if (!cnpj || cnpj.length !== 14 || /^(\d)\1{13}$/.test(cnpj)) return false;
-
-  let tamanho = cnpj.length - 2;
-  let numeros = cnpj.substring(0, tamanho);
-  let digitos = cnpj.substring(tamanho);
-  let soma = 0;
-  let pos = tamanho - 7;
-
-  for (let i = tamanho; i >= 1; i--) {
-    soma += numeros.charAt(tamanho - i) * pos--;
-    if (pos < 2) pos = 9;
-  }
-
-  let resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
-  if (resultado != digitos.charAt(0)) return false;
-
-  tamanho = tamanho + 1;
-  numeros = cnpj.substring(0, tamanho);
-  soma = 0;
-  pos = tamanho - 7;
-
-  for (let i = tamanho; i >= 1; i--) {
-    soma += numeros.charAt(tamanho - i) * pos--;
-    if (pos < 2) pos = 9;
-  }
-
-  resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
-  return resultado == digitos.charAt(1);
-};
-
-// =================================================================
-// 6. LISTENERS E INICIALIZAÇÃO
-// =================================================================
-function addListenersAndMasks() {
-  const form = document.getElementById("multiStepForm");
-
-  // Impede o envio do formulário ao pressionar Enter em um input
-  form.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter' && event.target.tagName === 'INPUT') {
-      event.preventDefault();
-    }
-  });
-
-  // Adiciona o listener para a busca de veículo por placa
-  buscaVeiculo();
-
-  // Para evitar listeners duplicados, removemos o antigo antes de adicionar um novo
-  if (window.formSubmitHandler) {
-    form.removeEventListener("submit", window.formSubmitHandler);
-  }
-
-  window.formSubmitHandler = async function (e) {
-    e.preventDefault();
-    if (!validateStep(currentStep)) return;
-
-    const submitButton = e.target.querySelector('button[type="submit"]');
-    const originalButtonText = submitButton.innerHTML;
-
-    const select = document.getElementById("tipoSolicitacao");
-    const tipoText = select.options[select.selectedIndex].text;
-    if (!confirm(`Confirmar envio da solicitação de ${tipoText}?`)) return;
-
-    submitButton.disabled = true;
-    submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...';
-
-    const formData = new FormData();
-
-    // Funções auxiliares para popular o FormData
-    const appendValue = (key, id) => {
-        const el = document.getElementById(id);
-        if (el && el.value) formData.append(key, el.value);
-    };
-    const appendFile = (key, id) => {
-        const el = document.getElementById(id);
-        if (el && el.files[0]) formData.append(key, el.files[0]);
-    };
-    const appendChecked = (key, id) => {
-        const el = document.getElementById(id);
-        formData.append(key, el ? el.checked : false);
-    };
-    const appendRadio = (key, name) => {
-        const el = document.querySelector(`input[name="${name}"]:checked`);
-        if (el) formData.append(key, el.value);
-    };
-    const appendInt = (key, id) => {
-        const el = document.getElementById(id);
-        if (el && el.value) formData.append(key, parseInt(el.value, 10) || 0);
-    };
-    const appendMultiSelect = (key, id) => {
-        const el = document.getElementById(id);
-        if (el) {
-            for (const option of el.selectedOptions) {
-                formData.append(key + ':', option.value);
-            }
-        }
-    };
-
-    // Adiciona dados que não estão em campos de input
-    formData.append('tipo', currentFluxo);
-    formData.append('tipoSolicitante', formDataStorage.tipoSolicitante || '');
-
-    switch (currentFluxo) {
-        case 'nova':
-            const rcfPolicySelect = document.getElementById('rcf_policy_select');
-            const appPolicySelect = document.getElementById('app_policy_select');
-            const rcfData = rcfPolicySelect && rcfPolicySelect.value ? JSON.parse(rcfPolicySelect.value) : {};
-            const appData = appPolicySelect && appPolicySelect.value ? JSON.parse(appPolicySelect.value) : {};
-
-            appendValue('solicitanteNome', 'estipNome');
-            appendValue('estipulanteCNPJ', 'cnpj');
-            formData.append('estipulanteApoliceRCF', rcfData.apolice || '');
-            formData.append('estipulantePremioRCF', rcfData.premio || '');
-            formData.append('estipulanteDanoMaterialRCF', rcfData.dano_material_DM || '');
-            formData.append('estipulanteDanoCorporalRCF', rcfData.dano_corporal_DC || '');
-            formData.append('estipulanteProLaboreRCF', rcfData.pro_labore || '');
-            formData.append('estipulanteFatorRCF', rcfData.fator || '');
-            formData.append('estipulanteApoliceAPP', appData.apolice || '');
-            formData.append('estipulantePremioAPP', appData.premio || '');
-            formData.append('estipulanteIpaCondutorAPP', appData.ipa_condutor || '');
-            formData.append('estipulanteMaCondutorAPP', appData.ma_condutor || '');
-            formData.append('estipulanteProLaboreAPP', appData.pro_labore || '');
-            formData.append('estipulanteFatorAPP', appData.fator || '');
-            formData.append('estipulanteIpaPassageiroAPP', appData.ipa_passageiro || '');
-            formData.append('estipulanteMaPassageiroAPP', appData.ma_passageiro || '');
-
-            appendValue('produtos', 'produtos');
-            const valorRCFSelect = document.getElementById('valorRCF_select');
-            if (valorRCFSelect && valorRCFSelect.value === 'outro') {
-                appendInt('valorRCF', 'valorRCF_outro');
-            } else {
-                appendInt('valorRCF', 'valorRCF_select');
-            }
-            const valorAPPSelect = document.getElementById('valorAPP_select');
-            if (valorAPPSelect && valorAPPSelect.value === 'outro') {
-                appendInt('valorAPP', 'valorAPP_outro');
-            } else {
-                appendInt('valorAPP', 'valorAPP_select');
-            }
-            
-            appendValue('qtdParcelas', 'qtdParcelas');
-            appendMultiSelect('segTrabalhadas', 'segTrabalhadas');
-            appendValue('seguradoNome', 'seguradoNome');
-            appendValue('seguradoNomeSocial', 'seguradoNomeSocial');
-            appendValue('seguradoTipoPessoa', 'seguradoTipoPessoa');
-            appendValue('seguradoDocumento', 'seguradoDocumento');
-            appendValue('seguradoDataNascimento', 'seguradoDataNascimento');
-            appendValue('seguradoEstadoCivil', 'seguradoEstadoCivil');
-            appendValue('seguradoSexo', 'seguradoSexo');
-            appendValue('seguradoTipoIdentidade', 'seguradoTipoIdentidade');
-            appendValue('seguradoNumIdentidade', 'seguradoNumIdentidade');
-            appendValue('seguradoOrgaoEmissor', 'seguradoOrgaoEmissor');
-            appendValue('seguradoDataEmissao', 'seguradoDataEmissao');
-            appendRadio('seguradoEstrangeiro', 'seguradoEstrangeiro');
-            appendValue('seguradoPais', 'seguradoPais');
-            appendValue('seguradoTempoPais', 'seguradoTempoPais');
-            appendValue('seguradoPaisResidencia', 'seguradoPaisResidencia');
-            appendValue('seguradoAtividadePrincipal', 'seguradoAtividadePrincipal');
-            appendValue('seguradoFaixaRenda', 'seguradoFaixaRenda');
-            appendRadio('seguradoPPE', 'seguradoPPE');
-            appendValue('seguradoPPENome', 'seguradoPPENome');
-            appendValue('seguradoPPECPF', 'seguradoPPECPF');
-            appendValue('seguradoPPEGrauRelacionamento', 'seguradoPPEGrauRelacionamento');
-            appendValue('seguradoCEP', 'segurado_cep');
-            appendValue('seguradoLogradouro', 'segurado_logradouro');
-            appendValue('seguradoNumero', 'segurado_numero');
-            appendValue('seguradoBairro', 'segurado_bairro');
-            appendValue('seguradoCidade', 'segurado_cidade');
-            appendValue('seguradoEstado', 'segurado_estado');
-            appendValue('seguradoEmail', 'emailSeg');
-            appendValue('seguradoTelefone', 'telSeg');
-            appendValue('seguradoEmailAdicional', 'emailSegAux');
-            appendValue('seguradoTelefoneAdicional', 'telSegAux');
-            appendFile('seguradoCNH', 'cnhSeg');
-            appendFile('seguradoComprovanteResidencia', 'comprovanteResidenciaSeg');
-
-            appendValue('veiculoPlaca', 'veiPlaca');
-            appendValue('veiculoChassi', 'veiChassi');
-            appendValue('veiculoRenavam', 'veiRenavam');
-            appendValue('veiculoFabricante', 'veiFab');
-            appendValue('veiculoModelo', 'veiModelo');
-            appendValue('veiculoAno', 'veiAno');
-            appendValue('veiculoUso', 'veiUso');
-            appendInt('veiculoLotacao', 'veiLotacao');
-            appendFile('veiculoCRLV', 'veiCNH');
-            appendRadio('tigoClube', 'tigoClube');
-            appendFile('tigoClubeAdesao', 'tigoClubeAdesao');
-
-            appendChecked('adicionarAuxiliar', 'addAuxiliar');
-            appendValue('auxiliar1Nome', 'aux1Nome');
-            appendValue('auxiliar1CPF', 'aux1CPF');
-            appendFile('auxiliar1CNH', 'aux1CNH');
-            appendChecked('adicionarAuxiliar2', 'addAuxiliar2');
-            appendValue('auxiliar2Nome', 'aux2Nome');
-            appendValue('auxiliar2CPF', 'aux2CPF');
-            appendFile('auxiliar2CNH', 'aux2CNH');
-
-            appendValue('infoAdicionais', 'infoAdicionais');
-            appendChecked('termos', 'termos');
-
-            break;
-        case 'renovacao':
-            appendValue('numeroApoliceAnterior', 'renovApolice');
-            appendValue('dataVencimentoAnterior', 'renovVencimento');
-            appendValue('seguradoraAnterior', 'renovSeguradora');
-            appendValue('outraSeguradoraAnterior', 'outraSeguradoraNome');
-            appendValue('seguradoNome', 'seguradoNome');
-            appendValue('seguradoNomeSocial', 'seguradoNomeSocial');
-            appendValue('seguradoTipoPessoa', 'seguradoTipoPessoa');
-            appendValue('seguradoDocumento', 'seguradoDocumento');
-            appendValue('seguradoDataNascimento', 'seguradoDataNascimento');
-            appendValue('seguradoEstadoCivil', 'seguradoEstadoCivil');
-            appendValue('seguradoSexo', 'seguradoSexo');
-            appendValue('seguradoTipoIdentidade', 'seguradoTipoIdentidade');
-            appendValue('seguradoNumIdentidade', 'seguradoNumIdentidade');
-            appendValue('seguradoOrgaoEmissor', 'seguradoOrgaoEmissor');
-            appendValue('seguradoDataEmissao', 'seguradoDataEmissao');
-            appendRadio('seguradoEstrangeiro', 'seguradoEstrangeiro');
-            appendValue('seguradoPais', 'seguradoPais');
-            appendValue('seguradoTempoPais', 'seguradoTempoPais');
-            appendValue('seguradoPaisResidencia', 'seguradoPaisResidencia');
-            appendValue('seguradoAtividadePrincipal', 'seguradoAtividadePrincipal');
-            appendValue('seguradoFaixaRenda', 'seguradoFaixaRenda');
-            appendRadio('seguradoPPE', 'seguradoPPE');
-            appendValue('seguradoPPENome', 'seguradoPPENome');
-            appendValue('seguradoPPECPF', 'seguradoPPECPF');
-            appendValue('seguradoPPEGrauRelacionamento', 'seguradoPPEGrauRelacionamento');
-            appendValue('seguradoCEP', 'segurado_cep');
-            appendValue('seguradoLogradouro', 'segurado_logradouro');
-            appendValue('seguradoNumero', 'segurado_numero');
-            appendValue('seguradoBairro', 'segurado_bairro');
-            appendValue('seguradoCidade', 'segurado_cidade');
-            appendValue('seguradoEstado', 'segurado_estado');
-            appendFile('seguradoCNH', 'cnhSeg');
-            appendFile('seguradoComprovanteResidencia', 'comprovanteResidenciaSeg');
-            appendChecked('confirmado', 'renovConfirm');
-            break;
-        case 'aviso_sinistro':
-            appendValue('corretor', 'sinistroCorretor');
-            appendValue('nomeSegurado', 'sinistroNomeSegurado');
-            appendValue('emailSegurado', 'sinistroEmailSegurado');
-            appendValue('numeroApolice', 'sinistroNumeroApolice');
-            appendValue('marcaVeiculo', 'sinistroMarcaVeiculo');
-            appendValue('modeloVeiculo', 'sinistroModeloVeiculo');
-            appendInt('anoFabricacaoVeiculo', 'sinistroAnoFabricacaoVeiculo');
-            appendInt('anoModeloVeiculo', 'sinistroAnoModeloVeiculo');
-            appendValue('placaSegurado', 'sinistroPlacaSegurado');
-            appendValue('categoriaDano', 'sinistroCategoriaDano');
-            appendValue('nomeTerceiro', 'sinistroNomeTerceiro');
-            appendValue('enderecoTerceiro', 'sinistroEnderecoTerceiro');
-            appendValue('telefoneTerceiro', 'sinistroTelefoneTerceiro');
-            appendValue('emailTerceiro', 'sinistroEmailTerceiro');
-            formData.append('paisSinistro', 'Brasil'); // Campo readonly
-            appendValue('estadoSinistro', 'sinistroEstado');
-            appendValue('cidadeSinistro', 'sinistroCidade');
-            appendValue('cepSinistro', 'sinistroCep');
-            appendValue('numeroLocalSinistro', 'sinistroNumeroLocal');
-            appendValue('enderecoEvento', 'sinistroEnderecoEvento');
-            appendValue('dataHoraOcorrencia', 'sinistroDataHoraOcorrencia');
-            appendValue('descricaoSinistro', 'sinistroDescricao');
-            appendValue('numeroBoletim', 'sinistroNumeroBoletim');
-            appendValue('dataHoraBoletim', 'sinistroDataHoraBoletim');
-            appendRadio('responsabilidadeSegurado', 'sinistroResponsabilidade');
-            appendValue('motivoResponsabilidade', 'sinistroMotivoResponsabilidade');
-            break;
-        case 'endosso':
-            appendValue('nomeOuRazao', 'endossoNome');
-            appendValue('documento', 'endossoDocumento');
-            appendValue('seguradora', 'endossoSeguradora');
-            appendValue('outraSeguradora', 'endossoOutraSeguradoraNome');
-            appendValue('apoliceAPP', 'endossoApoliceAPP');
-            appendValue('apoliceRCF', 'endossoApoliceRCF');
-            const tipoSolicitacao = document.getElementById('endossoTipo')?.value;
-            if (tipoSolicitacao) formData.append('tipoSolicitacao', tipoSolicitacao);
-
-            switch (tipoSolicitacao) {
-                case 'substituicao_veiculo':
-                    appendValue('placaAtual', 'endossoVeiculoPlacaAtual');
-                    appendValue('placaNova', 'endossoVeiculoPlacaNova');
-                    appendValue('chassi', 'endossoVeiculoChassi');
-                    appendValue('renavam', 'endossoVeiculoRenavam');
-                    appendValue('fabricante', 'endossoVeiculoFab');
-                    appendValue('modelo', 'endossoVeiculoModelo');
-                    appendValue('ano', 'endossoVeiculoAno');
-                    appendInt('lotacao', 'endossoVeiculoLotacao');
-                    appendFile('crlv', 'endossoVeiculoCRLV');
-                    break;
-                case 'inclusao_condutor':
-                    appendValue('qaInicial', 'endossoQaInicial');
-                    appendValue('acaoCondutor', 'endossoAcao');
-                    appendValue('condutor1RetirarNome', 'endossoCondutor1RetirarNome');
-                    appendValue('condutor1RetirarCPF', 'endossoCondutor1RetirarCPF');
-                    appendValue('condutor2RetirarNome', 'endossoCondutor2RetirarNome');
-                    appendValue('condutor2RetirarCPF', 'endossoCondutor2RetirarCPF');
-                    appendValue('condutor1Nome', 'endossoCondutor1Nome');
-                    appendValue('condutor1CPF', 'endossoCondutor1CPF');
-                    appendFile('condutor1CNH', 'endossoCondutor1CNH');
-                    appendValue('condutor2Nome', 'endossoCondutor2Nome');
-                    appendValue('condutor2CPF', 'endossoCondutor2CPF');
-                    appendFile('condutor2CNH', 'endossoCondutor2CNH');
-                    break;
-                case 'alteracao_endereco':
-                    appendValue('novoEndereco', 'endossoNovoEndereco');
-                    appendValue('novoEmail', 'endossoNovoEmail');
-                    appendValue('novoTelefone', 'endossoNovoTelefone');
-                    appendFile('comprovanteEndereco', 'endossoNovoEnderecoComp');
-                    break;
-                case 'correcao_cadastral':
-                    appendRadio('tipoPessoa', 'tipoPessoa');
-                    appendValue('segNomePF', 'segNomePF');
-                    appendValue('segCPF', 'segCPF');
-                    appendValue('segRazao', 'segRazao');
-                    appendValue('segCNPJ', 'segCNPJ');
-                    appendFile('cnhSegurado', 'endossoCorrecaoCNH');
-                    break;
-                case 'cancel_req':
-                    appendFile('endossoCartaCancel', 'endossoCartaCancel');
-                    break;
-            }
-            break;
-        case 'segunda_via':
-            appendValue('nomeOuRazao', 'segundaViaNome');
-            appendValue('documento', 'segundaViaDocumento');
-            appendValue('tipoDocumento', 'segundaViaTipoDoc');
-            appendValue('outroDocumento', 'segundaViaOutroNome');
-            appendValue('responsavel', 'segundaViaResponsavel');
-            appendValue('observacoes', 'segundaViaObs');
-            break;
-        case 'financeiro_regularizacao':
-            appendValue('nomeOuRazao', 'finRegNome');
-            appendValue('documento', 'finRegDocumento');
-            appendValue('dataVencimento', 'finRegDataVencimento');
-            appendValue('parcelaAberta', 'finRegParcela');
-            appendValue('apoliceRCF', 'finRegApoliceRCF');
-            appendValue('motivoInadimplencia', 'finRegMotivo');
-            appendValue('responsavel', 'finRegResponsavel');
-            appendValue('observacoes', 'finRegObs');
-            break;
-        default:
-            alert("Tipo de solicitação não configurado para envio.");
-            submitButton.disabled = false;
-            submitButton.innerHTML = originalButtonText;
-            return;
-    }
-
-    console.log('Enviando para o servidor:');
-    for (let [key, value] of formData.entries()) {
-        console.log(key, value);
-    }
-
-    
-
-    try {
-      const response = await fetch("/submit-form", {
-        method: 'POST',
-        body: formData,
-      });
-
-      console.log(response.status, response.statusText);
-
-      if (response.ok) {
-        console.log(`Formulário do fluxo '${currentFluxo}' enviado com sucesso!`);
-        document.getElementById("multiStepForm").style.display = "none";
-        document.getElementById("successMessageText").textContent = `Recebemos sua ${tipoText}. Entraremos em contato em breve.`;
-        document.getElementById("successMessage").classList.add("active");
-      }
-
-    } catch (error) {
-      console.error("Falha ao enviar o formulário:", error);
-    } finally {
-      submitButton.disabled = false;
-      submitButton.innerHTML = originalButtonText;
-    }
-  };
-
-  form.addEventListener("submit", window.formSubmitHandler);
-
-  handleColaboradorValidation();
-
-  // --- Configuração dos Listeners ---
-
-  // Mapeia os IDs dos selects para suas respectivas configurações de toggle
-  const toggleConfigs = {
-    'renovSeguradora': { container: 'outraSeguradoraContainer', input: 'outraSeguradoraNome' },
-    'endossoSeguradora': { container: 'endossoOutraSeguradoraContainer', input: 'endossoOutraSeguradoraNome' },
-    'segundaViaTipoDoc': { container: 'segundaViaOutroContainer', input: 'segundaViaOutroNome' },
-    'segTrabalhadas': { container: 'seguradoraContainer', input: 'seguradoraNome', value: 'Outra' }
-  };
-
-  // Adiciona listeners para os campos de toggle
-  for (const selectId in toggleConfigs) {
-    const el = document.getElementById(selectId);
-    if (el) {
-      const config = toggleConfigs[selectId];
-      el.addEventListener('change', () => toggleOutroCampo(selectId, config.container, config.input, config.value || 'outra'));
-    }
-  }
-
-  // Outros listeners
-  const estipuQuestionSelect = document.getElementById("estipuQuestion");
-  if (estipuQuestionSelect) {
-    estipuQuestionSelect.addEventListener("change", handleDadosEstipVisibility);
-  }
-
-  const produtosSelect = document.getElementById("produtos");
-  if (produtosSelect) {
-    produtosSelect.addEventListener("change", () => {
-      applyProductsVisibility();
-      toggleObservacaoAPP();
-    });
-  }
-  const rcfSelect = document.getElementById("valorRCF_select");
-  if (rcfSelect) rcfSelect.addEventListener("change", handleRcfVisibility);
-  const appSelect = document.getElementById("valorAPP_select");
-  if (appSelect) appSelect.addEventListener("change", handleAppVisibility);
-  document.querySelectorAll('input[name="seguradoEstrangeiro"]').forEach((r) => r.addEventListener("change", applyEstipulanteVisibility));
-  document.querySelectorAll('input[name="seguradoPPE"]').forEach((r) => r.addEventListener("change", applyEstipulanteVisibility));
-  document.querySelectorAll('input[name="tigoClube"]').forEach((r) => r.addEventListener("change", toggleTigoClubeAdesao));
-  
-  const codigo = document.getElementById('codigo');
-  if (codigo) {
-    codigo.addEventListener('blur', buscar);
-    codigo.addEventListener('keydown', function(event) {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        buscar();
-      }
-    });
-  }
-
-  const seguradoCepInput = document.getElementById('segurado_cep');
-  if (seguradoCepInput) {
-    seguradoCepInput.addEventListener('keydown', function(event) {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        buscarCep();
-      }
-    });
-  }
-
-  // Remove erro on-input
-  document.querySelectorAll("input, select, textarea").forEach((input) => {
-    input.addEventListener("input", () => input.classList.remove("is-invalid"));
-    input.addEventListener("change", () => input.classList.remove("is-invalid"));
-  });
-
-  // --- Inicialização da UI ---
-  // Chama todas as funções de visibilidade para garantir o estado correto ao renderizar
-  applyProductsVisibility();
-  for (const selectId in toggleConfigs) {
-      const config = toggleConfigs[selectId];
-      toggleOutroCampo(selectId, config.container, config.input, config.value || 'outra');
-  }
-  handleRcfVisibility();
-  handleAppVisibility();
-  applyEstipulanteVisibility();
-  toggleTigoClubeAdesao();
-  handleDadosEstipVisibility(); // Adicionado para controlar a visibilidade dos dados do estipulante
-
-  // Lógica para mostrar/esconder segs_trabalhadas_container
-  const segsTrabalhadasContainer = document.getElementById('segs_trabalhadas_container');
-  if (segsTrabalhadasContainer) {
-    if (formDataStorage.tipoSolicitante === 'colaborador') {
-      segsTrabalhadasContainer.classList.remove('d-none');
-    } else {
-      segsTrabalhadasContainer.classList.add('d-none');
-    }
-  } 
-
-  if (activeSteps[currentStep]?.template === 'renovacao_confirmar') {
-    populateRenovacaoConfirmacao();
-  }
-
-  const segTrabalhadasSelect = document.getElementById('segTrabalhadas');
-  if (segTrabalhadasSelect) {
-    new MultiSelectTag('segTrabalhadas', {
-      maxSelection: 6,
-      required: true,
-      placeholder: 'Seguradoras'
-    });
-  }
-}
-
-function applyProductsVisibility() {
-  const produtosSelect = document.getElementById("produtos");
-  if (!produtosSelect) return;
-  const selectedProduct = produtosSelect.value;
-
-  const fieldsContainer = document.getElementById("rcf_app_fields");
-  if (!fieldsContainer) return;
-
-  const coberturaRCF = document.getElementById("coberturaRCF");
-  const coberturaAPP = document.getElementById("coberturaAPP");
-  const qtdParcelas = document.getElementById("qtdParcelas");
-  const segTrabalhadas = document.getElementById("segTrabalhadas");
-
-  const isAuto = selectedProduct === 'auto';
-
-  fieldsContainer.style.display = isAuto ? 'none' : 'block';
-  
-  if (qtdParcelas) qtdParcelas.required = !isAuto;
-  if (segTrabalhadas) segTrabalhadas.required = !isAuto;
-
-  if (!isAuto) {
-    const showRCF = selectedProduct === 'rcf' || selectedProduct === 'rcf_app';
-    const showAPP = selectedProduct === 'app' || selectedProduct === 'rcf_app';
-
-    if (coberturaRCF) {
-        coberturaRCF.style.display = showRCF ? 'block' : 'none';
-        document.getElementById('valorRCF_select').required = showRCF;
-        if (showRCF) handleRcfVisibility();
-    }
-    
-    if (coberturaAPP) {
-        coberturaAPP.style.display = showAPP ? 'block' : 'none';
-        document.getElementById('valorAPP_select').required = showAPP;
-        if (showAPP) handleAppVisibility();
-    }
-  } else {
-    // Garante que os campos de RCF e APP não sejam obrigatórios quando for auto
-    if (coberturaRCF) document.getElementById('valorRCF_select').required = false;
-    if (coberturaAPP) document.getElementById('valorAPP_select').required = false;
-  }
-}
-
-function toggleObservacaoAPP() {
-  const observacaoAPP = document.getElementById('observacaoAPP');
-  if (!observacaoAPP) return;
-
-  const produtos = document.getElementById('produtos')?.value;
-  if (currentFluxo === 'nova' && (produtos === 'app' || produtos === 'rcf_app')) {
-    observacaoAPP.style.display = 'block';
-  } else {
-    observacaoAPP.style.display = 'none';
-  }
-}
-
-function applyEstipulanteVisibility() {
-    const estrangeiroSim = document.getElementById("seguradoEstrangeiroSim");
-    const blocoEstrangeiro = document.getElementById("seguradoBlocoEstrangeiro");
-    if (estrangeiroSim && blocoEstrangeiro) {
-        blocoEstrangeiro.style.display = estrangeiroSim.checked ? "" : "none";
-        document.getElementById("seguradoPais").required = estrangeiroSim.checked;
-        document.getElementById("seguradoTempoPais").required = estrangeiroSim.checked;
-        document.getElementById("seguradoPaisResidencia").required = estrangeiroSim.checked;
-    }
-
-    const ppeSim = document.getElementById("seguradoPPESim");
-    const blocoPPE = document.getElementById("seguradoBlocoPPE");
-    if (ppeSim && blocoPPE) {
-        blocoPPE.style.display = ppeSim.checked ? "" : "none";
-        document.getElementById("seguradoPPENome").required = ppeSim.checked;
-        document.getElementById("seguradoPPECPF").required = ppeSim.checked;
-        document.getElementById("seguradoPPEGrauRelacionamento").required = ppeSim.checked;
-    }
-}
-
-function handleAppVisibility() {
-  const appSelect = document.getElementById("valorAPP_select");
-  const appOutro = document.getElementById("valorAPP_outro");
-  const blocoAPP = document.getElementById("coberturaAPP");
-  if (!appSelect || !appOutro || !blocoAPP) return;
-
-  const isBlockVisible = blocoAPP.style.display !== 'none';
-
-  if (appSelect.value === 'outro') {
-    appOutro.style.display = 'block';
-    appOutro.required = isBlockVisible;
-    appSelect.required = false;
-  } else {
-    appOutro.style.display = 'none';
-    appOutro.required = false;
-    appOutro.value = '';
-    appSelect.required = isBlockVisible;
-  }
-}
-
-function handleRcfVisibility() {
-  const rcfSelect = document.getElementById("valorRCF_select");
-  const rcfOutro = document.getElementById("valorRCF_outro");
-  const blocoRCF = document.getElementById("coberturaRCF");
-  if (!rcfSelect || !rcfOutro || !blocoRCF) return;
-
-  const isBlockVisible = blocoRCF.style.display !== 'none';
-
-  if (rcfSelect.value === 'outro') {
-    rcfOutro.style.display = 'block';
-    rcfOutro.required = isBlockVisible;
-    rcfSelect.required = false;
-  } else {
-    rcfOutro.style.display = 'none';
-    rcfOutro.required = false;
-    rcfOutro.value = '';
-    rcfSelect.required = isBlockVisible;
-  }
-}
-
-function toggleOutroCampo(selectId, containerId, inputId, triggerValue = 'outro') {
-  const select = document.getElementById(selectId);
-  const container = document.getElementById(containerId);
-  const input = document.getElementById(inputId);
-
-  if (!select || !container || !input) {
-    return;
-  }
-
-  const shouldShow = select.value === triggerValue;
-
-  container.style.display = shouldShow ? 'block' : 'none';
-  input.required = shouldShow;
-
-  if (!shouldShow) {
-    input.value = '';
-    input.classList.remove('is-invalid');
-  }
-}
-
-
-function applyProductsVisibility() {
-  const produtos = document.getElementById("produtos")?.value;
-  const blocoRCF = document.getElementById("coberturaRCF");
-  const blocoAPP = document.getElementById("coberturaAPP");
-  if (!blocoRCF || !blocoAPP) return;
-
-  // Esconde os blocos por padrão
-  blocoRCF.style.display = "none";
-  blocoAPP.style.display = "none";
-
-  // Mostra os blocos conforme a seleção de produtos
-  if (produtos === "rcf" || produtos === "rcf_app") {
-    blocoRCF.style.display = "";
-  }
-  if (produtos === "app" || produtos === "rcf_app") {
-    blocoAPP.style.display = "";
-  }
-
-  // Atualiza a validação de 'required' após mudar a visibilidade
-  handleRcfVisibility();
-  handleAppVisibility();
-}
-
-function applyPessoaTipo() {
-  const pfRadio = document.getElementById("pf");
-  if (!pfRadio) return;
-
-  const pf = pfRadio.checked;
-  const blocoPF = document.getElementById("blocoPF");
-  const blocoPJ = document.getElementById("blocoPJ");
-  blocoPF.style.display = pf ? "" : "none";
-  blocoPJ.style.display = pf ? "none" : "";
-
-  document.getElementById("segNomePF").required = pf;
-  document.getElementById("segCPF").required = pf;
-  document.getElementById("segRazao").required = !pf;
-  document.getElementById("segCNPJ").required = !pf;
-}
-
-function toggleAuxiliares(checked) {
-  const container = document.getElementById('auxiliaresContainer');
-  if (container) {
-    container.style.display = checked ? 'block' : 'none';
-    document.getElementById('aux1Nome').required = checked;
-    document.getElementById('aux1CPF').required = checked;
-    document.getElementById('aux1CNH').required = checked;
-  }
-}
-
-function toggleAuxiliar2(checked) {
-  const container = document.getElementById('auxiliar2Container');
-  if (container) {
-    container.style.display = checked ? 'block' : 'none';
-    document.getElementById('aux2Nome').required = checked;
-    document.getElementById('aux2CPF').required = checked;
-    document.getElementById('aux2CNH').required = checked;
-  }
-}
-
-function toggleTigoClubeAdesao() {
-  const tigoClubeSim = document.getElementById("tigoClubeSim");
-  const adesaoContainer = document.getElementById("tigoClubeAdesaoContainer");
-  const adesaoInput = document.getElementById("tigoClubeAdesao");
-
-  if (tigoClubeSim && adesaoContainer && adesaoInput) {
-    const show = tigoClubeSim.checked;
-    adesaoContainer.style.display = show ? 'block' : 'none';
-    adesaoInput.required = show;
-  }
-}
-
-function handleDadosEstipVisibility() {
-  const dadosEstipDiv = document.getElementById('dados_estip');
-  if (!dadosEstipDiv) return;
-
-  const tipoSolicitante = formDataStorage.tipoSolicitante;
-  const estipuQuestion = document.getElementById('estipuQuestion')?.value;
-
-  const isEstipulante = (tipoSolicitante === 'estipulante');
-  const isColaboradorComEstip = (tipoSolicitante === 'colaborador' && estipuQuestion === 'Sim');
-
-  if (isEstipulante || isColaboradorComEstip) {
-    dadosEstipDiv.classList.remove('d-none');
-  } else {
-    dadosEstipDiv.classList.add('d-none');
-  }
-}
-
-function populateRenovacaoConfirmacao() {
-  // Dados da Apólice Anterior
-  document.getElementById('displayRenovApolice').textContent = document.getElementById('renovApolice')?.value || 'Não informado';
-  document.getElementById('displayRenovVencimento').textContent = document.getElementById('renovVencimento')?.value || 'Não informado';
-  
-  const seguradoraVencendo = document.getElementById('renovSeguradora')?.value;
-  document.getElementById('displayRenovSeguradora').textContent = seguradoraVencendo === 'outra' ? 'Outra' : (seguradoraVencendo || 'Não informado');
-
-  const displayOutraSeguradora = document.getElementById('displayRenovOutraSeguradora');
-  const displayOutraSeguradoraNome = document.getElementById('displayRenovOutraSeguradoraNome');
-  if (seguradoraVencendo === 'outra' && displayOutraSeguradora && displayOutraSeguradoraNome) {
-    displayOutraSeguradora.style.display = 'block';
-    displayOutraSeguradoraNome.textContent = document.getElementById('outraSeguradoraNome')?.value || 'Não informado';
-  } else if (displayOutraSeguradora) {
-    displayOutraSeguradora.style.display = 'none';
-  }
-
-  // Dados do Segurado
-  const tipoPessoa = document.querySelector('input[name="tipoPessoa"]:checked')?.value;
-  document.getElementById('displaySegTipoPessoa').textContent = tipoPessoa === 'pf' ? 'Pessoa Física' : 'Pessoa Jurídica';
-
-  if (tipoPessoa === 'pf') {
-    document.getElementById('displaySegNomeRazao').textContent = document.getElementById('segNomePF')?.value || 'Não informado';
-    document.getElementById('displaySegDocumento').textContent = document.getElementById('segCPF')?.value || 'Não informado';
-  } else {
-    document.getElementById('displaySegNomeRazao').textContent = document.getElementById('segRazao')?.value || 'Não informado';
-    document.getElementById('displaySegDocumento').textContent = document.getElementById('segCNPJ')?.value || 'Não informado';
-  }
-}
-
-async function buscarCep(prefix) {
-  // Define os IDs dos campos com base no prefixo
-  const isEstipulante = prefix === 'estipulante';
-  const isColaborador = prefix === 'colaborador';
-
-  const cepId = isEstipulante ? 'cep' : (isColaborador ? 'colaborador_cep' : 'segurado_cep');
-  const logradouroId = isEstipulante ? 'logradouro' : (isColaborador ? 'colaborador_logradouro' : 'segurado_logradouro');
-  const bairroId = isEstipulante ? 'bairro' : (isColaborador ? 'colaborador_bairro' : 'segurado_bairro');
-  const cidadeId = isEstipulante ? 'cidade' : (isColaborador ? 'colaborador_cidade' : 'segurado_cidade');
-  const estadoId = isEstipulante ? 'estado' : (isColaborador ? 'colaborador_estado' : 'segurado_estado');
-
-  const cepInput = document.getElementById(cepId);
-  const addressFields = [
-    document.getElementById(logradouroId),
-    document.getElementById(bairroId),
-    document.getElementById(cidadeId),
-    document.getElementById(estadoId),
-  ].filter(Boolean); // Filtra campos que possam não existir
-
-  const cep = cepInput.value.replace(/\D/g, '');
-
-  // Limpa estado de erro e valores antigos
-  cepInput.classList.remove('is-invalid');
-  const errorDiv = cepInput.closest('.input-group').querySelector('.invalid-feedback');
-  if(errorDiv) errorDiv.textContent = 'Informe um CEP válido.'; // Restaura mensagem padrão
-  addressFields.forEach(field => { field.value = ''; });
-
-  if (cep.length !== 8) {
-    return; // Não busca se o CEP for inválido
-  }
-
-  // Ativa o estado de "carregando"
-  addressFields.forEach(field => {
-    field.placeholder = 'Carregando...';
-    field.disabled = true;
-  });
-  cepInput.disabled = true; // Desabilita o campo de CEP também
-
-  const url = `https://viacep.com.br/ws/${cep}/json/`;
-
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-
-    if (data.erro) {
-      cepInput.classList.add('is-invalid');
-      if(errorDiv) errorDiv.textContent = 'CEP não encontrado.';
-      addressFields.forEach(field => { field.value = ''; }); // Limpa campos em caso de erro
-      return;
-    }
-
-    // Preenche os campos com os dados da API
-    document.getElementById(logradouroId).value = data.logradouro;
-    document.getElementById(bairroId).value = data.bairro;
-    document.getElementById(cidadeId).value = data.localidade;
-    document.getElementById(estadoId).value = data.uf;
-
-  } catch (error) {
-    console.error('Erro ao buscar CEP:', error);
-    cepInput.classList.add('is-invalid');
-    if(errorDiv) errorDiv.textContent = 'Erro ao buscar CEP.';
-  } finally {
-    // Desativa o estado de "carregando"
-    addressFields.forEach(field => {
-      field.placeholder = '';
-      field.disabled = false;
-    });
-    cepInput.disabled = false;
-  }
-}
-
-// =================================================================
-// 7. CHAMADA AO CSV DE ESTIPULANTES
-// =================================================================
-
-async function buscar() {
-    let codigo = '';
-    if (document.getElementById('codigo')) {
-      codigo = document.getElementById('codigo').value;
-    }
-    
-    const resultadoDiv = document.getElementById('resultadoEstipulante');
-
-    if (!codigo) {
-        resultadoDiv.innerHTML = `<div class="alert alert-warning">Digite um Código válido.</div>`;
-        return;
-    }
-
-    resultadoDiv.innerHTML = `<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Buscando...</span></div>`;
-
-    try {
-        // 1. Buscar e processar ambos os CSVs em paralelo
-        const [rcfResponse, appResponse] = await Promise.all([
-            fetch('./data/estipulantes_rcf.csv').catch(e => e),
-            fetch('./data/estipulantes_app.csv').catch(e => e)
-        ]);
-
-        let achados_rcf = [];
-        let achados_app = [];
-        let estipulanteNome = '';
-
-        // Processa RCF
-        if (rcfResponse.ok) {
-            const texto_rcf = await rcfResponse.text();
-            const csv_rcf = Papa.parse(texto_rcf, { header: true, skipEmptyLines: true }).data;
-            achados_rcf = csv_rcf.filter(l => l.codigo === codigo);
-        } else {
-            console.error('Falha ao carregar estipulantes_rcf.csv');
-        }
-
-        // Processa APP
-        if (appResponse.ok) {
-            const texto_app = await appResponse.text();
-            const csv_app = Papa.parse(texto_app, { header: true, skipEmptyLines: true, delimiter: ';' }).data;
-            achados_app = csv_app.filter(l => l.codigo === codigo);
-        } else {
-            console.error('Falha ao carregar estipulantes_app.csv');
-        }
-
-        if (achados_rcf.length === 0 && achados_app.length === 0) {
-            resultadoDiv.innerHTML = `<div class="alert alert-danger">Estipulante não encontrado para o Código informado.</div>`;
-            return;
-        }
-        
-        // Pega o nome do estipulante de qualquer um dos resultados
-        estipulanteNome = (achados_rcf.length > 0) ? achados_rcf[0].estipulante : achados_app[0].estipulante;
-
-        let html = `
-            <div class="row mb-3">
-                <div class="col-12 col-sm-auto d-flex flex-wrap align-items-baseline">
-                    <span class="fw-bold text-break">${estipulanteNome}</span>
-                </div>
-            </div>
-        `;
-
-        // Monta o dropdown de RCF
-        if (achados_rcf.length > 0) {
-            html += `
-                <div class="mb-3">
-                    <label for="rcf_policy_select" class="form-label"><strong>RCF - Dano Material (DM)</strong></label>
-                    <select id="rcf_policy_select" class="form-select">
-                        <option value=''>Nenhuma</option>
-                        ${achados_rcf.map(p => `<option value='${JSON.stringify(p)}'>${p.apolice} - ${p.premio}</option>`).join('')}
-                    </select>
-                </div>`;
-        }
-
-        // Monta o dropdown de APP
-        if (achados_app.length > 0) {
-            html += `
-                <div class="mb-3">
-                    <label for="app_policy_select" class="form-label"><strong>APP</strong></label>
-                    <select id="app_policy_select" class="form-select">
-                        <option value=''>Nenhuma</option>
-                        ${achados_app.map(p => `<option value='${JSON.stringify(p)}'>${p.apolice} - ${p.premio}</option>`).join('')}
-                    </select>
-                </div>`;
-        }
-
-        resultadoDiv.innerHTML = html;
-
-    } catch (error) {
-        console.error('Erro ao buscar dados do estipulante:', error);
-        resultadoDiv.innerHTML = `<div class="alert alert-danger">Erro ao carregar os dados. Tente novamente.</div>`;
-    }
-}
-
-// =================================================================
-// 8. BUSCA VEICULO POR PLACA (API EXTERNA)
-// =================================================================
-
-// Validação (antigo padrão + Mercosul)
-const PLATE_REGEX = /^(?:[A-Z]{3}\d{4}|[A-Z]{3}\d[A-Z]\d{2})$/i;
-
-// cache na aba (evita pagar por requisições repetidas na mesma sessão)
-const plateCache = new Map(); 
-let lastPlateSuccess = null;  
-
-function normalizePlate(str) {
-  return (str || '').replace(/[^A-Z0-9]/gi, '').toUpperCase();
-}
-
-function isValidPlate(placa) {
-  return PLATE_REGEX.test(placa);
-}
-
-function setVal(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.value = val ?? '';
-}
-
-function fillFromApiData(apiData) {
-  const dv = apiData?.dados?.informacoes_veiculo?.dados_veiculo ?? {};
-  setVal('veiChassi', dv.chassi);
-  setVal('veiFab', dv.marca);
-  setVal('veiModelo', dv.modelo);
-  setVal('veiAno', dv.ano_modelo ?? dv.ano_fabricacao ?? dv.ano_frabricacao ?? '');
-}
-
-function buscaVeiculo() {
-  const veiculoInput = document.getElementById('veiPlaca');
-  if (!veiculoInput) return;
-  if (veiculoInput.dataset.listenerAttached) return;
-
-  // quando o usuário alterar a placa, marcamos como "desatualizado"
-  veiculoInput.addEventListener('input', () => {
-    const placaAtual = normalizePlate(veiculoInput.value);
-    if (placaAtual !== lastPlateSuccess) {
-      // opcional: limpar campos para sinalizar que precisa consultar de novo
-      setVal('veiChassi', '');
-      setVal('veiFab', '');
-      setVal('veiModelo', '');
-      setVal('veiAno', '');
-    }
-  });
-
-  veiculoInput.addEventListener('blur', async () => {
-    const placa = normalizePlate(veiculoInput.value);
-    if (!isValidPlate(placa)) return;             
-
-    const parent = veiculoInput.parentElement;
-    const oldFeedback = parent.querySelector('.form-text');
-    if (oldFeedback) oldFeedback.remove();
-
-    const feedbackEl = document.createElement('div');
-    feedbackEl.className = 'form-text text-muted ms-2';
-    feedbackEl.textContent = 'Buscando dados...';
-    parent.appendChild(feedbackEl);
-
-    try {
-      // 1) tenta pegar do cache do front
-      if (plateCache.has(placa)) {
-        const cached = plateCache.get(placa);
-        fillFromApiData(cached);
-        lastPlateSuccess = placa;
-        feedbackEl.remove();
-        return;
-      }
-
-      const response = await fetch(`/consulta_placa?placa=${encodeURIComponent(placa)}`);
-      const data = await response.json();
-
-      if (response.ok && data?.status === 'ok') {
-        plateCache.set(placa, data); 
-        fillFromApiData(data);
-        lastPlateSuccess = placa;
-        feedbackEl.remove();
-      } else {
-        feedbackEl.textContent = (data?.mensagem || data?.message || 'Placa não encontrada.');
-        feedbackEl.className = 'form-text text-danger ms-2';
-      }
-    } catch (error) {
-      console.error('Falha na requisição para buscar veículo:', error);
-      feedbackEl.textContent = 'Erro na consulta.';
-      feedbackEl.className = 'form-text text-danger ms-2';
-    }
-  });
-
-  veiculoInput.dataset.listenerAttached = 'true';
-}
-
-
-
-// Listener inicial para o tipo de solicitação
-document.getElementById("tipoSolicitacao").addEventListener("change", (e) => {
-  renderizarFluxo(e.target.value);
-});
-
-// Inicialização da página
-function inicializarFormulario(fluxoInicial = null) {
-  fetchColaboradores();
-  resetForm(); // Garante que o estado está limpo
-  if (fluxoInicial && fluxosConfig[fluxoInicial]) {
-    document.getElementById('tipoSolicitacao').value = fluxoInicial;
-    renderizarFluxo(fluxoInicial);
-  }
-}
-
-// Para iniciar com a tela de seleção, chame: inicializarFormulario();
-// Para iniciar diretamente com um fluxo, chame: inicializarFormulario('nova');
-inicializarFormulario();
