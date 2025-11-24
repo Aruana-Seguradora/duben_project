@@ -9,21 +9,26 @@ function initializeDeclarativeRules() {
   const ruleTriggers = document.querySelectorAll('[data-rule]');
 
   const applyRule = (triggerElement) => {
-    // Lida com múltiplos gatilhos no mesmo elemento, separados por ';'
     const rules = triggerElement.dataset.rule.split(';');
+    const targetsVisibility = {};
 
+    // Initialize all targets controlled by this trigger to hidden by default.
+    rules.forEach(rule => {
+      const targetId = rule.split(':')[0];
+      if (targetId) {
+        targetsVisibility[targetId] = false;
+      }
+    });
+
+    // Evaluate rules to determine which targets should be visible.
     rules.forEach(rule => {
       const parts = rule.split(':');
       if (parts.length !== 2) return;
 
       const targetId = parts[0];
       const triggerValue = parts[1];
-      const targetElement = document.getElementById(targetId);
-
-      if (!targetElement) return;
-
+      
       let isTriggered = false;
-      // Verifica a condição de disparo da regra
       if (triggerElement.type === 'radio') {
         if (triggerValue === 'checked') {
           isTriggered = triggerElement.checked;
@@ -31,37 +36,71 @@ function initializeDeclarativeRules() {
           isTriggered = triggerElement.checked && triggerElement.value === triggerValue;
         }
       } else if (triggerElement.type === 'checkbox') {
-        isTriggered = triggerElement.checked; // Para checkboxes, 'checked' é o gatilho implícito
-      } else { // Para selects e outros inputs
+        isTriggered = triggerElement.checked;
+      } else { // Selects and other inputs
         isTriggered = triggerElement.value === triggerValue;
       }
 
-      // Aplica a visibilidade
-      targetElement.style.display = isTriggered ? '' : 'none';
+      // If any rule for a target is triggered, it should be visible.
+      if (isTriggered) {
+        targetsVisibility[targetId] = true;
+      }
+    });
 
-      // Gerencia o atributo 'required' dos inputs dentro do alvo
+    // Apply the final visibility state to each target.
+    for (const targetId in targetsVisibility) {
+      const targetElement = document.getElementById(targetId);
+      if (!targetElement) continue;
+
+      const shouldBeVisible = targetsVisibility[targetId];
+      targetElement.style.display = shouldBeVisible ? '' : 'none';
+
       const inputs = targetElement.querySelectorAll('input, select, textarea');
       inputs.forEach(input => {
-        // Armazena o estado original de 'required' para não perder a informação
         if (!input.hasAttribute('data-required-original')) {
           input.setAttribute('data-required-original', input.required);
         }
-
         const wasOriginallyRequired = input.getAttribute('data-required-original') === 'true';
-        input.required = isTriggered && wasOriginallyRequired;
-
-        // Limpa o estado de erro se o campo for escondido
-        if (!isTriggered) {
+        input.required = shouldBeVisible && wasOriginallyRequired;
+        if (!shouldBeVisible) {
           input.classList.remove('is-invalid');
         }
       });
-    });
+    }
   };
 
-  // Anexa o listener e executa a regra uma vez para definir o estado inicial
+  const processedRadioGroups = new Set();
+
   ruleTriggers.forEach(trigger => {
-    trigger.addEventListener('change', () => applyRule(trigger));
-    applyRule(trigger); // Garante o estado correto na renderização inicial
+    if (trigger.type === 'radio') {
+      const groupName = trigger.name;
+      if (processedRadioGroups.has(groupName)) {
+        return; // Skip if we've already set up listeners for this group.
+      }
+
+      const radioGroup = document.querySelectorAll(`input[name="${groupName}"]`);
+      const triggersInGroup = Array.from(radioGroup).filter(r => r.hasAttribute('data-rule'));
+
+      radioGroup.forEach(radio => {
+        radio.addEventListener('change', () => {
+          // When any radio changes, re-evaluate the rules of all triggers in the group.
+          triggersInGroup.forEach(applyRule);
+        });
+      });
+
+      processedRadioGroups.add(groupName);
+      // Initial application for all triggers in the group.
+      triggersInGroup.forEach(applyRule);
+
+    } else {
+      // Logic for other input types (select, checkbox, etc.).
+      const eventType = trigger.tagName === 'SELECT' ? 'change' : 'input';
+      trigger.addEventListener(eventType, () => applyRule(trigger));
+      if (eventType !== 'change') {
+          trigger.addEventListener('change', () => applyRule(trigger));
+      }
+      applyRule(trigger); // Initial application.
+    }
   });
 }
 
@@ -436,15 +475,9 @@ function addListenersAndMasks() {
   form.addEventListener('submit', window.formSubmitHandler);
 
   handleColaboradorValidation();
+  setupParceiroStepListeners();
 
   // --- Configuração dos Listeners ---
-  const produtosSelect = document.getElementById('produtos');
-  if (produtosSelect) {
-    produtosSelect.addEventListener('change', () => {
-      applyProductsVisibility();
-      toggleObservacaoAPP();
-    });
-  }
   
   const codigo = document.getElementById('codigo');
   if (codigo) {
@@ -477,186 +510,333 @@ function addListenersAndMasks() {
 
   // --- Inicialização da UI ---
   // Chama todas as funções de visibilidade para garantir o estado correto ao renderizar
-  applyProductsVisibility();
+
   handleDadosEstipVisibility();
-  toggleObservacaoAPP();
   
-  // NOVO: Inicializa todas as regras declarativas
-  initializeDeclarativeRules();
-
-  const segTrabalhadasSelect = document.getElementById('segTrabalhadas');
-  if (segTrabalhadasSelect) {
-    new MultiSelectTag('segTrabalhadas', {
-      maxSelection: 6,
-      placeholder: 'Seguradoras',
-    });
-  }
-}
-
-function applyProductsVisibility() {
-  const produtosSelect = document.getElementById('produtos');
-  if (!produtosSelect) return;
-  const selectedProduct = produtosSelect.value;
-
-  const fieldsContainer = document.getElementById('rcf_app_fields');
-  if (!fieldsContainer) return;
-
-  const coberturaRCF = document.getElementById('coberturaRCF');
-  const coberturaAPP = document.getElementById('coberturaAPP');
-  const qtdParcelas = document.getElementById('qtdParcelas');
-  // const segTrabalhadas = document.getElementById('segTrabalhadas');
-
-  const isAuto = selectedProduct === 'auto';
-
-  fieldsContainer.style.display = isAuto ? 'none' : 'block';
-
-  if (qtdParcelas) qtdParcelas.required = !isAuto;
-
-  if (!isAuto) {
-    const showRCF = selectedProduct === 'rcf' || selectedProduct === 'rcf_app';
-    const showAPP = selectedProduct === 'app' || selectedProduct === 'rcf_app';
-
-    if (coberturaRCF) {
-      coberturaRCF.style.display = showRCF ? 'block' : 'none';
-      document.getElementById('valorRCF_select').required = showRCF;
-    }
     
-    if (coberturaAPP) {
-      coberturaAPP.style.display = showAPP ? 'block' : 'none';
-      document.getElementById('valorAPP_select').required = showAPP;
+  
+    // NOVO: Inicializa todas as regras declarativas
+  
+    initializeDeclarativeRules();
+  
+  
+  
+    // NOVO: Aplica visibilidade com base no fluxo atual
+  
+    applyFluxoVisibility();
+  
+  
+  
+    const segTrabalhadasSelect = document.getElementById('segTrabalhadas');
+  
+    if (segTrabalhadasSelect) {
+  
+      new MultiSelectTag('segTrabalhadas', {
+  
+        maxSelection: 6,
+  
+        placeholder: 'Seguradoras',
+  
+      });
+  
     }
-  } else {
-    if (coberturaRCF) document.getElementById('valorRCF_select').required = false;
-    if (coberturaAPP) document.getElementById('valorAPP_select').required = false;
+  
   }
-}
-
-function toggleObservacaoAPP() {
-  const observacaoAPP = document.getElementById('observacaoAPP');
-  if (!observacaoAPP) return;
-
-  const produtos = document.getElementById('produtos')?.value;
-  if (
-    currentFluxo === 'nova' &&
-    (produtos === 'app' || produtos === 'rcf_app')
-  ) {
-    observacaoAPP.style.display = 'block';
-  } else {
-    observacaoAPP.style.display = 'none';
-  }
-}
-
-function handleDadosEstipVisibility() {
-  const dadosEstipDiv = document.getElementById('dados_estip');
-  if (!dadosEstipDiv) return;
-
-  const tipoSolicitante = formDataStorage.tipoSolicitante;
-  const estipuQuestion = formDataStorage.estipuQuestion;
-
-  const isEstipulante = tipoSolicitante === 'estipulante';
-  const isColaboradorComEstip = tipoSolicitante === 'colaborador' && estipuQuestion === 'Sim';
-
-  console.log(estipuQuestion);
-
-  if (isEstipulante || isColaboradorComEstip) {
-    dadosEstipDiv.classList.remove('d-none');
-  } else {
-    dadosEstipDiv.classList.add('d-none');
-  }
-}
-
-async function buscarCep() {
-  const cepInput = document.getElementById('segurado_cep');
-  if(!cepInput) return;
-
-  const cep = cepInput.value.replace(/\D/g, '');
-
-  cepInput.classList.remove('is-invalid');
-  const errorDiv = cepInput.closest('.input-group')?.querySelector('.invalid-feedback');
-  if (errorDiv) errorDiv.textContent = 'Informe um CEP válido.';
-
-  const addressFields = {
-    logradouro: document.getElementById('segurado_logradouro'),
-    bairro: document.getElementById('segurado_bairro'),
-    cidade: document.getElementById('segurado_cidade'),
-    estado: document.getElementById('segurado_estado'),
-  };
-
-  Object.values(addressFields).forEach(field => { if(field) field.value = ''; });
-
-  if (cep.length !== 8) return;
-
-  Object.values(addressFields).forEach(field => {
-    if(field) {
-      field.placeholder = 'Carregando...';
-      field.disabled = true;
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  function handleDadosEstipVisibility() {
+  
+    const dadosEstipDiv = document.getElementById('dados_estip');
+  
+    if (!dadosEstipDiv) return;
+  
+  
+  
+    const tipoSolicitante = formDataStorage.tipoSolicitante;
+  
+    const estipuQuestion = formDataStorage.estipuQuestion;
+  
+  
+  
+    const isEstipulante = tipoSolicitante === 'estipulante';
+  
+    const isColaboradorComEstip = tipoSolicitante === 'colaborador' && estipuQuestion === 'Sim';
+  
+  
+  
+  
+  
+  
+  
+    if (isEstipulante || isColaboradorComEstip) {
+  
+      dadosEstipDiv.classList.remove('d-none');
+  
+    } else {
+  
+      dadosEstipDiv.classList.add('d-none');
+  
     }
-  });
-  cepInput.disabled = true;
-
-  const url = `https://viacep.com.br/ws/${cep}/json/`;
-
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-
-    if (data.erro) {
-      cepInput.classList.add('is-invalid');
-      if (errorDiv) errorDiv.textContent = 'CEP não encontrado.';
-      return;
-    }
-
-    if(addressFields.logradouro) addressFields.logradouro.value = data.logradouro;
-    if(addressFields.bairro) addressFields.bairro.value = data.bairro;
-    if(addressFields.cidade) addressFields.cidade.value = data.localidade;
-    if(addressFields.estado) addressFields.estado.value = data.uf;
-
-  } catch (error) {
-    console.error('Erro ao buscar CEP:', error);
-    cepInput.classList.add('is-invalid');
-    if (errorDiv) errorDiv.textContent = 'Erro ao buscar CEP.';
-  } finally {
+  
+  }
+  
+  
+  
+  async function buscarCep() {
+  
+    const cepInput = document.getElementById('segurado_cep');
+  
+    if(!cepInput) return;
+  
+  
+  
+    const cep = cepInput.value.replace(/\D/g, '');
+  
+  
+  
+    cepInput.classList.remove('is-invalid');
+  
+    const errorDiv = cepInput.closest('.input-group')?.querySelector('.invalid-feedback');
+  
+    if (errorDiv) errorDiv.textContent = 'Informe um CEP válido.';
+  
+  
+  
+    const addressFields = {
+  
+      logradouro: document.getElementById('segurado_logradouro'),
+  
+      bairro: document.getElementById('segurado_bairro'),
+  
+      cidade: document.getElementById('segurado_cidade'),
+  
+      estado: document.getElementById('segurado_estado'),
+  
+    };
+  
+  
+  
+    Object.values(addressFields).forEach(field => { if(field) field.value = ''; });
+  
+  
+  
+    if (cep.length !== 8) return;
+  
+  
+  
     Object.values(addressFields).forEach(field => {
+  
       if(field) {
-        field.placeholder = '';
-        field.disabled = false;
+  
+        field.placeholder = 'Carregando...';
+  
+        field.disabled = true;
+  
       }
+  
     });
-    cepInput.disabled = false;
+  
+    cepInput.disabled = true;
+  
+  
+  
+    const url = `https://viacep.com.br/ws/${cep}/json/`;
+  
+  
+  
+    try {
+  
+      const response = await fetch(url);
+  
+      const data = await response.json();
+  
+  
+  
+      if (data.erro) {
+  
+        cepInput.classList.add('is-invalid');
+  
+        if (errorDiv) errorDiv.textContent = 'CEP não encontrado.';
+  
+        return;
+  
+      }
+  
+  
+  
+      if(addressFields.logradouro) addressFields.logradouro.value = data.logradouro;
+  
+      if(addressFields.bairro) addressFields.bairro.value = data.bairro;
+  
+      if(addressFields.cidade) addressFields.cidade.value = data.localidade;
+  
+      if(addressFields.estado) addressFields.estado.value = data.uf;
+  
+  
+  
+    } catch (error) {
+  
+      console.error('Erro ao buscar CEP:', error);
+  
+      cepInput.classList.add('is-invalid');
+  
+      if (errorDiv) errorDiv.textContent = 'Erro ao buscar CEP.';
+  
+    } finally {
+  
+      Object.values(addressFields).forEach(field => {
+  
+        if(field) {
+  
+          field.placeholder = '';
+  
+          field.disabled = false;
+  
+        }
+  
+      });
+  
+      cepInput.disabled = false;
+  
+    }
+  
   }
-}
-
-/**
- * Aplica regras de visibilidade condicional com base no tipo de solicitante.
- * Lê o atributo `data-visible-when-solicitante`.
- */
-function applyConditionalVisibility() {
-  const tipoSolicitante = formDataStorage.tipoSolicitante;
-  if (!tipoSolicitante) return;
-
-  const conditionalElements = document.querySelectorAll(
-    '[data-visible-when-solicitante]',
-  );
-
-  conditionalElements.forEach(element => {
-    const allowedTypes = element.dataset.visibleWhenSolicitante
-      .split(',')
-      .map(s => s.trim());
-
-    const shouldBeVisible = allowedTypes.includes(tipoSolicitante);
-    element.style.display = shouldBeVisible ? '' : 'none';
-
-    const inputs = element.querySelectorAll('input, select, textarea');
-    inputs.forEach(input => {
-      if (!input.hasAttribute('data-required-original')) {
-        input.setAttribute('data-required-original', input.required);
-      }
-      const wasOriginallyRequired =
-        input.getAttribute('data-required-original') === 'true';
-      input.required = shouldBeVisible && wasOriginallyRequired;
-      if (!shouldBeVisible) {
-        input.classList.remove('is-invalid');
-      }
+  
+  
+  
+  /**
+  
+   * Aplica regras de visibilidade condicional com base no tipo de solicitante.
+  
+   * Lê o atributo `data-visible-when-solicitante`.
+  
+   */
+  
+  function applyConditionalVisibility() {
+  
+    const tipoSolicitante = formDataStorage.tipoSolicitante;
+  
+    if (!tipoSolicitante) return;
+  
+  
+  
+    const conditionalElements = document.querySelectorAll(
+  
+      '[data-visible-when-solicitante]',
+  
+    );
+  
+  
+  
+    conditionalElements.forEach(element => {
+  
+      const allowedTypes = element.dataset.visibleWhenSolicitante
+  
+        .split(',')
+  
+        .map(s => s.trim());
+  
+  
+  
+      const shouldBeVisible = allowedTypes.includes(tipoSolicitante);
+  
+      element.style.display = shouldBeVisible ? '' : 'none';
+  
+  
+  
+      const inputs = element.querySelectorAll('input, select, textarea');
+  
+      inputs.forEach(input => {
+  
+        if (!input.hasAttribute('data-required-original')) {
+  
+          input.setAttribute('data-required-original', input.required);
+  
+        }
+  
+        const wasOriginallyRequired =
+  
+          input.getAttribute('data-required-original') === 'true';
+  
+        input.required = shouldBeVisible && wasOriginallyRequired;
+  
+        if (!shouldBeVisible) {
+  
+          input.classList.remove('is-invalid');
+  
+        }
+  
+      });
+  
     });
-  });
-}
+  
+  }
+  
+  
+  
+  /**
+  
+   * Aplica regras de visibilidade condicional com base no fluxo atual.
+  
+   * Lê o atributo `data-visible-when-fluxo`.
+  
+   */
+  
+  function applyFluxoVisibility() {
+  
+    if (!currentFluxo) return;
+  
+  
+  
+    const conditionalElements = document.querySelectorAll('[data-visible-when-fluxo]');
+  
+  
+  
+    conditionalElements.forEach(element => {
+  
+      const allowedFluxos = element.dataset.visibleWhenFluxo.split(',').map(s => s.trim());
+  
+      
+  
+      const shouldBeVisible = allowedFluxos.includes(currentFluxo);
+  
+      element.style.display = shouldBeVisible ? '' : 'none';
+  
+  
+  
+      const inputs = element.querySelectorAll('input, select, textarea');
+  
+      inputs.forEach(input => {
+  
+        if (!input.hasAttribute('data-required-original')) {
+  
+          input.setAttribute('data-required-original', input.required);
+  
+        }
+  
+        const wasOriginallyRequired = input.getAttribute('data-required-original') === 'true';
+  
+        input.required = shouldBeVisible && wasOriginallyRequired;
+  
+        if (!shouldBeVisible) {
+  
+          input.classList.remove('is-invalid');
+  
+        }
+  
+      });
+  
+    });
+  
+  }
+  
+  

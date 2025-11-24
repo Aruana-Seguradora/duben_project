@@ -405,105 +405,173 @@ function resetForm() {
 // 7. CHAMADA AO CSV DE ESTIPULANTES
 // =================================================================
 
-async function buscar() {
-  let codigo = '';
-  if (document.getElementById('codigo')) {
-    codigo = document.getElementById('codigo').value;
-  }
+let estipulantePolicies = { rcf: [], app: [] };
 
-  const resultadoDiv = document.getElementById('resultadoEstipulante');
+async function buscar() {
+  const codigoInput = document.getElementById('codigo');
+  if (!codigoInput) return;
+  const codigo = codigoInput.value.trim().toUpperCase();
+
+  const loadingDiv = document.getElementById('estipulanteLoading');
+  const errorDiv = document.getElementById('estipulanteError');
+  const coberturaSection = document.getElementById('estipulanteCoberturaSelection');
+  const resultadoFinalDiv = document.getElementById('resultadoFinalEstipulante');
+
+  // Reset UI
+  if(loadingDiv) loadingDiv.style.display = 'block';
+  if(errorDiv) errorDiv.style.display = 'none';
+  if(coberturaSection) coberturaSection.style.display = 'none';
+  if(resultadoFinalDiv) resultadoFinalDiv.style.display = 'none';
 
   if (!codigo) {
-    resultadoDiv.innerHTML = `<div class="alert alert-warning">Digite um Código válido.</div>`;
+    if(errorDiv) {
+      errorDiv.textContent = 'Digite um Código válido.';
+      errorDiv.style.display = 'block';
+    }
+    if(loadingDiv) loadingDiv.style.display = 'none';
     return;
   }
 
-  resultadoDiv.innerHTML = `<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Buscando...</span></div>`;
-
   try {
-    // 1. Buscar e processar ambos os CSVs em paralelo
     const [rcfResponse, appResponse] = await Promise.all([
-      fetch('./data/estipulantes_rcf.csv').catch(e => e),
-      fetch('./data/estipulantes_app.csv').catch(e => e),
+      fetch('./data/estipulantes/estipulantes_rcf.csv').catch(e => e),
+      fetch('./data/estipulantes/estipulantes_app.csv').catch(e => e),
     ]);
+
+    if (!rcfResponse.ok && !appResponse.ok) {
+        throw new Error('Falha ao carregar arquivos de dados dos estipulantes.');
+    }
 
     let achados_rcf = [];
     let achados_app = [];
-    let estipulanteNome = '';
 
-    // Processa RCF
     if (rcfResponse.ok) {
       const texto_rcf = await rcfResponse.text();
-      const csv_rcf = Papa.parse(texto_rcf, {
-        header: true,
-        skipEmptyLines: true,
-      }).data;
-      achados_rcf = csv_rcf.filter(l => l.codigo === codigo);
-    } else {
-      console.error('Falha ao carregar estipulantes_rcf');
+      achados_rcf = Papa.parse(texto_rcf, { header: true, skipEmptyLines: true, delimiter: ',' }).data
+                      .filter(l => l.codigo && l.codigo.toUpperCase() === codigo);
     }
 
-    // Processa APP
     if (appResponse.ok) {
       const texto_app = await appResponse.text();
-      const csv_app = Papa.parse(texto_app, {
-        header: true,
-        skipEmptyLines: true,
-        delimiter: ';',
-      }).data;
-      achados_app = csv_app.filter(l => l.codigo === codigo);
-    } else {
-      console.error('Falha ao carregar estipulantes_app');
+      achados_app = Papa.parse(texto_app, { header: true, skipEmptyLines: true, delimiter: ';' }).data
+                      .filter(l => l.codigo && l.codigo.toUpperCase() === codigo);
     }
+    
+    estipulantePolicies.rcf = achados_rcf;
+    estipulantePolicies.app = achados_app;
 
     if (achados_rcf.length === 0 && achados_app.length === 0) {
-      resultadoDiv.innerHTML = `<div class="alert alert-danger">Estipulante não encontrado para o Código informado.</div>`;
+      if(errorDiv) {
+        errorDiv.textContent = 'Estipulante não encontrado para o Código informado.';
+        errorDiv.style.display = 'block';
+      }
       return;
     }
 
-    // Pega o nome do estipulante de qualquer um dos resultados
-    estipulanteNome =
-      achados_rcf.length > 0
-        ? achados_rcf[0].estipulante
-        : achados_app[0].estipulante;
+    const estipulanteNome = achados_rcf[0]?.estipulante || achados_app[0]?.estipulante;
+    const nomeDisplay = document.getElementById('estipulanteNomeDisplay');
+    if(nomeDisplay) nomeDisplay.textContent = `Estipulante: ${estipulanteNome}`;
 
-    let html = `
-            <div class="row mb-3">
-                <div class="col-12 col-sm-auto d-flex flex-wrap align-items-baseline">
-                    <span class="fw-bold text-break">${estipulanteNome}</span>
-                </div>
-            </div>
-        `;
+    // Popula dropdowns
+    const rcfSelect = document.getElementById('coberturaEstipulanteRCF');
+    const appSelect = document.getElementById('coberturaEstipulanteAPP');
 
-    // Monta o dropdown de RCF
-    if (achados_rcf.length > 0) {
-      html += `
-                <div class="mb-3">
-                    <label for="rcf_policy_select" class="form-label"><strong>RCF - Dano Material (DM)</strong></label>
-                    <select id="rcf_policy_select" class="form-select">
-                        <option value=''>Nenhuma</option>
-                        ${achados_rcf.map(p => `<option value='${JSON.stringify(p)}'>${p.apolice} - ${p.premio}</option>`).join('')}
-                    </select>
-                </div>`;
+    if (rcfSelect) {
+        const rcfValues = [...new Set(achados_rcf.map(p => normalizeCurrency(p.dano_material_DM)))].sort((a, b) => a - b);
+        rcfSelect.innerHTML = '<option value="" selected>Nenhuma</option>';
+        rcfValues.forEach(value => {
+            const option = new Option(value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), value);
+            rcfSelect.add(option);
+        });
     }
 
-    // Monta o dropdown de APP
-    if (achados_app.length > 0) {
-      html += `
-                <div class="mb-3">
-                    <label for="app_policy_select" class="form-label"><strong>APP</strong></label>
-                    <select id="app_policy_select" class="form-select">
-                        <option value=''>Nenhuma</option>
-                        ${achados_app.map(p => `<option value='${JSON.stringify(p)}'>${p.apolice} - ${p.premio}</option>`).join('')}
-                    </select>
-                </div>`;
+    if (appSelect) {
+        const appValues = [...new Set(achados_app.map(p => normalizeCurrency(p.ma_condutor)))].sort((a, b) => a - b);
+        appSelect.innerHTML = '<option value="" selected>Nenhuma</option>';
+        appValues.forEach(value => {
+            const option = new Option(value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), value);
+            appSelect.add(option);
+        });
     }
 
-    resultadoDiv.innerHTML = html;
+    if(coberturaSection) coberturaSection.style.display = 'block';
+
   } catch (error) {
     console.error('Erro ao buscar dados do estipulante:', error);
-    resultadoDiv.innerHTML = `<div class="alert alert-danger">Erro ao carregar os dados. Tente novamente.</div>`;
+    if(errorDiv) {
+        errorDiv.textContent = 'Erro ao carregar os dados. Tente novamente.';
+        errorDiv.style.display = 'block';
+    }
+  } finally {
+    if(loadingDiv) loadingDiv.style.display = 'none';
   }
+}
+
+function selecionarCoberturaEstipulante() {
+    const rcfValue = parseFloat(document.getElementById('coberturaEstipulanteRCF').value) || null;
+    const appValue = parseFloat(document.getElementById('coberturaEstipulanteAPP').value) || null;
+    const resultadoFinalDiv = document.getElementById('resultadoFinalEstipulante');
+    const resultadoContent = document.getElementById('resultadoFinalEstipulanteContent');
+
+    if (!resultadoFinalDiv || !resultadoContent) return;
+
+    if (!rcfValue && !appValue) {
+        alert('Por favor, selecione ao menos um valor de cobertura.');
+        return;
+    }
+
+    const selectedRcfPolicy = rcfValue ? estipulantePolicies.rcf.find(p => normalizeCurrency(p.dano_material_DM) === rcfValue) : null;
+    const selectedAppPolicy = appValue ? estipulantePolicies.app.find(p => normalizeCurrency(p.ma_condutor) === appValue) : null;
+
+    // Salva as apólices selecionadas no formDataStorage
+    formDataStorage.selectedEstipulanteRcfPolicy = selectedRcfPolicy;
+    formDataStorage.selectedEstipulanteAppPolicy = selectedAppPolicy;
+
+    let html = '';
+    if (selectedRcfPolicy) {
+        html += `
+            <div class="col-md-6">
+                <p class="mb-1"><strong>Apólice RCF:</strong> ${selectedRcfPolicy.apolice}</p>
+                <p><strong>Prêmio RCF:</strong> ${selectedRcfPolicy.premio}</p>
+            </div>
+        `;
+    }
+    if (selectedAppPolicy) {
+        html += `
+            <div class="col-md-6">
+                <p class="mb-1"><strong>Apólice APP:</strong> ${selectedAppPolicy.apolice}</p>
+                <p><strong>Prêmio APP:</strong> ${selectedAppPolicy.premio}</p>
+            </div>
+        `;
+    }
+    
+    resultadoContent.innerHTML = `<div class="row">${html}</div><div class="alert alert-success mt-2 mb-0">Seleção confirmada!</div>`;
+    resultadoFinalDiv.style.display = 'block';
+}
+
+
+function setupEstipulanteStepListeners() {
+    const buscarBtn = document.getElementById('codigo');
+    if (buscarBtn) {
+        // To prevent multiple listeners, we can remove old one, but blur/keydown are idempotent
+        // so it's not strictly necessary unless the `buscar` function itself changes, which it does.
+        // A simple way is to clone and replace the node.
+        const newBtn = buscarBtn.cloneNode(true);
+        buscarBtn.parentNode.replaceChild(newBtn, buscarBtn);
+        newBtn.addEventListener('blur', buscar);
+        newBtn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                buscar();
+            }
+        });
+    }
+
+    const selecionarBtn = document.getElementById('selecionarCoberturaEstipulanteBtn');
+    if (selecionarBtn) {
+        selecionarBtn.replaceWith(selecionarBtn.cloneNode(true));
+        document.getElementById('selecionarCoberturaEstipulanteBtn').addEventListener('click', selecionarCoberturaEstipulante);
+    }
 }
 
 // =================================================================
@@ -631,7 +699,218 @@ function iniciarFluxo(tipoSolicitante) {
   updateProgress();
 }
 
-// MODIFIED event listener and initialization
+// =================================================================
+// 9. FLUXO DE BUSCA POR PARCEIRO
+// =================================================================
+
+let parceiroPolicies = { rcf: [], app: [] };
+
+/**
+ * Normaliza um valor monetário em string para um número.
+ * Ex: "R$ 50.000,00" -> 50000
+ * @param {string} value
+ * @returns {number}
+ */
+function normalizeCurrency(value) {
+  if (typeof value !== 'string') return value;
+  return parseFloat(value.replace(/[^0-9,]/g, '').replace(',', '.'));
+}
+
+/**
+ * Busca os dados de um parceiro pelo código e popula as opções de cobertura.
+ */
+async function buscarParceiro() {
+  const codigoInput = document.getElementById('parceiroCodigo');
+  const codigo = codigoInput.value.trim().toUpperCase();
+
+  const loadingDiv = document.getElementById('parceiroLoading');
+  const errorDiv = document.getElementById('parceiroError');
+  const coberturaSection = document.getElementById('coberturaSelection');
+  const resultadoFinalDiv = document.getElementById('resultadoFinal');
+  const parceiroNomeDisplay = document.getElementById('parceiroNomeDisplay');
+
+  // Reset UI
+  loadingDiv.style.display = 'block';
+  errorDiv.style.display = 'none';
+  coberturaSection.style.display = 'none';
+  resultadoFinalDiv.style.display = 'none';
+  document.getElementById('parceiroNextBtn').disabled = true;
+
+  if (!codigo) {
+    errorDiv.textContent = 'Por favor, insira um código de parceiro.';
+    errorDiv.style.display = 'block';
+    loadingDiv.style.display = 'none';
+    return;
+  }
+
+  try {
+    const [appResponse, rcfResponse] = await Promise.all([
+      fetch('./data/parceiros/parceiros_app.csv').catch(e => e),
+      fetch('./data/parceiros/parceiros_rcf.csv').catch(e => e),
+    ]);
+
+    if (!appResponse.ok || !rcfResponse.ok) {
+      throw new Error('Falha ao carregar um ou mais arquivos de dados dos parceiros.');
+    }
+
+    const texto_app = await appResponse.text();
+    const csv_app = Papa.parse(texto_app, { header: true, skipEmptyLines: true, delimiter: ';' }).data;
+
+    const texto_rcf = await rcfResponse.text();
+    const csv_rcf = Papa.parse(texto_rcf, { header: true, skipEmptyLines: true, delimiter: ';' }).data;
+    
+    const partnerRecord = csv_app.find(row => row.codigo && row.codigo.toUpperCase() === codigo);
+
+    if (!partnerRecord) {
+      errorDiv.textContent = 'Parceiro não encontrado para o código informado.';
+      errorDiv.style.display = 'block';
+      loadingDiv.style.display = 'none';
+      return;
+    }
+
+    const partnerName = partnerRecord.parceiro;
+
+    // Filtra todas as apólices para este parceiro
+    parceiroPolicies.app = csv_app.filter(row => row.codigo && row.codigo.toUpperCase() === codigo);
+    parceiroPolicies.rcf = csv_rcf.filter(row => row.parceiro && row.parceiro.toUpperCase() === partnerName.toUpperCase());
+
+    if (parceiroPolicies.app.length === 0 && parceiroPolicies.rcf.length === 0) {
+        errorDiv.textContent = 'Nenhuma apólice APP ou RCF encontrada para este parceiro.';
+        errorDiv.style.display = 'block';
+        loadingDiv.style.display = 'none';
+        return;
+    }
+
+    // Popula dropdowns com valores únicos de cobertura
+    const rcfSelect = document.getElementById('coberturaRCF');
+    const appSelect = document.getElementById('coberturaAPP');
+
+    const rcfValues = [...new Set(parceiroPolicies.rcf.map(p => normalizeCurrency(p.dano_material_DM)))].sort((a, b) => a - b);
+    const appValues = [...new Set(parceiroPolicies.app.map(p => normalizeCurrency(p.ma_condutor)))].sort((a, b) => a - b);
+
+    rcfSelect.innerHTML = '<option value="" selected>Nenhuma</option>';
+    appSelect.innerHTML = '<option value="" selected>Nenhuma</option>';
+
+    rcfValues.forEach(value => {
+        const option = new Option(value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), value);
+        rcfSelect.add(option);
+    });
+
+    appValues.forEach(value => {
+        const option = new Option(value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), value);
+        appSelect.add(option);
+    });
+
+    // Exibe a próxima seção
+    parceiroNomeDisplay.textContent = `Parceiro: ${partnerName}`;
+    coberturaSection.style.display = 'block';
+
+  } catch (error) {
+    console.error('Erro ao buscar parceiro:', error);
+    errorDiv.textContent = 'Ocorreu um erro ao buscar os dados. Tente novamente.';
+    errorDiv.style.display = 'block';
+  } finally {
+    loadingDiv.style.display = 'none';
+  }
+}
+
+/**
+ * Encontra as apólices correspondentes à seleção do usuário e exibe o resultado.
+ */
+function selecionarCobertura() {
+    const rcfValue = parseFloat(document.getElementById('coberturaRCF').value) || null;
+    const appValue = parseFloat(document.getElementById('coberturaAPP').value) || null;
+    const resultadoFinalDiv = document.getElementById('resultadoFinal');
+    const resultadoContent = document.getElementById('resultadoFinalContent');
+
+    if (!rcfValue && !appValue) {
+        alert('Por favor, selecione ao menos um valor de cobertura.');
+        return;
+    }
+
+    const selectedRcfPolicy = rcfValue ? parceiroPolicies.rcf.find(p => normalizeCurrency(p.dano_material_DM) === rcfValue) : null;
+    const selectedAppPolicy = appValue ? parceiroPolicies.app.find(p => normalizeCurrency(p.ma_condutor) === appValue) : null;
+
+    // Validação de consistência do estipulante apenas se ambas as apólices forem selecionadas
+    if (selectedRcfPolicy && selectedAppPolicy && selectedRcfPolicy.estipulante !== selectedAppPolicy.estipulante) {
+        resultadoContent.innerHTML = `<div class="alert alert-danger">As apólices encontradas pertencem a estipulantes diferentes. Por favor, contate o suporte.</div>`;
+        resultadoFinalDiv.style.display = 'block';
+        document.getElementById('parceiroNextBtn').disabled = true;
+        return;
+    }
+
+    const estipulante = selectedRcfPolicy?.estipulante || selectedAppPolicy?.estipulante;
+    const cnpj = selectedRcfPolicy?.cnpj || selectedAppPolicy?.cnpj;
+    const parceiroNome = selectedAppPolicy?.parceiro || selectedRcfPolicy?.parceiro;
+
+
+    // Guarda os dados para o envio do formulário
+    formDataStorage.parceiro = {
+      codigo: document.getElementById('parceiroCodigo').value.trim().toUpperCase(),
+      nome: parceiroNome,
+      estipulante: estipulante,
+      cnpj: cnpj,
+      apoliceRCF: selectedRcfPolicy?.apolice || '',
+      premioRCF: selectedRcfPolicy?.premio || '',
+      apoliceAPP: selectedAppPolicy?.apolice || '',
+      premioAPP: selectedAppPolicy?.premio || '',
+    };
+
+    let html = `
+        <p><strong>Estipulante:</strong> ${estipulante}</p>
+        <p><strong>CNPJ:</strong> ${cnpj}</p>
+        <hr>
+        <div class="row">
+    `;
+
+    if (selectedRcfPolicy) {
+        html += `
+            <div class="col-md-6">
+                <p><strong>Apólice RCF:</strong> ${selectedRcfPolicy.apolice}</p>
+                <p><strong>Prêmio RCF:</strong> ${selectedRcfPolicy.premio}</p>
+            </div>
+        `;
+    }
+
+    if (selectedAppPolicy) {
+        html += `
+            <div class="col-md-6">
+                <p><strong>Apólice APP:</strong> ${selectedAppPolicy.apolice}</p>
+                <p><strong>Prêmio APP:</strong> ${selectedAppPolicy.premio}</p>
+            </div>
+        `;
+    }
+
+    html += `
+        </div>
+        <div class="alert alert-success mt-3">Seleção concluída! Você já pode avançar.</div>
+    `;
+
+    resultadoContent.innerHTML = html;
+    resultadoFinalDiv.style.display = 'block';
+    document.getElementById('parceiroNextBtn').disabled = false; // Habilita o botão de próximo
+}
+
+
+/**
+ * Adiciona os event listeners para os elementos do passo de busca de parceiro.
+ */
+function setupParceiroStepListeners() {
+    const buscarBtn = document.getElementById('buscarParceiroBtn');
+    if (buscarBtn) {
+      // Remove listener antigo para evitar duplicatas ao re-renderizar
+      buscarBtn.replaceWith(buscarBtn.cloneNode(true));
+      document.getElementById('buscarParceiroBtn').addEventListener('click', buscarParceiro);
+    }
+
+    const selecionarBtn = document.getElementById('selecionarCoberturaBtn');
+    if (selecionarBtn) {
+      selecionarBtn.replaceWith(selecionarBtn.cloneNode(true));
+      document.getElementById('selecionarCoberturaBtn').addEventListener('click', selecionarCobertura);
+    }
+}
+
+
 document.getElementById('tipoSolicitante').addEventListener('change', e => {
   iniciarFluxo(e.target.value);
 });

@@ -6,7 +6,7 @@ const stepTemplates = {
         <label for="tipoSolicitacao" class="form-label">Selecione *</label>
         <select id="tipoSolicitacao" class="form-select" required>
           <option value="" disabled selected>Selecione</option>
-          <option value="nova">Nova Transmissão</option>
+          <option value="nova" data-visible-when-solicitante="colaborador, estipulante, parceiro">Nova Transmissão</option>
           <option value="renovacao">Renovação</option>
           <option value="endosso">Endosso</option>
           <option value="segunda_via">
@@ -15,7 +15,7 @@ const stepTemplates = {
           <option value="financeiro_regularizacao">
             Financeiro Regularização
           </option>
-          <option value="cotacao">Cotação</option>
+          <option value="cotacao" data-visible-when-solicitante="colaborador, segurado">Cotação</option>
           <option value="aviso_sinistro">Aviso de Sinistro</option>
         </select>
       </div>
@@ -63,7 +63,7 @@ const stepTemplates = {
         </button>
       </div>
     </div>`,
-  produtos_coberturas: `
+  estipulante_seguradoras: `
     <div class="form-step">
       <div id="dados_estip" class="d-none">
         <h4 class="mb-4">Dados do Estipulante</h4>
@@ -75,38 +75,202 @@ const stepTemplates = {
         </div>
 
         <div id="resultadoEstipulante" class="mt-3">
-          <!-- Os dados do estipulante serão exibidos aqui -->
+          <div id="estipulanteLoading" style="display: none;">
+            <div class="spinner-border spinner-border-sm" role="status">
+              <span class="visually-hidden">Buscando...</span>
+            </div>
+          </div>
+          <div id="estipulanteError" class="alert alert-danger" style="display: none;"></div>
+
+          
+          <div id="estipulanteCoberturaSelection" class="mt-4" style="display: none;">
+            <h5 id="estipulanteNomeDisplay" class="mb-3"></h5>
+            <div data-visible-when-fluxo="nova">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="coberturaEstipulanteRCF" class="form-label">Cobertura RCF (Danos Materiais)</label>
+                  <select id="coberturaEstipulanteRCF" class="form-select">
+                    <option value="" selected>Nenhuma</option>
+                  </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="coberturaEstipulanteAPP" class="form-label">Cobertura APP (Morte/Invalidez)</label>
+                  <select id="coberturaEstipulanteAPP" class="form-select">
+                    <option value="" selected>Nenhuma</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div data-visible-when-fluxo="nova">
+              <button class="btn btn-success" type="button" id="selecionarCoberturaEstipulanteBtn">
+                <i class="bi bi-check-circle"></i> Confirmar Seleção
+              </button>
+            </div>
+          </div>
+          
+
+          <div data-visible-when-fluxo="nova">
+            <div id="resultadoFinalEstipulante" class="mt-4" style="display: none;">
+              <h5 class="mb-3">Apólices Selecionadas</h5>
+              <div id="resultadoFinalEstipulanteContent" class="card p-3">
+                <!-- Conteúdo do resultado -->
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
+      <div data-visible-when-solicitante="colaborador">
+        <h4 id="segs_trabalhadas" class="mb-4">Seguradoras Trabalhadas</h4>
+        <div class="row">
+          <div class="col-md-12 mb-3">
+            <label for="segTrabalhadas" class="form-label">Seguradoras *</label>
+            <select id="segTrabalhadas" class="form-select" multiple name="segTrabalhadas[]" data-rule="seguradoraContainer:Outra">
+              <option>Aruana</option> <option>Porto Seguro</option> <option>Azul</option> <option>Allianz</option> <option>Tokio Marine</option> <option>HDI</option> <option>Sompo</option> <option>Bradesco</option> <option>Suhai</option> <option>Mapfre</option> <option>MBM</option> <option>Sabemi</option> <option>Akad</option><option>Ezze</option> <option>Darwin</option><option>	Yelium</option> <option>Zurich</option> <option>Chubb</option> <option>Essor</option> <option>Sura</option> <option>Icatu</option> <option>Alfa</option><option>Fator</option><option>American Life</option><option>Excelsior</option><option>Kovr</option><option>ALM</option><option>AXA</option>
+            </select>
+          </div>
+          <div class="mb-3" id="seguradoraContainer" style="display: none;">
+            <label for="seguradoraNome" class="form-label">Nome da outra seguradora *</label>
+            <input type="text" id="seguradoraNome" class="form-control" />
+          </div>
+        </div>
+      </div>
+
+      <div class="row" data-visible-when-solicitante="colaborador, estipulante">
+        <div class="col-md-12 mb-3 mt-3">
+          <label for="paymentMethod" class="form-label">Forma de pagamento *</label>
+          <select id="paymentMethod" class="form-select" required>
+            <option value="" disabled selected>Selecione</option>
+            <option>Boleto</option> <option>Cartão</option> <option>Débito em conta</option>
+          </select>
+        </div>
+      </div>
+      
+      <div id="cotacao-container" class="mb-3" data-visible-when-solicitante="colaborador, parceiro">
+        <label class="form-label">Upload Cotação </label>
+        <input id="cnhSeg" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"  />
+      </div>
+
+      <div class="btn-group-navigation">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">
+          Próximo <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>`,
+  produtos_coberturas: `
+    <div class="form-step">
       <h4 class="mb-4">Produtos e Coberturas</h4>
       <div class="mb-4">
         <label class="form-label">Selecione os produtos desejados *</label>
-        <select id="produtos" class="form-select" required>
+        <select id="produtos" class="form-select" required data-rule="app_fields:rcf_app;rcf_fields:rcf_app;rcf_fields:rcf;app_fields:app;empresarial_fields:empresarial;parcelamento_fields:rcf_app;parcelamento_fields:rcf;parcelamento_fields:app;observacaoAPP:rcf_app;observacaoAPP:app;seguro_vida_fields:seguro_vida;seguro_viagem_fields:seguro_viagem;rc_profissional_fields:rc_profissional;carta_verde_fields:carta_verde;veiculoFields:rcf_app;veiculoFields:rcf;veiculoFields:app;cotacao_extra_fields:rcf_app;cotacao_extra_fields:rcf;cotacao_extra_fields:app">
           <option value="" disabled selected>Selecione</option>
           <option value="rcf_app">RCF e APP</option>
           <option value="rcf">Somente RCF</option>
           <option value="app">Somente APP</option>
+          <option value="empresarial">Seguro Empresarial</option>
+          <option value="seguro_vida">Seguro de Vida</option>
+          <option value="seguro_viagem">Seguro Viagem</option>
+          <option value="rc_profissional">RC Profissional</option>
+          <option value="carta_verde">Seguro Carta Verde</option>
           <option data-visible-when-solicitante="colaborador, parceiro" value="auto">Seguro Auto Compreensivo</option>
         </select>
       </div>
 
-      <div id="rcf_app_fields">
-        <div id="coberturaRCF" class="mb-4" style="display: none;">
-          <label for="valorRCF_select" class="form-label">Valor RCF (R$) *</label>
-          <div id="rcfApoliceInfo" class="text-muted mb-2"></div>
-          <select id="valorRCF_select" class="form-select" data-rule="valorRCF_outro:outro">
-            <option value="" disabled selected>Selecione</option>
-            <option value="50000">R$ 50.000</option>
-            <option value="100000">R$ 100.000</option>
-            <option value="150000">R$ 150.000</option>
-            <option value="200000">R$ 200.000</option>
-            <option value="outro">Outro Valor</option>
-          </select>
-          <input type="number" class="form-control mt-2" id="valorRCF_outro" step="1000" style="display: none;" placeholder="Digite o valor desejado" />
-        </div>
+      <div data-visible-when-fluxo="cotacao">
+        <div id="cotacao_extra_fields" style="display: none;">
+            <hr>
+            <h4 class="mb-4">Dados Adicionais para Cotação</h4>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Estado Civil do Segurado *</label>
+                    <select id="seguradoEstadoCivil" class="form-select" required>
+                        <option value="">Selecione</option>
+                        <option>Solteiro(a)</option>
+                        <option>Casado(a)</option>
+                        <option>Divorciado(a)</option>
+                        <option>Viúvo(a)</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="cepPernoite" class="form-label">CEP Pernoite *</label>
+                    <input id="cepPernoite" class="form-control" placeholder="00000-000" required>
+                </div>
+            </div>
 
-        <div id="coberturaAPP" class="mb-4" style="display: none;">
+            <h5 class="mt-4">Endereço do Segurado</h5>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                <label for="segurado_cep_cotacao" class="form-label">CEP *</label>
+                <div class="input-group">
+                    <input id="segurado_cep_cotacao" class="form-control" placeholder="00000-000" required>
+                    <button class="btn btn-outline-secondary" type="button" onclick="buscarCep()"><i class="bi bi-search"></i></button>
+                </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 mb-3">
+                <label class="form-label">Logradouro</label>
+                <input id="segurado_logradouro_cotacao" class="form-control" readonly>
+                </div>
+                <div class="col-md-4 mb-3">
+                <label class="form-label">Número</label>
+                <input type="number" id="segurado_numero_cotacao" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                <label class="form-label">Bairro</label>
+                <input id="segurado_bairro_cotacao" class="form-control" readonly>
+                </div>
+                <div class="col-md-4 mb-3">
+                <label class="form-label">Cidade</label>
+                <input id="segurado_cidade_cotacao" class="form-control" readonly>
+                </div>
+                <div class="col-md-2 mb-3">
+                <label class="form-label">Estado</label>
+                <input id="segurado_estado_cotacao" class="form-control" readonly>
+                </div>
+            </div>
+
+            <h5 class="mt-4">Dados do Veículo</h5>
+             <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Fabricante (Marca) *</label>
+                    <input id="veiFab" class="form-control" required />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Lotação *</label>
+                    <input id="veiLotacao" type="number" class="form-control" min="1" required />
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <div data-visible-when-fluxo="nova">
+        <div id="rcf_fields" style="display: none;">
+          <div id="coberturaRCF" class="mb-4">
+            <label for="valorRCF_select" class="form-label">Valor RCF (R$) *</label>
+            <div id="rcfApoliceInfo" class="text-muted mb-2"></div> 
+            <select id="valorRCF_select" class="form-select" data-rule="valorRCF_outro:outro">
+              <option value="" disabled selected>Selecione</option>
+              <option value="50000">R$ 50.000</option>
+              <option value="100000">R$ 100.000</option>
+              <option value="150000">R$ 150.000</option>
+              <option value="200000">R$ 200.000</option>
+              <option value="outro">Outro Valor</option>
+            </select>
+            <input type="number" class="form-control mt-2" id="valorRCF_outro" step="1000" style="display: none;" placeholder="Digite o valor desejado" />
+          </div>
+        </div>
+      </div>
+
+
+      <div data-visible-when-fluxo="nova">
+        <div id="app_fields" class="mb-4" style="display: none;">
           <label for="valorAPP_select" class="form-label">Valor APP por pessoa (R$) *</label>
           <div id="appApoliceInfo" class="text-muted mb-2"></div>
           <select id="valorAPP_select" class="form-select" data-rule="valorAPP_outro:outro">
@@ -117,11 +281,12 @@ const stepTemplates = {
           </select>
           <input type="number" class="form-control mt-2" id="valorAPP_outro" step="1000" style="display: none;" placeholder="Digite o valor desejado" />
         </div>
-        
-        <hr>
+      </div>
 
+      <div id="parcelamento_fields" style="display: none;">
+        <hr>
         <h4 class="mb-4">Parcelamento</h4>
-        <div id="observacaoAPP" class="alert alert-info">
+        <div id="observacaoAPP" class="alert alert-info" style="display: none;">
           <strong>Atenção:</strong> O produto APP (Acidentes Pessoais de Passageiros) é sempre pago à vista. O parcelamento se aplica apenas ao RCF.
         </div>
         <div class="row">
@@ -133,39 +298,633 @@ const stepTemplates = {
             </select>
           </div>
         </div>
+      </div>
 
-        <div data-visible-when-solicitante="colaborador">
-          <h4 id="segs_trabalhadas" class="mb-4">Seguradoras Trabalhadas</h4>
-          <div class="row">
-            <div class="col-md-12 mb-3">
-              <label for="segTrabalhadas" class="form-label">Seguradoras *</label>
-              <select id="segTrabalhadas" class="form-select" multiple name="segTrabalhadas[]" data-rule="seguradoraContainer:Outra">
-                <option>Aruana</option> <option>Porto Seguro</option> <option>Azul</option> <option>Allianz</option> <option>Tokio Marine</option> <option>HDI</option> <option>Sompo</option> <option>Bradesco</option> <option>Suhai</option> <option>Mapfre</option> <option>MBM</option> <option>Sabemi</option> <option>Akad</option><option>Ezze</option> <option>Darwin</option><option>	Yelium</option> <option>Zurich</option> <option>Chubb</option> <option>Essor</option> <option>Sura</option> <option>Icatu</option> <option>Alfa</option><option>Fator</option><option>American Life</option><option>Excelsior</option><option>Kovr</option><option>ALM</option><option>AXA</option>
-              </select>
+      <div id="empresarial_fields" style="display: none;">
+        <h5 class="mt-4 mb-3">Dados da Empresa</h5>
+        <div class="row">
+            <div class="col-md-8 mb-3">
+                <label for="empRazaoSocial" class="form-label">Razão Social *</label>
+                <input type="text" id="empRazaoSocial" class="form-control" required>
             </div>
-            <div class="mb-3" id="seguradoraContainer" style="display: none;">
-              <label for="seguradoraNome" class="form-label">Nome da outra seguradora *</label>
-              <input type="text" id="seguradoraNome" class="form-control" />
+            <div class="col-md-4 mb-3">
+                <label for="empCnpj" class="form-label">CNPJ *</label>
+                <input type="text" id="empCnpj" class="form-control" required>
             </div>
-          </div>
+        </div>
+        <div class="mb-3">
+            <label for="empEndereco" class="form-label">Endereço *</label>
+            <input type="text" id="empEndereco" class="form-control" placeholder="Rua, Número, Bairro, Cidade - UF" required>
+        </div>
+        <div class="mb-3">
+            <label for="empAtividade" class="form-label">Atividade Principal *</label>
+            <input type="text" id="empAtividade" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Histórico de Sinistros (últimos 5 anos)? *</label>
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                  <input class="form-check-input" type="radio" name="empHistSinistro" id="empHistSinistroSim" value="Sim" required>
+                  <label class="form-check-label" for="empHistSinistroSim">Sim</label>
+              </div>
+              <div class="form-check">
+                  <input class="form-check-input" type="radio" name="empHistSinistro" id="empHistSinistroNao" value="Não" required>
+                  <label class="form-check-label" for="empHistSinistroNao">Não</label>
+              </div>
+            </div>
+        </div>
+        <hr>
+        <h5 class="mt-4 mb-3">Dados da Cobertura</h5>
+        <div class="mb-3">
+            <label for="empLimite" class="form-label">Limite de Cobertura (R$) *</label>
+            <input type="number" id="empLimite" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Cobertura Desejada *</label>
+            <select id="empCoberturaDesejada" class="form-select" required>
+                <option value="">Selecione</option>
+                <option value="predio">Prédio</option>
+                <option value="conteudo">Conteúdo</option>
+                <option value="predio_conteudo">Prédio + Conteúdo</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Deseja coberturas adicionais? *</label>
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                  <input class="form-check-input" type="radio" name="empAdicionais" id="empAdicionaisSim" value="Sim" required data-rule="coberturasAdicionaisContainer:checked">
+                  <label class="form-check-label" for="empAdicionaisSim">Sim</label>
+              </div>
+              <div class="form-check">
+                  <input class="form-check-input" type="radio" name="empAdicionais" id="empAdicionaisNao" value="Não" required>
+                  <label class="form-check-label" for="empAdicionaisNao">Não</label>
+              </div>
+            </div>
+        </div>
+        <div id="coberturasAdicionaisContainer" style="display: none;">
+            <label class="form-label">Quais?</label>
+            <div class="row">
+                ${[
+                  'RC',
+                  'RC Danos Morais',
+                  'Home Office',
+                  'Delivery',
+                  'Danos Elétricos',
+                  'Alagamentos',
+                  'Vazamentos',
+                  'Desmoronamentos',
+                  'Vidros',
+                  'Perda/Pagamento de aluguel',
+                  'Subtração de bens',
+                  'Subtração de valores',
+                  'Outros',
+                ]
+                  .map(
+                    cov => `
+                <div class="col-md-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="${cov}" id="cov_${cov.toLowerCase().replace(/[^a-z0-9]/g, '')}">
+                        <label class="form-check-label" for="cov_${cov.toLowerCase().replace(/[^a-z0-9]/g, '')}">${cov}</label>
+                    </div>
+                </div>
+                `,
+                  )
+                  .join('')}
+            </div>
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="empObs" class="form-label">Observações</label>
+            <textarea id="empObs" class="form-control" rows="3"></textarea>
         </div>
       </div>
       
-      <div class="row" data-visible-when-solicitante="colaborador, estipulante">
-        <div class="col-md-12 mb-3">
-          <label for="paymentMethod" class="form-label">Forma de pagamento *</label>
-          <select id="paymentMethod" class="form-select" required>
-            <option value="" disabled selected>Selecione</option>
-            <option>Boleto</option> <option>Cartão</option> <option>Débito em conta</option>
-          </select>
+      <div id="veiculoFields" style="display: none;">
+        <h4 class="mb-4">Dados do veículo</h4>
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Placa *</label>
+            <input id="veiPlaca" class="form-control" placeholder="ABC1D23"  />
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Chassi *</label>
+            <input id="veiChassi" class="form-control" minlength="5"  />
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Renavam *</label>
+            <input id="veiRenavam" class="form-control"  />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Fabricante *</label>
+            <input id="veiFab" class="form-control"  />
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Modelo *</label>
+            <input id="veiModelo" class="form-control"  />
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Ano *</label>
+            <input id="veiAno" type="number" class="form-control" min="1980" max="2099"  />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Uso *</label>
+            <select id="veiUso" class="form-select" >
+              <option value="" disabled selected>Selecione</option>
+              <option>Moto</option><option>Van Turismo</option><option>Van Escolar</option><option>Van Urbano</option><<option>Táxi/Aplicativos</option> <option>Policiamento/Bombeiro</option> <option>Comercial/Profissional</option><option>Particular/Passeio</option>
+              <option>Casa Locadora - Uso Comercial/Industrial, S/Veículo por Aplicativo</option> <option>Casa Locadora - Uso Veículo por Aplicativos</option> <option>Chapa de Fabricante</option> <option>Auto Escola</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Lotação *</label>
+            <input id="veiLotacao" type="number" class="form-control" min="1"  />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 mb-3">
+              <label class="form-label">Contrato com adesão ao TIGO CLUBE? *</label>
+              <div class="d-flex gap-3">
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="tigoClube" id="tigoClubeSim" value="sim" data-rule="tigoClubeAdesaoContainer:checked" />
+                      <label class="form-check-label" for="tigoClubeSim">Sim</label>
+                  </div>
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="tigoClube" id="tigoClubeNao" value="nao"  checked />
+                      <label class="form-check-label" for="tigoClubeNao">Não</label>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <div id="tigoClubeAdesaoContainer" class="mb-3" style="display: none;">
+          <label class="form-label">Upload do documento de adesão assinado (PDF/JPG/PNG) *</label>
+          <input id="tigoClubeAdesao" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Upload CLRV (PDF/JPG/PNG) *</label>
+          <input id="veiCNH" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png"  />
         </div>
       </div>
 
-      <div id="cotacao-container" class="mb-3" data-visible-when-solicitante="colaborador, parceiro">
-        <label class="form-label">Upload Cotação </label>
-        <input id="cnhSeg" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"  />
+      <div id="seguro_vida_fields" style="display: none;">
+        <h4 class="mb-4">Seguro de Vida - Informações Médicas</h4>
+        
+        <div class="row">
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Doenças pré-existentes? *</label>
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="vidaDoencasPreExistentes" id="vidaDoencasPreExistentesSim" value="sim" required data-rule="vidaQuaisDoencasPreExistentesContainer:checked">
+                <label class="form-check-label" for="vidaDoencasPreExistentesSim">Sim</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="vidaDoencasPreExistentes" id="vidaDoencasPreExistentesNao" value="nao" required>
+                <label class="form-check-label" for="vidaDoencasPreExistentesNao">Não</label>
+              </div>
+            </div>
+          </div>
+          <div id="vidaQuaisDoencasPreExistentesContainer" class="col-md-9 mb-3" style="display: none;">
+            <label for="vidaQuaisDoencasPreExistentes" class="form-label">Quais doenças pré-existentes?</label>
+            <textarea id="vidaQuaisDoencasPreExistentes" class="form-control" rows="2"></textarea>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Cirurgias anteriores? *</label>
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="vidaCirurgiasAnteriores" id="vidaCirurgiasAnterioresSim" value="sim" required data-rule="vidaQuaisCirurgiasAnterioresContainer:checked">
+                <label class="form-check-label" for="vidaCirurgiasAnterioresSim">Sim</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="vidaCirurgiasAnteriores" id="vidaCirurgiasAnterioresNao" value="nao" required>
+                <label class="form-check-label" for="vidaCirurgiasAnterioresNao">Não</label>
+              </div>
+            </div>
+          </div>
+          <div id="vidaQuaisCirurgiasAnterioresContainer" class="col-md-9 mb-3" style="display: none;">
+            <label for="vidaQuaisCirurgiasAnteriores" class="form-label">Quais cirurgias anteriores?</label>
+            <textarea id="vidaQuaisCirurgiasAnteriores" class="form-control" rows="2"></textarea>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Doenças familiares? *</label>
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="vidaDoencasFamiliares" id="vidaDoencasFamiliaresSim" value="sim" required data-rule="vidaQuaisDoencasFamiliaresContainer:checked">
+                <label class="form-check-label" for="vidaDoencasFamiliaresSim">Sim</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="vidaDoencasFamiliares" id="vidaDoencasFamiliaresNao" value="nao" required>
+                <label class="form-check-label" for="vidaDoencasFamiliaresNao">Não</label>
+              </div>
+            </div>
+          </div>
+          <div id="vidaQuaisDoencasFamiliaresContainer" class="col-md-9 mb-3" style="display: none;">
+            <label for="vidaQuaisDoencasFamiliares" class="form-label">Quais doenças familiares?</label>
+            <textarea id="vidaQuaisDoencasFamiliares" class="form-control" rows="2"></textarea>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Pratica atividade física? *</label>
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="vidaAtividadeFisica" id="vidaAtividadeFisicaSim" value="sim" required data-rule="vidaQuaisAtividadesFisicasContainer:checked">
+                <label class="form-check-label" for="vidaAtividadeFisicaSim">Sim</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="vidaAtividadeFisica" id="vidaAtividadeFisicaNao" value="nao" required>
+                <label class="form-check-label" for="vidaAtividadeFisicaNao">Não</label>
+              </div>
+            </div>
+          </div>
+          <div id="vidaQuaisAtividadesFisicasContainer" class="col-md-9 mb-3" style="display: none;">
+            <label for="vidaQuaisAtividadesFisicas" class="form-label">Quais atividades físicas?</label>
+            <textarea id="vidaQuaisAtividadesFisicas" class="form-control" rows="2"></textarea>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Ingere bebidas alcoólicas? *</label>
+          <div class="d-flex gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="vidaBebidasAlcoolicas" id="vidaBebidasAlcoolicasSim" value="sim" required>
+              <label class="form-check-label" for="vidaBebidasAlcoolicasSim">Sim</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="vidaBebidasAlcoolicas" id="vidaBebidasAlcoolicasNao" value="nao" required>
+              <label class="form-check-label" for="vidaBebidasAlcoolicasNao">Não</label>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label class="form-label">Fuma? *</label>
+          <div class="d-flex gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="vidaFuma" id="vidaFumaSim" value="sim" required>
+              <label class="form-check-label" for="vidaFumaSim">Sim</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="vidaFuma" id="vidaFumaNao" value="nao" required>
+              <label class="form-check-label" for="vidaFumaNao">Não</label>
+            </div>
+          </div>
+        </div>
+
+        <h4 class="mt-4 mb-3">Coberturas Desejadas</h4>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="vidaMorteNatural">
+          <label class="form-check-label" for="vidaMorteNatural">Morte natural</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="vidaMorteAcidental">
+          <label class="form-check-label" for="vidaMorteAcidental">Morte acidental</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="vidaInvalidezPermanente">
+          <label class="form-check-label" for="vidaInvalidezPermanente">Invalidez permanente</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="vidaDoencasGraves">
+          <label class="form-check-label" for="vidaDoencasGraves">Doenças graves</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="vidaDIT">
+          <label class="form-check-label" for="vidaDIT">DIT</label>
+        </div>
+        <div class="mb-3">
+          <label for="vidaOutrasCoberturas" class="form-label">Outras coberturas:</label>
+          <textarea id="vidaOutrasCoberturas" class="form-control" rows="2"></textarea>
+        </div>
+
+        <h4 class="mt-4 mb-3">Beneficiários</h4>
+        <div class="mb-3">
+          <label class="form-label">Incluir beneficiários? *</label>
+          <div class="d-flex gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="vidaIncluirBeneficiarios" id="vidaIncluirBeneficiariosSim" value="sim" required data-rule="vidaBeneficiariosContainer:checked">
+              <label class="form-check-label" for="vidaIncluirBeneficiariosSim">Sim</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="vidaIncluirBeneficiarios" id="vidaIncluirBeneficiariosNao" value="nao" required>
+              <label class="form-check-label" for="vidaIncluirBeneficiariosNao">Não</label>
+            </div>
+          </div>
+        </div>
+        <div id="vidaBeneficiariosContainer" style="display: none;">
+          <div class="beneficiario-block mb-3">
+            <h5>Beneficiário 1</h5>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Nome Completo *</label>
+                <input id="vidaBeneficiario1Nome" class="form-control" />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">CPF *</label>
+                <input id="vidaBeneficiario1CPF" class="form-control" placeholder="000.000.000-00" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Data de Nascimento *</label>
+                <input type="date" id="vidaBeneficiario1Nascimento" class="form-control" />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Sexo *</label>
+                <select id="vidaBeneficiario1Sexo" class="form-select">
+                  <option value="">Selecione</option>
+                  <option>Masculino</option>
+                  <option>Feminino</option>
+                </select>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Grau de Parentesco *</label>
+              <input id="vidaBeneficiario1Parentesco" class="form-control" />
+            </div>
+          </div>
+          <!-- Future enhancement: Add button to add more beneficiaries dynamically -->
+        </div>
+
+        <div class="mb-3 mt-3">
+          <label for="vidaObservacoes" class="form-label">Observações</label>
+          <textarea id="vidaObservacoes" class="form-control" rows="3"></textarea>
+        </div>
       </div>
 
+      <div id="seguro_viagem_fields" style="display: none;">
+        <h4 class="mb-4">Seguro Viagem - Informações da Viagem</h4>
+        <div class="row">
+          <div class="col-md-12 mb-3">
+            <label for="viagemDestino" class="form-label">Destino *</label>
+            <input type="text" id="viagemDestino" class="form-control" required>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="viagemIda" class="form-label">Data de Ida *</label>
+            <input type="date" id="viagemIda" class="form-control" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="viagemVolta" class="form-label">Data de Volta *</label>
+            <input type="date" id="viagemVolta" class="form-control" required>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="viagemNumViajantes" class="form-label">Número de viajantes *</label>
+            <input type="number" id="viagemNumViajantes" class="form-control" required min="1">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="viagemIdades" class="form-label">Idades (separadas por vírgula) *</label>
+            <input type="text" id="viagemIdades" class="form-control" required>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="viagemMotivo" class="form-label">Motivo da viagem *</label>
+            <select id="viagemMotivo" class="form-select" required>
+              <option value="">Selecione</option>
+              <option>Turismo</option>
+              <option>Negócios</option>
+              <option>Estudo</option>
+              <option>Outro</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="viagemTipo" class="form-label">Nacional/Internacional *</label>
+            <select id="viagemTipo" class="form-select" required>
+              <option value="">Selecione</option>
+              <option>Nacional</option>
+              <option>Internacional</option>
+            </select>
+          </div>
+        </div>
+
+        <h4 class="mt-4 mb-3">Coberturas Desejadas</h4>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="viagemCoberturaAssistenciaMedica">
+              <label class="form-check-label" for="viagemCoberturaAssistenciaMedica">Assistência médica</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="viagemCoberturaRepatriacaoMedica">
+              <label class="form-check-label" for="viagemCoberturaRepatriacaoMedica">Repatriação médica</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="viagemCoberturaRepatriacaoFuneraria">
+              <label class="form-check-label" for="viagemCoberturaRepatriacaoFuneraria">Repatriação funerária</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="viagemCoberturaExtravioBagagem">
+              <label class="form-check-label" for="viagemCoberturaExtravioBagagem">Extravio de bagagem</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="viagemCoberturaCancelamento">
+              <label class="form-check-label" for="viagemCoberturaCancelamento">Cancelamento/Interrupção</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="viagemCoberturaAcidenteMorte">
+              <label class="form-check-label" for="viagemCoberturaAcidenteMorte">Acidente/Morte</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="viagemCoberturaDoencasPreexistentes">
+              <label class="form-check-label" for="viagemCoberturaDoencasPreexistentes">Doenças pré-existentes</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="viagemCoberturaEsportesRadicais">
+              <label class="form-check-label" for="viagemCoberturaEsportesRadicais">Esportes radicais</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="viagemCoberturaSeguroSaude">
+              <label class="form-check-label" for="viagemCoberturaSeguroSaude">Seguro saúde internacional</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 mt-3">
+          <label for="viagemCondicaoMedica" class="form-label">Condição médica atual</label>
+          <textarea id="viagemCondicaoMedica" class="form-control" rows="2"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="viagemObservacoes" class="form-label">Observações</label>
+          <textarea id="viagemObservacoes" class="form-control" rows="3"></textarea>
+        </div>
+      </div>
+
+      <div id="rc_profissional_fields" style="display: none;">
+        <h4 class="mb-4">RC Profissional - Dados</h4>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="rcpNome" class="form-label">Nome/Razão Social *</label>
+            <input type="text" id="rcpNome" class="form-control" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="rcpDocumento" class="form-label">CPF/CNPJ *</label>
+            <input type="text" id="rcpDocumento" class="form-control" required>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="rcpEndereco" class="form-label">Endereço *</label>
+          <input type="text" id="rcpEndereco" class="form-control" required>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="rcpEmail" class="form-label">E-mail *</label>
+            <input type="email" id="rcpEmail" class="form-control" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="rcpTelefone" class="form-label">Telefone *</label>
+            <input type="tel" id="rcpTelefone" class="form-control" required>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="rcpProfissao" class="form-label">Profissão/Área *</label>
+            <input type="text" id="rcpProfissao" class="form-control" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="rcpExperiencia" class="form-label">Tempo de experiência *</label>
+            <input type="text" id="rcpExperiencia" class="form-control" required>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="rcpNumProfissionais" class="form-label">Número de profissionais *</label>
+            <input type="number" id="rcpNumProfissionais" class="form-control" required min="1">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Atua fora das dependências? *</label>
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="rcpForaDependencias" id="rcpForaDependenciasSim" value="sim" required>
+                <label class="form-check-label" for="rcpForaDependenciasSim">Sim</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="rcpForaDependencias" id="rcpForaDependenciasNao" value="nao" required>
+                <label class="form-check-label" for="rcpForaDependenciasNao">Não</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h4 class="mt-4 mb-3">Tipo de Cobertura</h4>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="rcpCoberturaGeral">
+          <label class="form-check-label" for="rcpCoberturaGeral">RC Geral</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="rcpCoberturaProfissional">
+          <label class="form-check-label" for="rcpCoberturaProfissional">RC Profissional</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="rcpCoberturaEventos">
+          <label class="form-check-label" for="rcpCoberturaEventos">RC Eventos</label>
+        </div>
+        <div class="mb-3">
+          <label for="rcpCoberturaOutros" class="form-label">Outros:</label>
+          <textarea id="rcpCoberturaOutros" class="form-control" rows="2"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="rcpLimiteApolice" class="form-label">Limite da apólice R$ *</label>
+          <input type="number" id="rcpLimiteApolice" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="rcpAtividadesExercidas" class="form-label">Atividades exercidas *</label>
+          <textarea id="rcpAtividadesExercidas" class="form-control" rows="3" required></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Reclamações judiciais/extrajudiciais? *</label>
+          <div class="d-flex gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="rcpReclamacoes" id="rcpReclamacoesSim" value="sim" required data-rule="rcpReclamacoesDescricaoContainer:checked">
+              <label class="form-check-label" for="rcpReclamacoesSim">Sim</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="rcpReclamacoes" id="rcpReclamacoesNao" value="nao" required>
+              <label class="form-check-label" for="rcpReclamacoesNao">Não</label>
+            </div>
+          </div>
+        </div>
+        <div id="rcpReclamacoesDescricaoContainer" class="mb-3" style="display: none;">
+          <label for="rcpReclamacoesDescricao" class="form-label">Descrição</label>
+          <textarea id="rcpReclamacoesDescricao" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="rcpObservacoes" class="form-label">Observações</label>
+          <textarea id="rcpObservacoes" class="form-control" rows="3"></textarea>
+        </div>
+      </div>
+
+      <div id="carta_verde_fields" style="display: none;">
+        <h4 class="mb-4">Seguro Carta Verde - Dados da Viagem</h4>
+        <div class="row">
+          <div class="col-md-12 mb-3">
+            <label for="cvDestino" class="form-label">Destino *</label>
+            <select id="cvDestino" class="form-select" required>
+              <option value="">Selecione</option>
+              <option>Argentina</option>
+              <option>Paraguai</option>
+              <option>Uruguai</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="cvIda" class="form-label">Data de Ida *</label>
+            <input type="date" id="cvIda" class="form-control" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="cvVolta" class="form-label">Data de Volta *</label>
+            <input type="date" id="cvVolta" class="form-control" required>
+          </div>
+        </div>
+
+        <h5 class="mt-4 mb-3">Condutor Principal (se diferente do proprietário)</h5>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="cvCondutorNome" class="form-label">Nome</label>
+            <input type="text" id="cvCondutorNome" class="form-control">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="cvCondutorCpf" class="form-label">CPF</label>
+            <input type="text" id="cvCondutorCpf" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="cvCondutorNascimento" class="form-label">Data de Nascimento</label>
+            <input type="date" id="cvCondutorNascimento" class="form-control">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="cvCondutorSexo" class="form-label">Sexo Biológico</label>
+            <select id="cvCondutorSexo" class="form-select">
+              <option value="">Selecione</option>
+              <option>Masculino</option>
+              <option>Feminino</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="cvCondutorIdAnexo" class="form-label">ID anexo</label>
+          <input type="file" id="cvCondutorIdAnexo" class="form-control">
+        </div>
+      </div>
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()">
           <i class="bi bi-arrow-left"></i> Voltar
@@ -952,10 +1711,6 @@ const stepTemplates = {
           <label class="form-label">Telefone *</label>
           <input type="phone" id="telefoneCliente" class="form-control" placeholder="Telefone"  />
         </div>
-        <div class="col-md-4 mb-3">
-          <label class="form-label">Placa*</label>
-          <input id="placaCliente" class="form-control" placeholder="Placa"  />
-        </div>
       </div>
       
       <div class="btn-group-navigation">
@@ -968,7 +1723,7 @@ const stepTemplates = {
       </div>
     </div>`,
   veiculo: `
-    <div class="form-step" data-step="5">
+    <div class="form-step" data-step="5" id="veiculoFields">
       <h4 class="mb-4">Dados do veículo</h4>
       <div class="row">
         <div class="col-md-4 mb-3">
@@ -1667,6 +2422,29 @@ const stepTemplates = {
               <input id="finRegDocumento" class="form-control" placeholder="CPF ou CNPJ" required />
             </div>
           </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="segTrabalhadasFin" class="form-label">Seguradoras *</label>
+              <select id="segTrabalhadasFin" class="form-select">
+                <option>Aruana</option> <option>Porto Seguro</option> <option>Azul</option> <option>Allianz</option> <option>Tokio Marine</option> <option>HDI</option> <option>Sompo</option> <option>Bradesco</option> <option>Suhai</option> <option>Mapfre</option> <option>MBM</option> <option>Sabemi</option> <option>Akad</option><option>Ezze</option> <option>Darwin</option><option>	Yelium</option> <option>Zurich</option> <option>Chubb</option> <option>Essor</option> <option>Sura</option> <option>Icatu</option> <option>Alfa</option><option>Fator</option><option>American Life</option><option>Excelsior</option><option>Kovr</option><option>ALM</option><option>AXA</option>
+              </select>
+            </div>
+            <div class="mb-4 col-md-6">
+              <label class="form-label">Selecione os produtos desejados *</label>
+              <select id="ramos" class="form-select" required">
+                <option value="" disabled selected>Selecione</option>
+                <option value="rcf_app">RCF e APP</option>
+                <option value="rcf">Somente RCF</option>
+                <option value="app">Somente APP</option>
+                <option value="empresarial">Seguro Empresarial</option>
+                <option value="seguro_vida">Seguro de Vida</option>
+                <option value="seguro_viagem">Seguro Viagem</option>
+                <option value="rc_profissional">RC Profissional</option>
+                <option value="carta_verde">Seguro Carta Verde</option>
+                <option value="auto">Seguro Auto Compreensivo</option>
+              </select>
+            </div>
+          </div>
           <div class="mb-3">
             <label class="form-label">Data de vencimento em aberto *</label>
             <input type="date" id="finRegDataVencimento" class="form-control" required />
@@ -1699,4 +2477,68 @@ const stepTemplates = {
             <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Enviar Solicitação</button>
           </div>
         </div>`,
+
+  parceiro_busca_cobertura: `
+    <div class="form-step" data-step="1">
+      <h4 class="mb-4">Busca de Apólice por Parceiro</h4>
+      
+      <!-- 1. Busca do Parceiro -->
+      <div id="parceiroSearchStep">
+        <label for="parceiroCodigo" class="form-label">Código do Parceiro *</label>
+        <div class="input-group mb-3">
+          <input type="text" id="parceiroCodigo" class="form-control" placeholder="Insira o código do parceiro" required>
+          <button class="btn btn-primary" type="button" id="buscarParceiroBtn">
+            <i class="bi bi-search"></i> Buscar
+          </button>
+        </div>
+        <div id="parceiroLoading" style="display: none;">
+          <div class="spinner-border spinner-border-sm" role="status">
+            <span class="visually-hidden">Buscando...</span>
+          </div>
+        </div>
+        <div id="parceiroError" class="alert alert-danger" style="display: none;"></div>
+      </div>
+
+      <!-- 2. Seleção de Cobertura (aparece após busca) -->
+      <div id="coberturaSelection" class="mt-4" style="display: none;">
+        <h5 id="parceiroNomeDisplay" class="mb-3"></h5>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="coberturaRCF" class="form-label">Cobertura RCF (Danos Materiais)</label>
+            <select id="coberturaRCF" class="form-select">
+              <option value="" selected disabled>Selecione o valor</option>
+              <!-- Opções preenchidas dinamicamente -->
+            </select>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="coberturaAPP" class="form-label">Cobertura APP (Morte/Invalidez)</label>
+            <select id="coberturaAPP" class="form-select">
+              <option value="" selected disabled>Selecione o valor</option>
+              <!-- Opções preenchidas dinamicamente -->
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-success" type="button" id="selecionarCoberturaBtn">
+          <i class="bi bi-check-circle"></i> Encontrar Apólice
+        </button>
+      </div>
+
+      <!-- 3. Resultado Final (aparece após seleção) -->
+      <div id="resultadoFinal" class="mt-4" style="display: none;">
+        <h5 class="mb-3">Estipulante e Apólices Recomendadas</h5>
+        <div id="resultadoFinalContent" class="card p-3">
+          <!-- Conteúdo do resultado -->
+        </div>
+      </div>
+
+      <div class="btn-group-navigation mt-4">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()" id="parceiroNextBtn" disabled>
+          Próximo <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  `,
 };
