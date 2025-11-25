@@ -189,7 +189,7 @@ const stepTemplates = {
       <h4 class="mb-4">Produtos e Coberturas</h4>
       <div class="mb-4" data-visible-when-solicitante="colaborador, parceiro, segurado">
         <label class="form-label">Selecione os produtos desejados *</label>
-        <select id="produtos" class="form-select" required data-rule="app_fields:rcf_app;rcf_fields:rcf_app;rcf_fields:rcf;app_fields:app;empresarial_fields:empresarial;parcelamento_fields:rcf_app;parcelamento_fields:rcf;parcelamento_fields:app;observacaoAPP:rcf_app;observacaoAPP:app;seguro_vida_fields:seguro_vida;seguro_viagem_fields:seguro_viagem;rc_profissional_fields:rc_profissional;carta_verde_fields:carta_verde;veiculoFields:rcf_app;veiculoFields:rcf;veiculoFields:app;cotacao_extra_fields:rcf_app;cotacao_extra_fields:rcf;cotacao_extra_fields:app">
+        <select id="produtos" class="form-select" required data-rule="app_fields:rcf_app;rcf_fields:rcf_app;rcf_fields:rcf;app_fields:app;empresarial_fields:empresarial;parcelamento_fields:rcf_app;parcelamento_fields:rcf;parcelamento_fields:app;observacaoAPP:rcf_app;observacaoAPP:app;seguro_vida_fields:seguro_vida;seguro_viagem_fields:seguro_viagem;rc_profissional_fields:rc_profissional;carta_verde_fields:carta_verde;veiculoFields:rcf_app;veiculoFields:rcf;veiculoFields:app;cotacao_extra_fields:rcf_app;cotacao_extra_fields:rcf;cotacao_extra_fields:app;auto_compreensivo_fields:auto">
           <option value="" disabled selected>Selecione</option>
           <option value="rcf_app">RCF e APP</option>
           <option value="rcf">Somente RCF</option>
@@ -934,272 +934,264 @@ const stepTemplates = {
           <input type="file" id="cvCondutorIdAnexo" class="form-control">
         </div>
       </div>
-      <div class="btn-group-navigation">
-        <button type="button" class="btn btn-secondary" onclick="prevStep()">
-          <i class="bi bi-arrow-left"></i> Voltar
-        </button>
-        <button type="button" class="btn btn-primary" onclick="nextStep()">
-          Próximo <i class="bi bi-arrow-right"></i>
-        </button>
-      </div>
-    </div>`,
-  auto_compreensivo: `
-    <div class="form-step">
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Veículo é 0km? *</label>
-          <div class="d-flex gap-3">
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="veiculo0km" id="veiculo0kmSim" value="sim" required data-rule="notaFiscal0kmContainer:checked">
-              <label class="form-check-label" for="veiculo0kmSim">Sim</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="veiculo0km" id="veiculo0kmNao" value="nao" required>
-              <label class="form-check-label" for="veiculo0kmNao">Não</label>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 mb-3" id="notaFiscal0kmContainer" style="display: none;">
-          <label class="form-label">Nota Fiscal do Veículo (PDF/JPG/PNG)</label>
-          <input id="notaFiscal0km" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Isenção Fiscal? *</label>
-          <select id="isencaoFiscal" class="form-select" required data-rule="notaFiscalIsencaoContainer:ipi;notaFiscalIsencaoContainer:icms;notaFiscalIsencaoContainer:ipi_icms;notaFiscalIsencaoContainer:pcd">
-            <option value="" disabled selected>Selecione</option>
-            <option value="nao">Não</option>
-            <option value="ipi">IPI</option>
-            <option value="icms">ICMS</option>
-            <option value="ipi_icms">IPI e ICMS</option>
-            <option value="pcd">PCD</option>
-          </select>
-        </div>
-        <div class="col-md-6 mb-3" id="notaFiscalIsencaoContainer" style="display: none;">
-          <label class="form-label">Documento de Isenção (PDF/JPG/PNG)</label>
-          <input id="notaFiscalIsencao" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Veículo com kit gás? *</label>
-          <div class="d-flex gap-3">
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="kitGas" id="kitGasSim" value="sim" required>
-              <label class="form-check-label" for="kitGasSim">Sim</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="kitGas" id="kitGasNao" value="nao" required>
-              <label class="form-check-label" for="kitGasNao">Não</label>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Veículo blindado? *</label>
-          <div class="d-flex gap-3">
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="blindado" id="blindadoSim" value="sim" required>
-              <label class="form-check-label" for="blindadoSim">Sim</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="blindado" id="blindadoNao" value="nao" required>
-              <label class="form-check-label" for="blindadoNao">Não</label>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Tipo de câmbio: *</label>
-          <select id="tipoCambio" class="form-select" required>
-            <option value="">Selecione</option>
-            <option value="manual">Manual</option>
-            <option value="automatico">Automático</option>
-          </select>
-        </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Possui rastreador? *</label>
-           <div class="d-flex gap-3">
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="rastreador" id="rastreadorSim" value="sim" required>
-              <label class="form-check-label" for="rastreadorSim">Sim</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="rastreador" id="rastreadorNao" value="nao" required>
-              <label class="form-check-label" for="rastreadorNao">Não</label>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Possui alarme? *</label>
-          <div class="d-flex gap-3">
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="alarme" id="alarmeSim" value="sim" required>
-              <label class="form-check-label" for="alarmeSim">Sim</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="alarme" id="alarmeNao" value="nao" required>
-              <label class="form-check-label" for="alarmeNao">Não</label>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Possui seguro atual? *</label>
-          <div class="d-flex gap-3">
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="seguroAtual" id="seguroAtualSim" value="sim" required data-rule="apoliceVigenteContainer:checked">
-              <label class="form-check-label" for="seguroAtualSim">Sim</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="seguroAtual" id="seguroAtualNao" value="nao" required>
-              <label class="form-check-label" for="seguroAtualNao">Não</label>
-            </div>
-          </div>
-        </div>
-      </div>
       
-      <div class="mb-3" id="apoliceVigenteContainer" style="display: none;">
-        <label class="form-label">Apólice Vigente (PDF/JPG/PNG)</label>
-        <input id="apoliceVigente" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
-      </div>
-
-      <div class="row">
+      <div id="auto_compreensivo_fields" style="display: none;">
+        <h4 class="mb-4">Seguro Auto Compreensivo</h4>
+        <div class="row">
           <div class="col-md-6 mb-3">
-            <label class="form-label">Histórico de sinistros nos últimos 5 anos? *</label>
+            <label class="form-label">Veículo é 0km? *</label>
             <div class="d-flex gap-3">
-                <div class="form-check">
-                <input class="form-check-input" type="radio" name="sinistro" id="sinistroSim" value="sim" required>
-                <label class="form-check-label" for="sinistroSim">Sim</label>
-                </div>
-                <div class="form-check">
-                <input class="form-check-input" type="radio" name="sinistro" id="sinistroNao" value="nao" required>
-                <label class="form-check-label" for="sinistroNao">Não</label>
-                </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="veiculo0km" id="veiculo0kmSim" value="sim" required data-rule="notaFiscal0kmContainer:checked">
+                <label class="form-check-label" for="veiculo0kmSim">Sim</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="veiculo0km" id="veiculo0kmNao" value="nao" required>
+                <label class="form-check-label" for="veiculo0kmNao">Não</label>
+              </div>
             </div>
+          </div>
+          <div class="col-md-6 mb-3" id="notaFiscal0kmContainer" style="display: none;">
+            <label class="form-label">Nota Fiscal do Veículo (PDF/JPG/PNG)</label>
+            <input id="notaFiscal0km" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
+          </div>
         </div>
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Pernoite em garagem: *</label>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Isenção Fiscal? *</label>
+            <select id="isencaoFiscal" class="form-select" required data-rule="notaFiscalIsencaoContainer:ipi;notaFiscalIsencaoContainer:icms;notaFiscalIsencaoContainer:ipi_icms;notaFiscalIsencaoContainer:pcd">
+              <option value="" disabled selected>Selecione</option>
+              <option value="nao">Não</option>
+              <option value="ipi">IPI</option>
+              <option value="icms">ICMS</option>
+              <option value="ipi_icms">IPI e ICMS</option>
+              <option value="pcd">PCD</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-3" id="notaFiscalIsencaoContainer" style="display: none;">
+            <label class="form-label">Documento de Isenção (PDF/JPG/PNG)</label>
+            <input id="notaFiscalIsencao" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Veículo com kit gás? *</label>
             <div class="d-flex gap-3">
-                <div class="form-check">
-                <input class="form-check-input" type="radio" name="pernoiteGaragem" id="pernoiteGaragemSim" value="sim" required data-rule="tipoGaragemContainer:checked">
-                <label class="form-check-label" for="pernoiteGaragemSim">Sim</label>
-                </div>
-                <div class="form-check">
-                <input class="form-check-input" type="radio" name="pernoiteGaragem" id="pernoiteGaragemNao" value="nao" required>
-                <label class="form-check-label" for="pernoiteGaragemNao">Não</label>
-                </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="kitGas" id="kitGasSim" value="sim" required>
+                <label class="form-check-label" for="kitGasSim">Sim</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="kitGas" id="kitGasNao" value="nao" required>
+                <label class="form-check-label" for="kitGasNao">Não</label>
+              </div>
             </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Veículo blindado? *</label>
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="blindado" id="blindadoSim" value="sim" required>
+                <label class="form-check-label" for="blindadoSim">Sim</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="blindado" id="blindadoNao" value="nao" required>
+                <label class="form-check-label" for="blindadoNao">Não</label>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="mb-3" id="tipoGaragemContainer" style="display: none;">
-        <label class="form-label">Tipo de garagem:</label>
-        <select id="tipoGaragem" class="form-select">
-          <option value="">Selecione</option>
-          <option value="fechada">Fechada</option>
-          <option value="aberta">Aberta</option>
-          <option value="estacionamento">Estacionamento</option>
-        </select>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label for="distanciaMedia" class="form-label">Distância média percorrida por dia (km):</label>
-          <input type="number" id="distanciaMedia" class="form-control">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Tipo de câmbio: *</label>
+            <select id="tipoCambio" class="form-select" required>
+              <option value="">Selecione</option>
+              <option value="manual">Manual</option>
+              <option value="automatico">Automático</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Possui rastreador? *</label>
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="rastreador" id="rastreadorSim" value="sim" required>
+                <label class="form-check-label" for="rastreadorSim">Sim</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="rastreador" id="rastreadorNao" value="nao" required>
+                <label class="form-check-label" for="rastreadorNao">Não</label>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="col-md-6 mb-3">
-          <label for="frequenciaUso" class="form-label">Frequência de uso:</label>
-          <select id="frequenciaUso" class="form-select">
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Possui alarme? *</label>
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="alarme" id="alarmeSim" value="sim" required>
+                <label class="form-check-label" for="alarmeSim">Sim</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="alarme" id="alarmeNao" value="nao" required>
+                <label class="form-check-label" for="alarmeNao">Não</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Possui seguro atual? *</label>
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="seguroAtual" id="seguroAtualSim" value="sim" required data-rule="apoliceVigenteContainer:checked">
+                <label class="form-check-label" for="seguroAtualSim">Sim</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="seguroAtual" id="seguroAtualNao" value="nao" required>
+                <label class="form-check-label" for="seguroAtualNao">Não</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mb-3" id="apoliceVigenteContainer" style="display: none;">
+          <label class="form-label">Apólice Vigente (PDF/JPG/PNG)</label>
+          <input id="apoliceVigente" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Histórico de sinistros nos últimos 5 anos? *</label>
+              <div class="d-flex gap-3">
+                  <div class="form-check">
+                  <input class="form-check-input" type="radio" name="sinistro" id="sinistroSim" value="sim" required>
+                  <label class="form-check-label" for="sinistroSim">Sim</label>
+                  </div>
+                  <div class="form-check">
+                  <input class="form-check-input" type="radio" name="sinistro" id="sinistroNao" value="nao" required>
+                  <label class="form-check-label" for="sinistroNao">Não</label>
+                  </div>
+              </div>
+          </div>
+          <div class="col-md-6 mb-3">
+              <label class="form-label">Pernoite em garagem: *</label>
+              <div class="d-flex gap-3">
+                  <div class="form-check">
+                  <input class="form-check-input" type="radio" name="pernoiteGaragem" id="pernoiteGaragemSim" value="sim" required data-rule="tipoGaragemContainer:checked">
+                  <label class="form-check-label" for="pernoiteGaragemSim">Sim</label>
+                  </div>
+                  <div class="form-check">
+                  <input class="form-check-input" type="radio" name="pernoiteGaragem" id="pernoiteGaragemNao" value="nao" required>
+                  <label class="form-check-label" for="pernoiteGaragemNao">Não</label>
+                  </div>
+              </div>
+          </div>
+        </div>
+
+        <div class="mb-3" id="tipoGaragemContainer" style="display: none;">
+          <label class="form-label">Tipo de garagem:</label>
+          <select id="tipoGaragem" class="form-select">
             <option value="">Selecione</option>
-            <option value="diaria">Diária</option>
-            <option value="semanal">Semanal</option>
-            <option value="eventual">Eventual</option>
+            <option value="fechada">Fechada</option>
+            <option value="aberta">Aberta</option>
+            <option value="estacionamento">Estacionamento</option>
           </select>
         </div>
-      </div>
 
-      <div class="row">
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Permissionário dirige o veículo? *</label>
-            <div class="d-flex gap-3">
-                <div class="form-check">
-                <input class="form-check-input" type="radio" name="permissionarioDirige" id="permissionarioDirigeSim" value="sim" required>
-                <label class="form-check-label" for="permissionarioDirigeSim">Sim</label>
-                </div>
-                <div class="form-check">
-                <input class="form-check-input" type="radio" name="permissionarioDirige" id="permissionarioDirigeNao" value="nao" required>
-                <label class="form-check-label" for="permissionarioDirigeNao">Não</label>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Possui motorista auxiliar cadastrado? *</label>
-            <div class="d-flex gap-3">
-                <div class="form-check">
-                <input class="form-check-input" type="radio" name="motoristaAuxiliar" id="motoristaAuxiliarSim" value="sim" required data-rule="motoristaAuxiliarContainer:checked">
-                <label class="form-check-label" for="motoristaAuxiliarSim">Sim</label>
-                </div>
-                <div class="form-check">
-                <input class="form-check-input" type="radio" name="motoristaAuxiliar" id="motoristaAuxiliarNao" value="nao" required>
-                <label class="form-check-label" for="motoristaAuxiliarNao">Não</label>
-                </div>
-            </div>
-        </div>
-      </div>
-
-      <div id="motoristaAuxiliarContainer" style="display: none;">
-        <h5 class="mb-3">Dados do Motorista Auxiliar</h5>
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label class="form-label">Nome Completo</label>
-            <input id="auxNome" class="form-control">
+            <label for="distanciaMedia" class="form-label">Distância média percorrida por dia (km):</label>
+            <input type="number" id="distanciaMedia" class="form-control">
           </div>
           <div class="col-md-6 mb-3">
-            <label class="form-label">CPF</label>
-            <input id="auxCPF" class="form-control">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Data de Nascimento</label>
-            <input type="date" id="auxDataNascimento" class="form-control">
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Estado Civil</label>
-            <select id="auxEstadoCivil" class="form-select">
+            <label for="frequenciaUso" class="form-label">Frequência de uso:</label>
+            <select id="frequenciaUso" class="form-select">
               <option value="">Selecione</option>
-              <option>Solteiro(a)</option>
-              <option>Casado(a)</option>
-              <option>Divorciado(a)</option>
-              <option>Viúvo(a)</option>
+              <option value="diaria">Diária</option>
+              <option value="semanal">Semanal</option>
+              <option value="eventual">Eventual</option>
             </select>
           </div>
         </div>
-      </div>
 
-      <div class="mb-3">
-        <label class="form-label">Deseja contratar cobertura para condutores na faixa de 18 a 25 anos? *</label>
-        <div class="d-flex gap-3">
-            <div class="form-check">
-            <input class="form-check-input" type="radio" name="coberturaJovem" id="coberturaJovemSim" value="sim" required>
-            <label class="form-check-label" for="coberturaJovemSim">Sim</label>
-            </div>
-            <div class="form-check">
-            <input class="form-check-input" type="radio" name="coberturaJovem" id="coberturaJovemNao" value="nao" required>
-            <label class="form-check-label" for="coberturaJovemNao">Não</label>
-            </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+              <label class="form-label">Permissionário dirige o veículo? *</label>
+              <div class="d-flex gap-3">
+                  <div class="form-check">
+                  <input class="form-check-input" type="radio" name="permissionarioDirige" id="permissionarioDirigeSim" value="sim" required>
+                  <label class="form-check-label" for="permissionarioDirigeSim">Sim</label>
+                  </div>
+                  <div class="form-check">
+                  <input class="form-check-input" type="radio" name="permissionarioDirige" id="permissionarioDirigeNao" value="nao" required>
+                  <label class="form-check-label" for="permissionarioDirigeNao">Não</label>
+                  </div>
+              </div>
+          </div>
+          <div class="col-md-6 mb-3">
+              <label class="form-label">Possui motorista auxiliar cadastrado? *</label>
+              <div class="d-flex gap-3">
+                  <div class="form-check">
+                  <input class="form-check-input" type="radio" name="motoristaAuxiliar" id="motoristaAuxiliarSim" value="sim" required data-rule="motoristaAuxiliarContainer:checked">
+                  <label class="form-check-label" for="motoristaAuxiliarSim">Sim</label>
+                  </div>
+                  <div class="form-check">
+                  <input class="form-check-input" type="radio" name="motoristaAuxiliar" id="motoristaAuxiliarNao" value="nao" required>
+                  <label class="form-check-label" for="motoristaAuxiliarNao">Não</label>
+                  </div>
+              </div>
+          </div>
         </div>
-      </div>
 
-      <h5 class="mt-4 mb-3">Coberturas Adicionais Desejadas</h5>
-      
+        <div id="motoristaAuxiliarContainer" style="display: none;">
+          <h5 class="mb-3">Dados do Motorista Auxiliar</h5>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Nome Completo</label>
+              <input id="auxNome" class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">CPF</label>
+              <input id="auxCPF" class="form-control">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Data de Nascimento</label>
+              <input type="date" id="auxDataNascimento" class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Estado Civil</label>
+              <select id="auxEstadoCivil" class="form-select">
+                <option value="">Selecione</option>
+                <option>Solteiro(a)</option>
+                <option>Casado(a)</option>
+                <option>Divorciado(a)</option>
+                <option>Viúvo(a)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Deseja contratar cobertura para condutores na faixa de 18 a 25 anos? *</label>
+          <div class="d-flex gap-3">
+              <div class="form-check">
+              <input class="form-check-input" type="radio" name="coberturaJovem" id="coberturaJovemSim" value="sim" required>
+              <label class="form-check-label" for="coberturaJovemSim">Sim</label>
+              </div>
+              <div class="form-check">
+              <input class="form-check-input" type="radio" name="coberturaJovem" id="coberturaJovemNao" value="nao" required>
+              <label class="form-check-label" for="coberturaJovemNao">Não</label>
+              </div>
+          </div>
+        </div>
+
+        <h5 class="mt-4 mb-3">Coberturas Adicionais Desejadas</h5>
+        
         <div class="form-check">
             <input class="form-check-input" type="checkbox" id="coberturaDanosMateriais">
             <label class="form-check-label" for="coberturaDanosMateriais">Danos materiais ao veículo</label>
@@ -1236,6 +1228,19 @@ const stepTemplates = {
             <label for="coberturasOutros" class="form-label">Outros:</label>
             <input type="text" id="coberturasOutros" class="form-control">
         </div>
+
+      <div class="btn-group-navigation">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">
+          Próximo <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>`,
+  auto_compreensivo: `
+    <div class="form-step">
+      
 
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
