@@ -675,63 +675,64 @@ function addListenersAndMasks() {
    */
   
   function applyConditionalVisibility() {
-  
     const tipoSolicitante = formDataStorage.tipoSolicitante;
-  
+    const tipoSolicitacao = formDataStorage.tipoSolicitacao; // Adiciona tipoSolicitacao
     if (!tipoSolicitante) return;
-  
-  
-  
+
     const conditionalElements = document.querySelectorAll(
-  
-      '[data-visible-when-solicitante]',
-  
+      '[data-visible-when-solicitante], [data-hide-when-estipulante-nova]', // Also select elements with the new attribute
     );
-  
-  
-  
+
     conditionalElements.forEach(element => {
-  
-      const allowedTypes = element.dataset.visibleWhenSolicitante
-  
-        .split(',')
-  
-        .map(s => s.trim());
-  
-  
-  
-      const shouldBeVisible = allowedTypes.includes(tipoSolicitante);
-  
+      let shouldBeVisible = true; // Default to visible
+
+      // Check for data-hide-when-estipulante-nova rule
+      if (element.dataset.hideWhenEstipulanteNova === 'true') {
+        if (tipoSolicitante === 'estipulante' && tipoSolicitacao === 'nova') {
+          shouldBeVisible = false;
+        } else {
+          // If this hide rule doesn't apply, check the data-visible-when-solicitante rule if it exists
+          if (element.hasAttribute('data-visible-when-solicitante')) {
+            const allowedTypes = element.dataset.visibleWhenSolicitante
+              .split(',')
+              .map(s => s.trim());
+            shouldBeVisible = allowedTypes.includes(tipoSolicitante);
+          }
+        }
+      } else if (element.hasAttribute('data-visible-when-solicitante')) {
+        // Normal data-visible-when-solicitante rule
+        const allowedTypes = element.dataset.visibleWhenSolicitante
+          .split(',')
+          .map(s => s.trim());
+        shouldBeVisible = allowedTypes.includes(tipoSolicitante);
+      }
+
+      // Lógica para data-visible-when-fluxo-nova (from previous step, for optionEmpresarial)
+      // Only apply this if the element has this attribute and it's set to 'true'
+      if (element.dataset.visibleWhenFluxoNova === 'true') {
+        shouldBeVisible = shouldBeVisible && (tipoSolicitacao === 'nova');
+      }
+      
       element.style.display = shouldBeVisible ? '' : 'none';
-  
-  
-  
+      // Se for uma opção, desabilite-a também para evitar que seja selecionada se estiver oculta.
+      // Apesar de display:none em option não ser totalmente cross-browser, o desabilitar ajuda.
+      if (element.tagName === 'OPTION') {
+        element.disabled = !shouldBeVisible;
+      }
+
       const inputs = element.querySelectorAll('input, select, textarea');
-  
       inputs.forEach(input => {
-  
         if (!input.hasAttribute('data-required-original')) {
-  
           input.setAttribute('data-required-original', input.required);
-  
         }
-  
         const wasOriginallyRequired =
-  
           input.getAttribute('data-required-original') === 'true';
-  
         input.required = shouldBeVisible && wasOriginallyRequired;
-  
         if (!shouldBeVisible) {
-  
           input.classList.remove('is-invalid');
-  
         }
-  
       });
-  
     });
-  
   }
   
   

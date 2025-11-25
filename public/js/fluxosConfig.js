@@ -78,6 +78,7 @@ const fluxosConfig = {
         // No fluxo 'nova' para estipulante, os dados dele são coletados na etapa de produtos.
         { label: 'Estipulante', template: 'estipulante_seguradoras' },
         { label: 'Segurado', template: 'segurado' },
+        { label: 'Produtos', template: 'produtos_coberturas' },
         { label: 'Auxiliares', template: 'auxiliares' },
         { label: 'Info & Consent.', template: 'consentimento' },
         { label: 'Enviar', template: 'enviar' },

@@ -194,12 +194,12 @@ const stepTemplates = {
           <option value="rcf_app">RCF e APP</option>
           <option value="rcf">Somente RCF</option>
           <option value="app">Somente APP</option>
-          <option value="empresarial">Seguro Empresarial</option>
-          <option value="seguro_vida">Seguro de Vida</option>
-          <option value="seguro_viagem">Seguro Viagem</option>
-          <option value="rc_profissional">RC Profissional</option>
-          <option value="carta_verde">Seguro Carta Verde</option>
-          <option value="auto">Seguro Auto Compreensivo</option>
+          <option value="empresarial" data-hide-when-estipulante-nova="true">Seguro Empresarial</option>
+          <option value="seguro_vida" data-hide-when-estipulante-nova="true">Seguro de Vida</option>
+          <option value="seguro_viagem" data-hide-when-estipulante-nova="true">Seguro Viagem</option>
+          <option value="rc_profissional" data-hide-when-estipulante-nova="true">RC Profissional</option>
+          <option value="carta_verde" data-hide-when-estipulante-nova="true">Seguro Carta Verde</option>
+          <option value="auto" data-hide-when-estipulante-nova="true">Seguro Auto Compreensivo</option>
         </select>
       </div>
 
