@@ -592,7 +592,6 @@ function setupEstipulanteStepListeners() {
     }
 
     const selecionarBtn = document.getElementById('selecionarCoberturaEstipulanteBtn');
-    console.log(selecionarBtn);
     if (selecionarBtn) {
         selecionarBtn.replaceWith(selecionarBtn.cloneNode(true));
         document.getElementById('selecionarCoberturaEstipulanteBtn').addEventListener('click', selecionarCoberturaEstipulante);

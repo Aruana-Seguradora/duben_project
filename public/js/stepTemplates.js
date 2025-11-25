@@ -7,16 +7,12 @@ const stepTemplates = {
         <select id="tipoSolicitacao" class="form-select" required>
           <option value="" disabled selected>Selecione</option>
           <option value="nova" data-visible-when-solicitante="colaborador, estipulante, parceiro">Nova Transmissão</option>
-          <option value="renovacao">Renovação</option>
-          <option value="endosso">Endosso</option>
-          <option value="segunda_via">
-            2ª Via de Documentos/Posição Financeira
-          </option>
-          <option value="financeiro_regularizacao">
-            Financeiro Regularização
-          </option>
+          <option value="renovacao" data-visible-when-solicitante="colaborador, estipulante, segurado">Renovação</option>
+          <option value="endosso" data-visible-when-solicitante="colaborador, estipulante, segurado">Endosso</option>
+          <option value="segunda_via" data-visible-when-solicitante="colaborador, estipulante, segurado">2ª Via de Documentos/Posição Financeira</option>
+          <option value="financeiro_regularizacao" data-visible-when-solicitante="colaborador, estipulante, segurado">Financeiro Regularização</option>
           <option value="cotacao" data-visible-when-solicitante="colaborador, segurado">Cotação</option>
-          <option value="aviso_sinistro">Aviso de Sinistro</option>
+          <option value="aviso_sinistro" data-visible-when-solicitante="colaborador, estipulante, segurado">Aviso de Sinistro</option>
         </select>
       </div>
       <div class="btn-group-navigation">
@@ -127,7 +123,34 @@ const stepTemplates = {
           <div class="col-md-12 mb-3">
             <label for="segTrabalhadas" class="form-label">Seguradoras *</label>
             <select id="segTrabalhadas" class="form-select" multiple name="segTrabalhadas[]" data-rule="seguradoraContainer:Outra">
-              <option>Aruana</option> <option>Porto Seguro</option> <option>Azul</option> <option>Allianz</option> <option>Tokio Marine</option> <option>HDI</option> <option>Sompo</option> <option>Bradesco</option> <option>Suhai</option> <option>Mapfre</option> <option>MBM</option> <option>Sabemi</option> <option>Akad</option><option>Ezze</option> <option>Darwin</option><option>	Yelium</option> <option>Zurich</option> <option>Chubb</option> <option>Essor</option> <option>Sura</option> <option>Icatu</option> <option>Alfa</option><option>Fator</option><option>American Life</option><option>Excelsior</option><option>Kovr</option><option>ALM</option><option>AXA</option>
+              <option value="aruana">Aruana</option>
+              <option value="porto">Porto Seguro</option>
+              <option value="azul">Azul</option>
+              <option value="allianz">Allianz</option>
+              <option value="tokio_marine">Tokio Marine</option>
+              <option value="hdi">HDI</option>
+              <option value="sompo">Sompo</option>
+              <option value="bradesco">Bradesco</option>
+              <option value="suhai">Suhai</option>
+              <option value="mapfre">Mapfre</option>
+              <option value="mbm">MBM</option>
+              <option value="sabemi">Sabemi</option>
+              <option value="akad">Akad</option>
+              <option value="ezze">Ezze</option>
+              <option value="darwin">Darwin</option>
+              <option value="yelium">Yelium</option>
+              <option value="zurich">Zurich</option>
+              <option value="chubb">Chubb</option>
+              <option value="essor">Essor</option>
+              <option value="sura">Sura</option>
+              <option value="icatu">Icatu</option>
+              <option value="alfa">Alfa</option>
+              <option value="fator">Fator</option>
+              <option value="american_life">American Life</option>
+              <option value="excelsior">Excelsior</option>
+              <option value="kovr">Kovr</option>
+              <option value="alm">ALM</option>
+              <option value="axa">AXA</option>
             </select>
           </div>
           <div class="mb-3" id="seguradoraContainer" style="display: none;">
@@ -1928,7 +1951,34 @@ const stepTemplates = {
           <label for="renovSeguradora" class="form-label">Seguradora Vencendo *</label>
           <select id="renovSeguradora" class="form-select">
             <option value="" selected disabled>Selecione</option>
-            <option>Aruana</option> <option>Porto Seguro</option> <option>Azul</option> <option>Allianz</option> <option>Tokio Marine</option> <option>HDI</option> <option>Sompo</option> <option>Bradesco</option> <option>Suhai</option> <option>Mapfre</option> <option>MBM</option> <option>Sabemi</option> <option>Akad</option><option>Ezze</option> <option>Darwin</option><option>	Yelium</option> <option>Zurich</option> <option>Chubb</option> <option>Essor</option> <option>Sura</option> <option>Icatu</option> <option>Alfa</option><option>Fator</option><option>American Life</option><option>Excelsior</option><option>Kovr</option><option>ALM</option><option>AXA</option>
+            <option value="aruana">Aruana</option>
+            <option value="porto">Porto Seguro</option>
+            <option value="azul">Azul</option>
+            <option value="allianz">Allianz</option>
+            <option value="tokio_marine">Tokio Marine</option>
+            <option value="hdi">HDI</option>
+            <option value="sompo">Sompo</option>
+            <option value="bradesco">Bradesco</option>
+            <option value="suhai">Suhai</option>
+            <option value="mapfre">Mapfre</option>
+            <option value="mbm">MBM</option>
+            <option value="sabemi">Sabemi</option>
+            <option value="akad">Akad</option>
+            <option value="ezze">Ezze</option>
+            <option value="darwin">Darwin</option>
+            <option value="yelium">Yelium</option>
+            <option value="zurich">Zurich</option>
+            <option value="chubb">Chubb</option>
+            <option value="essor">Essor</option>
+            <option value="sura">Sura</option>
+            <option value="icatu">Icatu</option>
+            <option value="alfa">Alfa</option>
+            <option value="fator">Fator</option>
+            <option value="american_life">American Life</option>
+            <option value="excelsior">Excelsior</option>
+            <option value="kovr">Kovr</option>
+            <option value="alm">ALM</option>
+            <option value="axa">AXA</option>
           </select>
         </div>
         <div class="col-md-6 mb-3">
@@ -1961,8 +2011,33 @@ const stepTemplates = {
             <select id="endossoSeguradora" class="form-select" required data-rule="endossoOutraSeguradoraContainer:outra">
               <option value="">Selecione</option>
               <option value="aruana">Aruana</option>
+              <option value="porto">Porto Seguro</option>
+              <option value="azul">Azul</option>
+              <option value="allianz">Allianz</option>
+              <option value="tokio_marine">Tokio Marine</option>
+              <option value="hdi">HDI</option>
+              <option value="sompo">Sompo</option>
+              <option value="bradesco">Bradesco</option>
+              <option value="suhai">Suhai</option>
+              <option value="mapfre">Mapfre</option>
               <option value="mbm">MBM</option>
-              <option value="outra">Outra</option>
+              <option value="sabemi">Sabemi</option>
+              <option value="akad">Akad</option>
+              <option value="ezze">Ezze</option>
+              <option value="darwin">Darwin</option>
+              <option value="yelium">Yelium</option>
+              <option value="zurich">Zurich</option>
+              <option value="chubb">Chubb</option>
+              <option value="essor">Essor</option>
+              <option value="sura">Sura</option>
+              <option value="icatu">Icatu</option>
+              <option value="alfa">Alfa</option>
+              <option value="fator">Fator</option>
+              <option value="american_life">American Life</option>
+              <option value="excelsior">Excelsior</option>
+              <option value="kovr">Kovr</option>
+              <option value="alm">ALM</option>
+              <option value="axa">AXA</option>
             </select>
           </div>
           <div class="mb-3" id="endossoOutraSeguradoraContainer" style="display: none;">
@@ -1970,16 +2045,50 @@ const stepTemplates = {
             <input type="text" id="endossoOutraSeguradoraNome" class="form-control" />
           </div>
 
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Número da apólice APP</label>
-              <input id="endossoApoliceAPP" class="form-control" />
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Número Apólice RCF</label>
-              <input id="endossoApoliceRCF" class="form-control" />
+          <div id="apolices-container">
+            <div class="row apolice-entry mb-3">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Número da Apólice 1</label>
+                <input type="text" class="form-control" name="apolice_1">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Seguradora da Apólice 1</label>
+                <select class="form-select" name="seguradora_apolice_1">
+                  <option value="">Selecione</option>
+                  <option value="aruana">Aruana</option>
+                  <option value="porto">Porto Seguro</option>
+                  <option value="azul">Azul</option>
+                  <option value="allianz">Allianz</option>
+                  <option value="tokio_marine">Tokio Marine</option>
+                  <option value="hdi">HDI</option>
+                  <option value="sompo">Sompo</option>
+                  <option value="bradesco">Bradesco</option>
+                  <option value="suhai">Suhai</option>
+                  <option value="mapfre">Mapfre</option>
+                  <option value="mbm">MBM</option>
+                  <option value="sabemi">Sabemi</option>
+                  <option value="akad">Akad</option>
+                  <option value="ezze">Ezze</option>
+                  <option value="darwin">Darwin</option>
+                  <option value="yelium">Yelium</option>
+                  <option value="zurich">Zurich</option>
+                  <option value="chubb">Chubb</option>
+                  <option value="essor">Essor</option>
+                  <option value="sura">Sura</option>
+                  <option value="icatu">Icatu</option>
+                  <option value="alfa">Alfa</option>
+                  <option value="fator">Fator</option>
+                  <option value="american_life">American Life</option>
+                  <option value="excelsior">Excelsior</option>
+                  <option value="kovr">Kovr</option>
+                  <option value="alm">ALM</option>
+                  <option value="axa">AXA</option>
+                </select>
+              </div>
             </div>
           </div>
+          <button type="button" class="btn btn-sm btn-outline-primary mb-3" id="add-apolice-btn" onclick="addApoliceInput()">Adicionar outra apólice</button>
+
 
           <div class="mb-3">
             <label for="endossoTipo" class="form-label">Tipo de solicitação *</label>
@@ -2588,7 +2697,34 @@ const stepTemplates = {
             <div class="col-md-6 mb-3">
               <label for="segTrabalhadasFin" class="form-label">Seguradoras *</label>
               <select id="segTrabalhadasFin" class="form-select">
-                <option>Aruana</option> <option>Porto Seguro</option> <option>Azul</option> <option>Allianz</option> <option>Tokio Marine</option> <option>HDI</option> <option>Sompo</option> <option>Bradesco</option> <option>Suhai</option> <option>Mapfre</option> <option>MBM</option> <option>Sabemi</option> <option>Akad</option><option>Ezze</option> <option>Darwin</option><option>	Yelium</option> <option>Zurich</option> <option>Chubb</option> <option>Essor</option> <option>Sura</option> <option>Icatu</option> <option>Alfa</option><option>Fator</option><option>American Life</option><option>Excelsior</option><option>Kovr</option><option>ALM</option><option>AXA</option>
+                <option value="aruana">Aruana</option>
+                <option value="porto">Porto Seguro</option>
+                <option value="azul">Azul</option>
+                <option value="allianz">Allianz</option>
+                <option value="tokio_marine">Tokio Marine</option>
+                <option value="hdi">HDI</option>
+                <option value="sompo">Sompo</option>
+                <option value="bradesco">Bradesco</option>
+                <option value="suhai">Suhai</option>
+                <option value="mapfre">Mapfre</option>
+                <option value="mbm">MBM</option>
+                <option value="sabemi">Sabemi</option>
+                <option value="akad">Akad</option>
+                <option value="ezze">Ezze</option>
+                <option value="darwin">Darwin</option>
+                <option value="yelium">Yelium</option>
+                <option value="zurich">Zurich</option>
+                <option value="chubb">Chubb</option>
+                <option value="essor">Essor</option>
+                <option value="sura">Sura</option>
+                <option value="icatu">Icatu</option>
+                <option value="alfa">Alfa</option>
+                <option value="fator">Fator</option>
+                <option value="american_life">American Life</option>
+                <option value="excelsior">Excelsior</option>
+                <option value="kovr">Kovr</option>
+                <option value="alm">ALM</option>
+                <option value="axa">AXA</option>
               </select>
             </div>
             <div class="mb-4 col-md-6">

@@ -366,8 +366,20 @@ function addListenersAndMasks() {
         appendValue('documento', 'endossoDocumento');
         appendValue('seguradora', 'endossoSeguradora');
         appendValue('outraSeguradora', 'endossoOutraSeguradoraNome');
-        appendValue('apoliceAPP', 'endossoApoliceAPP');
-        appendValue('apoliceRCF', 'endossoApoliceRCF');
+        
+        const apoliceEntries = document.querySelectorAll('#apolices-container .apolice-entry');
+        apoliceEntries.forEach((entry, index) => {
+            const apoliceInput = entry.querySelector('input[name^="apolice_"]');
+            const seguradoraSelect = entry.querySelector('select[name^="seguradora_apolice_"]');
+
+            if (apoliceInput && apoliceInput.value) {
+                formData.append(`apolice_${index + 1}`, apoliceInput.value);
+            }
+            if (seguradoraSelect && seguradoraSelect.value) {
+                formData.append(`seguradora_apolice_${index + 1}`, seguradoraSelect.value);
+            }
+        });
+
         const tipoSolicitacao = document.getElementById('endossoTipo')?.value;
         if (tipoSolicitacao)
           formData.append('tipoSolicitacao', tipoSolicitacao);
@@ -778,6 +790,75 @@ function addListenersAndMasks() {
   
     });
   
+  }
+
+  function addApoliceInput() {
+    const container = document.getElementById('apolices-container');
+    if (!container) return;
+  
+    const count = container.querySelectorAll('.apolice-entry').length + 1;
+  
+    const newEntry = document.createElement('div');
+    newEntry.className = 'row apolice-entry mb-3';
+    newEntry.innerHTML = `
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Número da Apólice ${count}</label>
+        <input type="text" class="form-control" name="apolice_${count}">
+      </div>
+      <div class="col-md-5 mb-3">
+        <label class="form-label">Seguradora da Apólice ${count}</label>
+        <select class="form-select" name="seguradora_apolice_${count}">
+          <option value="">Selecione</option>
+          <option value="aruana">Aruana</option>
+          <option value="mbm">MBM</option>
+          <option value="outra">Outra</option>
+        </select>
+      </div>
+      <div class="col-md-1 mb-3 d-flex align-items-end">
+        <i
+          class="bi bi-trash-fill text-danger fs-5"
+          role="button"
+          title="Remover"
+          onclick="removeApoliceInput(this)"
+        ></i>
+      </div>
+    `;
+    container.appendChild(newEntry);
+  }
+  
+  function removeApoliceInput(button) {
+    button.closest('.apolice-entry').remove();
+    
+    const addButton = document.getElementById('add-apolice-btn');
+    if (addButton) {
+      addButton.removeAttribute('disabled');
+      addButton.textContent = 'Adicionar outra apólice';
+    }
+  
+    // Re-number labels and input names to keep them sequential
+    const container = document.getElementById('apolices-container');
+    if (!container) return;
+    const entries = container.querySelectorAll('.apolice-entry');
+    entries.forEach((entry, index) => {
+      const apoliceLabel = entry.querySelector('div:first-child label');
+      const apoliceInput = entry.querySelector('div:first-child input');
+      const seguradoraLabel = entry.querySelector('div:nth-child(2) label');
+      const seguradoraSelect = entry.querySelector('div:nth-child(2) select');
+
+      const newCount = index + 1;
+      if (apoliceLabel) {
+        apoliceLabel.innerText = `Número da Apólice ${newCount}`;
+      }
+      if (apoliceInput) {
+        apoliceInput.name = `apolice_${newCount}`;
+      }
+      if (seguradoraLabel) {
+        seguradoraLabel.innerText = `Seguradora da Apólice ${newCount}`;
+      }
+      if (seguradoraSelect) {
+        seguradoraSelect.name = `seguradora_apolice_${newCount}`;
+      }
+    });
   }
   
   
