@@ -187,7 +187,7 @@ const stepTemplates = {
   produtos_coberturas: `
     <div class="form-step">
       <h4 class="mb-4">Produtos e Coberturas</h4>
-      <div class="mb-4" data-visible-when-solicitante="colaborador, parceiro, segurado">
+      <div class="mb-4">
         <label class="form-label">Selecione os produtos desejados *</label>
         <select id="produtos" class="form-select" required data-rule="app_fields:rcf_app;rcf_fields:rcf_app;rcf_fields:rcf;app_fields:app;empresarial_fields:empresarial;parcelamento_fields:rcf_app;parcelamento_fields:rcf;parcelamento_fields:app;observacaoAPP:rcf_app;observacaoAPP:app;seguro_vida_fields:seguro_vida;seguro_viagem_fields:seguro_viagem;rc_profissional_fields:rc_profissional;carta_verde_fields:carta_verde;veiculoFields:rcf_app;veiculoFields:rcf;veiculoFields:app;cotacao_extra_fields:rcf_app;cotacao_extra_fields:rcf;cotacao_extra_fields:app;auto_compreensivo_fields:auto">
           <option value="" disabled selected>Selecione</option>
@@ -1228,6 +1228,7 @@ const stepTemplates = {
             <label for="coberturasOutros" class="form-label">Outros:</label>
             <input type="text" id="coberturasOutros" class="form-control">
         </div>
+      </div>
 
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()">
