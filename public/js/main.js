@@ -10,6 +10,11 @@ function validateStep(step) {
   let isValid = true;
 
   inputs.forEach(input => {
+    if (input.offsetParent === null) {
+      input.classList.remove('is-invalid')
+      return;
+    }
+    
     let fieldValid = input.checkValidity();
 
     // --- Início das Validações Customizadas ---
@@ -729,12 +734,6 @@ function iniciarFluxo(tipoSolicitante) {
 
 let parceiroPolicies = { rcf: [], app: [] };
 
-/**
- * Normaliza um valor monetário em string para um número.
- * Ex: "R$ 50.000,00" -> 50000
- * @param {string} value
- * @returns {number}
- */
 function normalizeCurrency(value) {
   if (typeof value !== 'string') return value;
   return parseFloat(value.replace(/[^0-9,]/g, '').replace(',', '.'));

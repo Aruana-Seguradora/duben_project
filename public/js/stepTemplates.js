@@ -187,7 +187,7 @@ const stepTemplates = {
   produtos_coberturas: `
     <div class="form-step">
       <h4 class="mb-4">Produtos e Coberturas</h4>
-      <div class="mb-4" data-visible-when-solicitante="colaborador, parceiro">
+      <div class="mb-4" data-visible-when-solicitante="colaborador, parceiro, segurado">
         <label class="form-label">Selecione os produtos desejados *</label>
         <select id="produtos" class="form-select" required data-rule="app_fields:rcf_app;rcf_fields:rcf_app;rcf_fields:rcf;app_fields:app;empresarial_fields:empresarial;parcelamento_fields:rcf_app;parcelamento_fields:rcf;parcelamento_fields:app;observacaoAPP:rcf_app;observacaoAPP:app;seguro_vida_fields:seguro_vida;seguro_viagem_fields:seguro_viagem;rc_profissional_fields:rc_profissional;carta_verde_fields:carta_verde;veiculoFields:rcf_app;veiculoFields:rcf;veiculoFields:app;cotacao_extra_fields:rcf_app;cotacao_extra_fields:rcf;cotacao_extra_fields:app">
           <option value="" disabled selected>Selecione</option>
@@ -206,21 +206,20 @@ const stepTemplates = {
       <div data-visible-when-fluxo="cotacao">
         <div id="cotacao_extra_fields" style="display: none;">
             <hr>
-            <h4 class="mb-4">Dados Adicionais para Cotação</h4>
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Estado Civil do Segurado *</label>
-                    <select id="seguradoEstadoCivil" class="form-select" required>
-                        <option value="">Selecione</option>
-                        <option>Solteiro(a)</option>
-                        <option>Casado(a)</option>
-                        <option>Divorciado(a)</option>
-                        <option>Viúvo(a)</option>
-                    </select>
+                  <label class="form-label">Estado Civil do Segurado *</label>
+                  <select id="seguradoEstadoCivil" class="form-select">
+                      <option value="">Selecione</option>
+                      <option>Solteiro(a)</option>
+                      <option>Casado(a)</option>
+                      <option>Divorciado(a)</option>
+                      <option>Viúvo(a)</option>
+                  </select>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="cepPernoite" class="form-label">CEP Pernoite *</label>
-                    <input id="cepPernoite" class="form-control" placeholder="00000-000" required>
+                    <input id="cepPernoite" class="form-control" placeholder="00000-000">
                 </div>
             </div>
 
@@ -229,7 +228,7 @@ const stepTemplates = {
                 <div class="col-md-4 mb-3">
                 <label for="segurado_cep_cotacao" class="form-label">CEP *</label>
                 <div class="input-group">
-                    <input id="segurado_cep_cotacao" class="form-control" placeholder="00000-000" required>
+                    <input id="segurado_cep_cotacao" class="form-control" placeholder="00000-000">
                     <button class="btn btn-outline-secondary" type="button" onclick="buscarCep('segurado_cep_cotacao', 'segurado_logradouro_cotacao', 'segurado_bairro_cotacao', 'segurado_cidade_cotacao', 'segurado_estado_cotacao')"><i class="bi bi-search"></i></button>
                 </div>
                 </div>
@@ -256,18 +255,6 @@ const stepTemplates = {
                 <div class="col-md-2 mb-3">
                 <label class="form-label">Estado</label>
                 <input id="segurado_estado_cotacao" class="form-control" readonly>
-                </div>
-            </div>
-
-            <h5 class="mt-4">Dados do Veículo</h5>
-             <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Fabricante (Marca) *</label>
-                    <input id="veiFab" class="form-control" required />
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Lotação *</label>
-                    <input id="veiLotacao" type="number" class="form-control" min="1" required />
                 </div>
             </div>
         </div>
@@ -1715,11 +1702,11 @@ const stepTemplates = {
         </div>
       </div>
       <div class="row">
-        <div class="col-md-4 mb-3">
+        <div class="col-md-6 mb-3">
           <label for="emailCliente" class="form-label">Email *</label>
           <input type="email" id="emailCliente" placeholder="Email" class="form-control"  />
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-6 mb-3">
           <label class="form-label">Telefone *</label>
           <input type="phone" id="telefoneCliente" class="form-control" placeholder="Telefone"  />
         </div>
@@ -1834,9 +1821,21 @@ const stepTemplates = {
               <input id="aux1CPF" class="form-control" placeholder="000.000.000-00" />
             </div>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Upload CNH (PDF/JPG/PNG) *</label>
-            <input id="aux1CNH" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" />
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Upload CNH (PDF/JPG/PNG) *</label>
+              <input id="aux1CNH" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+            <div class="col-md-6 mb-3" data-visible-when-fluxo="cotacao">
+              <label class="form-label">Estado Civil</label>
+              <select id="auxiliar1EstadoCivil" class="form-select">
+                <option value="">Selecione</option>
+                <option>Solteiro(a)</option>
+                <option>Casado(a)</option>
+                <option>Divorciado(a)</option>
+                <option>Viúvo(a)</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -1859,9 +1858,21 @@ const stepTemplates = {
               <input id="aux2CPF" class="form-control" placeholder="000.000.000-00" />
             </div>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Upload CNH (PDF/JPG/PNG) *</label>
-            <input id="aux2CNH" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" />
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Upload CNH (PDF/JPG/PNG) *</label>
+              <input id="aux2CNH" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+            <div class="col-md-6 mb-3" data-visible-when-fluxo="cotacao">
+              <label class="form-label">Estado Civil</label>
+              <select id="auxiliar2EstadoCivil" class="form-select">
+                <option value="">Selecione</option>
+                <option>Solteiro(a)</option>
+                <option>Casado(a)</option>
+                <option>Divorciado(a)</option>
+                <option>Viúvo(a)</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
