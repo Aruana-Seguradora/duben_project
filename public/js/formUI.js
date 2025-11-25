@@ -476,7 +476,8 @@ function addListenersAndMasks() {
 
   handleColaboradorValidation();
   setupParceiroStepListeners();
-
+  setupEstipulanteStepListeners();
+  
   // --- Configuração dos Listeners ---
   
   const codigo = document.getElementById('codigo');
@@ -591,125 +592,65 @@ function addListenersAndMasks() {
   
   
   
-  async function buscarCep() {
-  
-    const cepInput = document.getElementById('segurado_cep');
-  
-    if(!cepInput) return;
-  
-  
-  
+  async function buscarCep(cepFieldId, logradouroFieldId, bairroFieldId, cidadeFieldId, estadoFieldId) {
+    const cepInput = document.getElementById(cepFieldId);
+    if (!cepInput) return;
+
     const cep = cepInput.value.replace(/\D/g, '');
-  
-  
-  
     cepInput.classList.remove('is-invalid');
-  
     const errorDiv = cepInput.closest('.input-group')?.querySelector('.invalid-feedback');
-  
     if (errorDiv) errorDiv.textContent = 'Informe um CEP válido.';
-  
-  
-  
+
     const addressFields = {
-  
-      logradouro: document.getElementById('segurado_logradouro'),
-  
-      bairro: document.getElementById('segurado_bairro'),
-  
-      cidade: document.getElementById('segurado_cidade'),
-  
-      estado: document.getElementById('segurado_estado'),
-  
+        logradouro: document.getElementById(logradouroFieldId),
+        bairro: document.getElementById(bairroFieldId),
+        cidade: document.getElementById(cidadeFieldId),
+        estado: document.getElementById(estadoFieldId),
     };
-  
-  
-  
-    Object.values(addressFields).forEach(field => { if(field) field.value = ''; });
-  
-  
-  
+
+    Object.values(addressFields).forEach(field => { if (field) field.value = ''; });
+
     if (cep.length !== 8) return;
-  
-  
-  
+
     Object.values(addressFields).forEach(field => {
-  
-      if(field) {
-  
-        field.placeholder = 'Carregando...';
-  
-        field.disabled = true;
-  
-      }
-  
-    });
-  
-    cepInput.disabled = true;
-  
-  
-  
-    const url = `https://viacep.com.br/ws/${cep}/json/`;
-  
-  
-  
-    try {
-  
-      const response = await fetch(url);
-  
-      const data = await response.json();
-  
-  
-  
-      if (data.erro) {
-  
-        cepInput.classList.add('is-invalid');
-  
-        if (errorDiv) errorDiv.textContent = 'CEP não encontrado.';
-  
-        return;
-  
-      }
-  
-  
-  
-      if(addressFields.logradouro) addressFields.logradouro.value = data.logradouro;
-  
-      if(addressFields.bairro) addressFields.bairro.value = data.bairro;
-  
-      if(addressFields.cidade) addressFields.cidade.value = data.localidade;
-  
-      if(addressFields.estado) addressFields.estado.value = data.uf;
-  
-  
-  
-    } catch (error) {
-  
-      console.error('Erro ao buscar CEP:', error);
-  
-      cepInput.classList.add('is-invalid');
-  
-      if (errorDiv) errorDiv.textContent = 'Erro ao buscar CEP.';
-  
-    } finally {
-  
-      Object.values(addressFields).forEach(field => {
-  
-        if(field) {
-  
-          field.placeholder = '';
-  
-          field.disabled = false;
-  
+        if (field) {
+            field.placeholder = 'Carregando...';
+            field.disabled = true;
         }
-  
-      });
-  
-      cepInput.disabled = false;
-  
+    });
+    cepInput.disabled = true;
+
+    const url = `https://viacep.com.br/ws/${cep}/json/`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.erro) {
+            cepInput.classList.add('is-invalid');
+            if (errorDiv) errorDiv.textContent = 'CEP não encontrado.';
+            return;
+        }
+
+        if (addressFields.logradouro) addressFields.logradouro.value = data.logradouro;
+        if (addressFields.bairro) addressFields.bairro.value = data.bairro;
+        if (addressFields.cidade) addressFields.cidade.value = data.localidade;
+        if (addressFields.estado) addressFields.estado.value = data.uf;
+
+    } catch (error) {
+        console.error('Erro ao buscar CEP:', error);
+        cepInput.classList.add('is-invalid');
+        if (errorDiv) errorDiv.textContent = 'Erro ao buscar CEP.';
+    } finally {
+        Object.values(addressFields).forEach(field => {
+            if (field) {
+                field.placeholder = '';
+                field.disabled = false;
+            }
+        });
+        cepInput.disabled = false;
     }
-  
-  }
+}
   
   
   

@@ -17,8 +17,9 @@ const fluxosConfig = {
     renovacao: {
       description: 'Siga as etapas para solicitar a Renovação',
       steps: [
-        { label: 'Colaborador', template: 'solicitante' },
+        { label: 'Colaborador', template: 'solicitante' }, 
         { label: 'Apólice', template: 'renovacao_apolice' },
+        { label: 'Produtos', template: 'produtos_coberturas' },
         { label: 'Auxiliares', template: 'auxiliares' },
         { label: 'Confirmar', template: 'renovacao_confirmar' },
       ],
@@ -77,7 +78,6 @@ const fluxosConfig = {
         // No fluxo 'nova' para estipulante, os dados dele são coletados na etapa de produtos.
         { label: 'Estipulante', template: 'estipulante_seguradoras' },
         { label: 'Segurado', template: 'segurado' },
-        { label: 'Produtos', template: 'produtos_coberturas' },
         { label: 'Auxiliares', template: 'auxiliares' },
         { label: 'Info & Consent.', template: 'consentimento' },
         { label: 'Enviar', template: 'enviar' },
@@ -89,6 +89,7 @@ const fluxosConfig = {
         { label: 'Estipulante', template: 'estipulante_seguradoras' },
         { label: 'Segurado', template: 'segurado' },
         { label: 'Apólice', template: 'renovacao_apolice' },
+        { label: 'Produtos', template: 'produtos_coberturas' },
         { label: 'Auxiliares', template: 'auxiliares' },
         { label: 'Confirmar', template: 'renovacao_confirmar' },
       ],
@@ -97,7 +98,6 @@ const fluxosConfig = {
       description: 'Siga as etapas para solicitar o Endosso',
       steps: [
         { label: 'Estipulante', template: 'estipulante_seguradoras' },
-        { label: 'Segurado', template: 'cliente' },
         { label: 'Dados', template: 'endosso_dados' },
       ],
     },
@@ -105,7 +105,6 @@ const fluxosConfig = {
       description: 'Solicite 2ª Via de Documentos ou Posição Financeira',
       steps: [
         { label: 'Estipulante', template: 'estipulante_seguradoras' },
-        { label: 'Segurado', template: 'segurado' },
         { label: 'Dados', template: 'segunda_via_docs' },
       ],
     },
@@ -113,7 +112,6 @@ const fluxosConfig = {
       description: 'Solicite Regularização Financeira',
       steps: [
         { label: 'Estipulante', template: 'estipulante_seguradoras' },
-        { label: 'Segurado', template: 'segurado' },
         { label: 'Dados', template: 'financeiro_regularizacao' },
       ],
     },
@@ -145,7 +143,6 @@ const fluxosConfig = {
         { label: 'Enviar', template: 'enviar' },
       ],
     },
-    // Adicionar outros fluxos para parceiro se necessário
   },
   
   // =================================================================
@@ -161,6 +158,30 @@ const fluxosConfig = {
         { label: 'Enviar', template: 'enviar' },
       ],
     },
-    // Adicionar outros fluxos para parceiro se necessário
+    aviso_sinistro: {
+      description: 'Preencha os dados para Aviso de Sinistro',
+      steps: [
+        { label: 'Colaborador', template: 'solicitante' },
+        { label: 'Aviso Segurado', template: 'aviso_sinistro' },
+        { label: 'Aviso Terceiro', template: 'aviso_sinistro_terceiro' },
+        { label: 'Aviso Ocorrência', template: 'aviso_sinistro_ocorrencia' },
+        { label: 'Info & Consent.', template: 'consentimento' },
+        { label: 'Enviar', template: 'enviar' },
+      ],
+    },
+    segunda_via: {
+      description: 'Solicite 2ª Via de Documentos ou Posição Financeira',
+      steps: [
+        { label: 'Estipulante', template: 'estipulante_seguradoras' },
+        { label: 'Dados', template: 'segunda_via_docs' },
+      ],
+    },
+    endosso: {
+      description: 'Siga as etapas para solicitar o Endosso',
+      steps: [
+        { label: 'Segurado', template: 'cliente' },
+        { label: 'Dados', template: 'endosso_dados' },
+      ],
+    },
   },
 };

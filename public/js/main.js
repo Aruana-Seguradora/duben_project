@@ -197,10 +197,25 @@ function nextStep() {
           label: 'Contato',
           template: 'endosso_alteracao_contato',
         });
+      } else if (tipoEndosso === 'alteracao_endereco_completo') {
+        stepsToAdd.push({
+          label: 'Endereço',
+          template: 'endosso_alteracao_endereco_completo',
+        });
+      } else if (tipoEndosso === 'alteracao_motorista_principal_pernoite') {
+        stepsToAdd.push({
+          label: 'Motorista/Pernoite',
+          template: 'endosso_motorista_pernoite',
+        });
       } else if (tipoEndosso === 'correcao_cadastral') {
         stepsToAdd.push({
           label: 'Correção',
           template: 'endosso_correcao_cadastral',
+        });
+      } else if (tipoEndosso === 'troca_titularidade') {
+        stepsToAdd.push({
+          label: 'Novo Titular',
+          template: 'endosso_troca_titularidade',
         });
       } else if (tipoEndosso === 'cancel_req') {
         stepsToAdd.push({ label: 'Carta', template: 'carta_cancelamento' });
@@ -472,6 +487,15 @@ async function buscar() {
     const nomeDisplay = document.getElementById('estipulanteNomeDisplay');
     if(nomeDisplay) nomeDisplay.textContent = `Estipulante: ${estipulanteNome}`;
 
+    const tigoClubeContainer = document.getElementById('tigoClubeQuestionContainer');
+    if (tigoClubeContainer) {
+      if (estipulanteNome && estipulanteNome.toUpperCase().includes('TIGO')) {
+        tigoClubeContainer.style.display = 'block';
+      } else {
+        tigoClubeContainer.style.display = 'none';
+      }
+    }
+
     // Popula dropdowns
     const rcfSelect = document.getElementById('coberturaEstipulanteRCF');
     const appSelect = document.getElementById('coberturaEstipulanteAPP');
@@ -568,6 +592,7 @@ function setupEstipulanteStepListeners() {
     }
 
     const selecionarBtn = document.getElementById('selecionarCoberturaEstipulanteBtn');
+    console.log(selecionarBtn);
     if (selecionarBtn) {
         selecionarBtn.replaceWith(selecionarBtn.cloneNode(true));
         document.getElementById('selecionarCoberturaEstipulanteBtn').addEventListener('click', selecionarCoberturaEstipulante);

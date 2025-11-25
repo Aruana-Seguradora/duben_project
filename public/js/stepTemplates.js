@@ -164,7 +164,7 @@ const stepTemplates = {
   produtos_coberturas: `
     <div class="form-step">
       <h4 class="mb-4">Produtos e Coberturas</h4>
-      <div class="mb-4">
+      <div class="mb-4" data-visible-when-solicitante="colaborador, parceiro">
         <label class="form-label">Selecione os produtos desejados *</label>
         <select id="produtos" class="form-select" required data-rule="app_fields:rcf_app;rcf_fields:rcf_app;rcf_fields:rcf;app_fields:app;empresarial_fields:empresarial;parcelamento_fields:rcf_app;parcelamento_fields:rcf;parcelamento_fields:app;observacaoAPP:rcf_app;observacaoAPP:app;seguro_vida_fields:seguro_vida;seguro_viagem_fields:seguro_viagem;rc_profissional_fields:rc_profissional;carta_verde_fields:carta_verde;veiculoFields:rcf_app;veiculoFields:rcf;veiculoFields:app;cotacao_extra_fields:rcf_app;cotacao_extra_fields:rcf;cotacao_extra_fields:app">
           <option value="" disabled selected>Selecione</option>
@@ -176,7 +176,7 @@ const stepTemplates = {
           <option value="seguro_viagem">Seguro Viagem</option>
           <option value="rc_profissional">RC Profissional</option>
           <option value="carta_verde">Seguro Carta Verde</option>
-          <option data-visible-when-solicitante="colaborador, parceiro" value="auto">Seguro Auto Compreensivo</option>
+          <option value="auto">Seguro Auto Compreensivo</option>
         </select>
       </div>
 
@@ -207,7 +207,7 @@ const stepTemplates = {
                 <label for="segurado_cep_cotacao" class="form-label">CEP *</label>
                 <div class="input-group">
                     <input id="segurado_cep_cotacao" class="form-control" placeholder="00000-000" required>
-                    <button class="btn btn-outline-secondary" type="button" onclick="buscarCep()"><i class="bi bi-search"></i></button>
+                    <button class="btn btn-outline-secondary" type="button" onclick="buscarCep('segurado_cep_cotacao', 'segurado_logradouro_cotacao', 'segurado_bairro_cotacao', 'segurado_cidade_cotacao', 'segurado_estado_cotacao')"><i class="bi bi-search"></i></button>
                 </div>
                 </div>
             </div>
@@ -442,22 +442,21 @@ const stepTemplates = {
             <input id="veiLotacao" type="number" class="form-control" min="1"  />
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-12 mb-3">
-              <label class="form-label">Contrato com adesão ao TIGO CLUBE? *</label>
-              <div class="d-flex gap-3">
-                  <div class="form-check">
-                      <input class="form-check-input" type="radio" name="tigoClube" id="tigoClubeSim" value="sim" data-rule="tigoClubeAdesaoContainer:checked" />
-                      <label class="form-check-label" for="tigoClubeSim">Sim</label>
-                  </div>
-                  <div class="form-check">
-                      <input class="form-check-input" type="radio" name="tigoClube" id="tigoClubeNao" value="nao"  checked />
-                      <label class="form-check-label" for="tigoClubeNao">Não</label>
-                  </div>
-              </div>
-          </div>
-        </div>
-        <div id="tigoClubeAdesaoContainer" class="mb-3" style="display: none;">
+        <div class="row" id="tigoClubeQuestionContainer" style="display: none;">
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">Contrato com adesão ao TIGO CLUBE? *</label>
+                    <div class="d-flex gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="tigoClube" id="tigoClubeSim" value="sim" data-rule="tigoClubeAdesaoContainer:checked" />
+                            <label class="form-check-label" for="tigoClubeSim">Sim</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="tigoClube" id="tigoClubeNao" value="nao"  checked />
+                            <label class="form-check-label" for="tigoClubeNao">Não</label>
+                        </div>
+                    </div>
+                </div>
+              </div>        <div id="tigoClubeAdesaoContainer" class="mb-3" style="display: none;">
           <label class="form-label">Upload do documento de adesão assinado (PDF/JPG/PNG) *</label>
           <input id="tigoClubeAdesao" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" />
         </div>
@@ -1607,7 +1606,7 @@ const stepTemplates = {
           <label for="segurado_cep" class="form-label">CEP *</label>
           <div class="input-group">
             <input id="segurado_cep" class="form-control" placeholder="00000-000" >
-            <button class="btn btn-outline-secondary" type="button" onclick="buscarCep()"><i class="bi bi-search"></i></button>
+            <button class="btn btn-outline-secondary" type="button" onclick="buscarCep('segurado_cep', 'segurado_logradouro', 'segurado_bairro', 'segurado_cidade', 'segurado_estado')"><i class="bi bi-search"></i></button>
           </div>
         </div>
       </div>
@@ -1667,16 +1666,6 @@ const stepTemplates = {
         <div class="col-md-6 mb-3">
           <label class="form-label">Nome</label>
           <input id="estipNome" class="form-control" readonly />
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Trabalha com estipulantes?</label>
-          <select id="estipuQuestion" class="form-select" >
-            <option disabled selected value="">Selecione</option>
-            <option>Sim</option>
-            <option>Não</option>
-          </select>
         </div>
       </div>
       
@@ -1767,7 +1756,7 @@ const stepTemplates = {
           <input id="veiLotacao" type="number" class="form-control" min="1"  />
         </div>
       </div>
-      <div class="row">
+      <div class="row" id="tigoClubeQuestionContainer" style="display: none;">
         <div class="col-md-12 mb-3">
             <label class="form-label">Contrato com adesão ao TIGO CLUBE? *</label>
             <div class="d-flex gap-3">
@@ -1999,7 +1988,10 @@ const stepTemplates = {
               <option value="substituicao_veiculo">Substituição de veículo / Correção de dados do veículo</option>
               <option value="inclusao_condutor">Inclusão ou exclusão de condutor auxiliar</option>
               <option value="alteracao_endereco">Alteração de endereço, e-mail ou telefone</option>
+              <option value="alteracao_endereco_completo">Alteração de Endereço Completo</option>
+              <option value="alteracao_motorista_principal_pernoite">Alteração de Motorista Principal / Endereço de Pernoite</option>
               <option value="correcao_cadastral">Correção de dados cadastrais (nome, CPF, etc.)</option>
+              <option value="troca_titularidade">Troca de titularidade</option>
               <option value="cancel_req">Pedidos de Cancelamento</option>
             </select>
           </div>
@@ -2009,6 +2001,176 @@ const stepTemplates = {
             <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
           </div>
         </div>`,
+  endosso_troca_titularidade: `
+  <div class="form-step">
+    <h4 class="mb-4">Endosso - Troca de Titularidade</h4>
+
+    <h5 class="mt-4 mb-3">Dados do Novo Titular</h5>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="trocaNome" class="form-label">Nome *</label>
+        <input type="text" id="trocaNome" class="form-control" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="trocaCPF" class="form-label">CPF *</label>
+        <input type="text" id="trocaCPF" class="form-control" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="trocaNascimento" class="form-label">Data de Nascimento *</label>
+        <input type="date" id="trocaNascimento" class="form-control" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="trocaEstadoCivil" class="form-label">Estado Civil *</label>
+        <select id="trocaEstadoCivil" class="form-select" required>
+          <option value="">Selecione</option>
+          <option>Solteiro(a)</option>
+          <option>Casado(a)</option>
+          <option>Divorciado(a)</option>
+          <option>Viúvo(a)</option>
+        </select>
+      </div>
+    </div>
+
+    <h5 class="mt-4 mb-3">Endereço</h5>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="trocaCepResidencia" class="form-label">CEP Residência *</label>
+        <input type="text" id="trocaCepResidencia" class="form-control" required>
+      </div>
+      <div class="col-md-6 mb-3">
+          <label for="trocaCepPernoite" class="form-label">CEP Pernoite (se diferente)</label>
+          <input type="text" id="trocaCepPernoite" class="form-control">
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Upload Comprovante de Residência (se alterou) </label>
+      <input id="trocaComprovanteResidencia" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf">
+    </div>
+
+
+    <h5 class="mt-4 mb-3">Motoristas</h5>
+    <div class="row">
+        <div class="col-md-12 mb-3">
+            <label class="form-label">Terá motoristas entre 18 e 24 anos? *</label>
+            <div class="d-flex gap-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="trocaMotoristaJovem" id="trocaMotoristaJovemSim" value="sim" required data-rule="trocaMotoristaJovemContainer:checked">
+                    <label class="form-check-label" for="trocaMotoristaJovemSim">Sim</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="trocaMotoristaJovem" id="trocaMotoristaJovemNao" value="nao" required>
+                    <label class="form-check-label" for="trocaMotoristaJovemNao">Não</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="trocaMotoristaJovemContainer" style="display: none;">
+        <h6>Dados do Motorista Jovem</h6>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label for="trocaMotoristaJovemNome" class="form-label">Nome *</label>
+                <input type="text" id="trocaMotoristaJovemNome" class="form-control">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="trocaMotoristaJovemCPF" class="form-label">CPF *</label>
+                <input type="text" id="trocaMotoristaJovemCPF" class="form-control">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="trocaMotoristaJovemNascimento" class="form-label">Data de Nascimento *</label>
+                <input type="date" id="trocaMotoristaJovemNascimento" class="form-control">
+            </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Upload CNH do Motorista Jovem *</label>
+          <input id="trocaCNHJovem" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf">
+        </div>
+        <!-- ADD MORE YOUNG DRIVERS? For now, just one -->
+    </div>
+
+      <div class="row">
+          <div class="col-md-12 mb-3">
+              <label class="form-label">O novo segurado será o principal motorista? *</label>
+              <div class="d-flex gap-3">
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="trocaPrincipalMotorista" id="trocaPrincipalMotoristaSim" value="sim" required>
+                      <label class="form-check-label" for="trocaPrincipalMotoristaSim">Sim</label>
+                  </div>
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="trocaPrincipalMotorista" id="trocaPrincipalMotoristaNao" value="nao" required data-rule="trocaOutroPrincipalContainer:checked">
+                      <label class="form-check-label" for="trocaPrincipalMotoristaNao">Não</label>
+                  </div>
+              </div>
+          </div>
+      </div>
+      
+    <div id="trocaOutroPrincipalContainer" style="display: none;">
+        <h6>Dados do Principal Motorista</h6>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="trocaPrincipalNome" class="form-label">Nome *</label>
+                <input type="text" id="trocaPrincipalNome" class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="trocaPrincipalCPF" class="form-label">CPF *</label>
+                <input type="text" id="trocaPrincipalCPF" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label for="trocaPrincipalNascimento" class="form-label">Data de Nascimento *</label>
+                <input type="date" id="trocaPrincipalNascimento" class="form-control">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="trocaPrincipalEstadoCivil" class="form-label">Estado Civil *</label>
+                <select id="trocaPrincipalEstadoCivil" class="form-select">
+                    <option value="">Selecione</option>
+                    <option>Solteiro(a)</option>
+                    <option>Casado(a)</option>
+                    <option>Divorciado(a)</option>
+                    <option>Viúvo(a)</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="trocaPrincipalVinculo" class="form-label">Vínculo com o Segurado *</label>
+                <input type="text" id="trocaPrincipalVinculo" class="form-control">
+            </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Upload CNH do Principal Motorista *</label>
+          <input id="trocaCNHPrincipal" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf">
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12 mb-3">
+            <label class="form-label">O carro dormirá em garagem? *</label>
+            <div class="d-flex gap-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="trocaGaragem" id="trocaGaragemSim" value="sim" required>
+                    <label class="form-check-label" for="trocaGaragemSim">Sim</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="trocaGaragem" id="trocaGaragemNao" value="nao" required>
+                    <label class="form-check-label" for="trocaGaragemNao">Não</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Upload CNH do Novo Titular *</label>
+      <input id="trocaCNHNovoTitular" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf" required>
+    </div>
+
+    <div class="btn-group-navigation">
+      <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
+      <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
+    </div>
+  </div>
+  `,
   endosso_veiculo: `
         <div class="form-step" data-step="2">
           <h4 class="mb-4">Dados do Veículo para Substituição</h4>
@@ -2541,4 +2703,230 @@ const stepTemplates = {
       </div>
     </div>
   `,
+endosso_alteracao_endereco_completo: `
+<div class="form-step">
+    <h4 class="mb-4">Endosso - Alteração de Endereço Completo</h4>
+
+    <!-- NOVO ENDEREÇO -->
+    <h5 class="mt-4 mb-3">Novo Endereço Completo</h5>
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label for="novo_endereco_cep" class="form-label">CEP *</label>
+        <div class="input-group">
+          <input id="novo_endereco_cep" class="form-control" placeholder="00000-000" required>
+          <button class="btn btn-outline-secondary" type="button" onclick="buscarCep('novo_endereco_cep', 'novo_endereco_logradouro', 'novo_endereco_bairro', 'novo_endereco_cidade', 'novo_endereco_estado')"><i class="bi bi-search"></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-8 mb-3">
+        <label class="form-label">Logradouro</label>
+        <input id="novo_endereco_logradouro" class="form-control" readonly>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Número</label>
+        <input type="number" id="novo_endereco_numero" class="form-control">
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Bairro</label>
+            <input id="novo_endereco_bairro" class="form-control" readonly>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Cidade</label>
+            <input id="novo_endereco_cidade" class="form-control" readonly>
+        </div>
+        <div class="col-md-2 mb-3">
+            <label class="form-label">Estado</label>
+            <input id="novo_endereco_estado" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Upload do Comprovante do Novo Endereço *</label>
+      <input id="comprovanteNovoEndereco" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf" required>
+    </div>
+
+    <!-- TIPO DE ENDEREÇO -->
+    <div class="mb-3">
+        <label class="form-label">Este novo endereço será para: *</label>
+        <div class="d-flex gap-3">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="tipoNovoEndereco" id="tipoNovoEnderecoAmbos" value="ambos" required>
+                <label class="form-check-label" for="tipoNovoEnderecoAmbos">Residência/Correspondência e Pernoite</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="tipoNovoEndereco" id="tipoNovoEnderecoPernoite" value="pernoite" required data-rule="pernoiteCondicional:checked">
+                <label class="form-check-label" for="tipoNovoEnderecoPernoite">Somente CEP Pernoite</label>
+            </div>
+        </div>
+    </div>
+    
+    <!-- CONDICIONAL: SE FOR SÓ PERNOITE -->
+    <div id="pernoiteCondicional" style="display: none;">
+        <div class="alert alert-light border">
+            <div class="mb-3">
+                <label class="form-label">O endereço de correspondência/residência também será alterado? *</label>
+                <div class="d-flex gap-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="alteraResidencia" id="alteraResidenciaSim" value="sim" data-rule="novoEnderecoResidenciaContainer:checked">
+                        <label class="form-check-label" for="alteraResidenciaSim">Sim</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="alteraResidencia" id="alteraResidenciaNao" value="nao">
+                        <label class="form-check-label" for="alteraResidenciaNao">Não, permanecerá o mesmo</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONDICIONAL: SE RESIDÊNCIA TAMBÉM MUDA -->
+            <div id="novoEnderecoResidenciaContainer" style="display: none;">
+                <h6 class="mt-3">Novo Endereço de Residência/Correspondência</h6>
+                 <div class="row">
+                  <div class="col-md-4 mb-3">
+                    <label for="residencia_cep" class="form-label">CEP *</label>
+                    <div class="input-group">
+                      <input id="residencia_cep" class="form-control" placeholder="00000-000">
+                      <button class="btn btn-outline-secondary" type="button" onclick="buscarCep('residencia_cep', 'residencia_logradouro', 'residencia_bairro', 'residencia_cidade', 'residencia_estado')"><i class="bi bi-search"></i></button>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-8 mb-3">
+                    <label class="form-label">Logradouro</label>
+                    <input id="residencia_logradouro" class="form-control" readonly>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label">Número</label>
+                    <input type="number" id="residencia_numero" class="form-control">
+                  </div>
+                </div>
+                 <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Bairro</label>
+                        <input id="residencia_bairro" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Cidade</label>
+                        <input id="residencia_cidade" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label">Estado</label>
+                        <input id="residencia_estado" class="form-control" readonly>
+                    </div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Upload do Comprovante do Endereço de Residência *</label>
+                  <input id="comprovanteResidencia" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="btn-group-navigation">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
+    </div>
+</div>`,
+endosso_motorista_pernoite: `
+<div class="form-step">
+    <h4 class="mb-4">Endosso - Alteração de Motorista Principal / Endereço de Pernoite</h4>
+
+    <h5 class="mt-4 mb-3">Dados do Principal Motorista</h5>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="motoristaPrincipalNome" class="form-label">Nome *</label>
+            <input type="text" id="motoristaPrincipalNome" class="form-control" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="motoristaPrincipalCPF" class="form-label">CPF *</label>
+            <input type="text" id="motoristaPrincipalCPF" class="form-control" required>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label for="motoristaPrincipalNascimento" class="form-label">Data de Nascimento *</label>
+            <input type="date" id="motoristaPrincipalNascimento" class="form-control" required>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="motoristaPrincipalEstadoCivil" class="form-label">Estado Civil *</label>
+            <select id="motoristaPrincipalEstadoCivil" class="form-select" required>
+                <option value="">Selecione</option>
+                <option>Solteiro(a)</option>
+                <option>Casado(a)</option>
+                <option>Divorciado(a)</option>
+                <option>Viúvo(a)</option>
+            </select>
+        </div>
+         <div class="col-md-4 mb-3">
+            <label for="motoristaPrincipalVinculo" class="form-label">Vínculo com o Segurado *</label>
+            <input type="text" id="motoristaPrincipalVinculo" class="form-control" required>
+        </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Upload CNH do Principal Motorista *</label>
+      <input id="motoristaPrincipalCNH" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf" required>
+    </div>
+
+    <hr>
+    <h5 class="mt-4 mb-3">Endereço de Pernoite</h5>
+    <div class="mb-3">
+        <label class="form-label">O CEP de pernoite permanece o mesmo? *</label>
+        <div class="d-flex gap-3">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="pernoiteMantem" id="pernoiteMantemSim" value="sim" required>
+                <label class="form-check-label" for="pernoiteMantemSim">Sim</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="pernoiteMantem" id="pernoiteMantemNao" value="nao" required data-rule="novoCepPernoiteContainer:checked">
+                <label class="form-check-label" for="pernoiteMantemNao">Não, desejo alterar</label>
+            </div>
+        </div>
+    </div>
+
+    <div id="novoCepPernoiteContainer" style="display: none;">
+        <h6 class="mt-3">Novo Endereço de Pernoite</h6>
+         <div class="row">
+          <div class="col-md-4 mb-3">
+            <label for="pernoite_cep" class="form-label">CEP *</label>
+            <div class="input-group">
+              <input id="pernoite_cep" class="form-control" placeholder="00000-000">
+              <button class="btn btn-outline-secondary" type="button" onclick="buscarCep('pernoite_cep', 'pernoite_logradouro', 'pernoite_bairro', 'pernoite_cidade', 'pernoite_estado')"><i class="bi bi-search"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 mb-3">
+            <label class="form-label">Logradouro</label>
+            <input id="pernoite_logradouro" class="form-control" readonly>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Número</label>
+            <input type="number" id="pernoite_numero" class="form-control">
+          </div>
+        </div>
+         <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Bairro</label>
+                <input id="pernoite_bairro" class="form-control" readonly>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Cidade</label>
+                <input id="pernoite_cidade" class="form-control" readonly>
+            </div>
+            <div class="col-md-2 mb-3">
+                <label class="form-label">Estado</label>
+                <input id="pernoite_estado" class="form-control" readonly>
+            </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Upload do Comprovante do Novo Endereço de Pernoite</label>
+          <input id="comprovantePernoite" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf">
+        </div>
+    </div>
+    
+    <div class="btn-group-navigation">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
+    </div>
+  </div>`,
 };
