@@ -169,28 +169,10 @@ const stepTemplates = {
           </select>
         </div>
       </div>
-
-      <div id="parcelamento_fields">
-        <hr>
-        <h4 class="mb-4">Parcelamento</h4>
-        <div id="observacaoAPP" class="alert alert-info" style="display: none;">
-          <strong>Atenção:</strong> O produto APP (Acidentes Pessoais de Passageiros) é sempre pago à vista. O parcelamento se aplica apenas ao RCF.
-        </div>
-        <div class="row">
-          <div class="col-md-12 mb-3">
-            <label for="qtdParcelas" class="form-label">Quantidade de parcelas *</label>
-            <select id="qtdParcelas" class="form-select" required>
-              <option value="" disabled selected>Selecione</option>
-              <option>1x</option> <option>2x</option> <option>3x</option> <option>4x</option> <option>5x</option> <option>6x</option> <option>7x</option> <option>8x</option> <option>9x</option> <option>10x</option> <option>11x</option>  <option>12x</option> 
-            </select>
-          </div>
-        </div>
-      </div>
       
       <div id="parcelamento_fields">
         <hr>
-        <h4 class="mb-4">Parcelamento</h4>
-        <div id="observacaoAPP" class="alert alert-info">
+        <div class="alert alert-info">
           <strong>Atenção:</strong> O produto APP (Acidentes Pessoais de Passageiros) é sempre pago à vista. O parcelamento se aplica apenas ao RCF.
         </div>
         <div class="row">
@@ -296,7 +278,7 @@ const stepTemplates = {
 
       <div data-visible-when-fluxo="nova, renovacao">
         <div id="rcf_fields" style="display: none;">
-          <div id="coberturaRCF" class="mb-4">
+          <div id="coberturaRCFren" class="mb-4">
             <label for="valorRCF_select" class="form-label">Valor RCF (R$) *</label>
             <div id="rcfApoliceInfo" class="text-muted mb-2"></div> 
             <select id="valorRCF_select" class="form-select" data-rule="valorRCF_outro:outro">
@@ -2063,45 +2045,6 @@ const stepTemplates = {
               <label class="form-label">CPF ou CNPJ *</label>
               <input id="endossoDocumento" class="form-control" placeholder="CPF ou CNPJ" required />
             </div>
-          </div>
-
-          <div class="mb-3">
-            <label for="endossoSeguradora" class="form-label">Seguradora *</label>
-            <select id="endossoSeguradora" class="form-select" required data-rule="endossoOutraSeguradoraContainer:outra">
-              <option value="">Selecione</option>
-              <option value="aruana">Aruana</option>
-              <option value="porto">Porto Seguro</option>
-              <option value="azul">Azul</option>
-              <option value="allianz">Allianz</option>
-              <option value="tokio_marine">Tokio Marine</option>
-              <option value="hdi">HDI</option>
-              <option value="sompo">Sompo</option>
-              <option value="bradesco">Bradesco</option>
-              <option value="suhai">Suhai</option>
-              <option value="mapfre">Mapfre</option>
-              <option value="mbm">MBM</option>
-              <option value="sabemi">Sabemi</option>
-              <option value="akad">Akad</option>
-              <option value="ezze">Ezze</option>
-              <option value="darwin">Darwin</option>
-              <option value="yelium">Yelium</option>
-              <option value="zurich">Zurich</option>
-              <option value="chubb">Chubb</option>
-              <option value="essor">Essor</option>
-              <option value="sura">Sura</option>
-              <option value="icatu">Icatu</option>
-              <option value="alfa">Alfa</option>
-              <option value="fator">Fator</option>
-              <option value="american_life">American Life</option>
-              <option value="excelsior">Excelsior</option>
-              <option value="kovr">Kovr</option>
-              <option value="alm">ALM</option>
-              <option value="axa">AXA</option>
-            </select>
-          </div>
-          <div class="mb-3" id="endossoOutraSeguradoraContainer" style="display: none;">
-            <label for="endossoOutraSeguradoraNome" class="form-label">Nome da outra seguradora *</label>
-            <input type="text" id="endossoOutraSeguradoraNome" class="form-control" />
           </div>
 
           <div id="apolices-container">

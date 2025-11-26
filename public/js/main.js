@@ -506,19 +506,35 @@ async function buscar() {
     const appSelect = document.getElementById('coberturaEstipulanteAPP');
 
     if (rcfSelect) {
-        const rcfValues = [...new Set(achados_rcf.map(p => normalizeCurrency(p.dano_material_DM)))].sort((a, b) => a - b);
         rcfSelect.innerHTML = '<option value="" selected>Nenhuma</option>';
-        rcfValues.forEach(value => {
-            const option = new Option(value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), value);
+        // Pre-process rcf.csv currency values if they use US format (comma for thousands, dot for decimal)
+        const processedRcfPolicies = achados_rcf.map(p => {
+          const newP = { ...p };
+          if (newP.dano_material_DM && typeof newP.dano_material_DM === 'string' && newP.dano_material_DM.match(/\d+,\d+\.\d{2}/)) {
+              newP.dano_material_DM = newP.dano_material_DM.replace(/,/g, ''); // Remove thousands commas
+              newP.dano_material_DM = newP.dano_material_DM.replace(/\./g, ','); // Change decimal dot to comma
+          }
+          if (newP.dano_corporal_DC && typeof newP.dano_corporal_DC === 'string' && newP.dano_corporal_DC.match(/\d+,\d+\.\d{2}/)) {
+              newP.dano_corporal_DC = newP.dano_corporal_DC.replace(/,/g, ''); // Remove thousands commas
+              newP.dano_corporal_DC = newP.dano_corporal_DC.replace(/\./g, ','); // Change decimal dot to comma
+          }
+          return newP;
+        });
+
+        processedRcfPolicies.forEach(policy => {
+            const normalizedValue = normalizeCurrency(policy.dano_material_DM);
+            const optionText = `${normalizedValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} (Apólice: ${policy.apolice})`;
+            const option = new Option(optionText, JSON.stringify(policy));
             rcfSelect.add(option);
         });
     }
 
     if (appSelect) {
-        const appValues = [...new Set(achados_app.map(p => normalizeCurrency(p.ma_condutor)))].sort((a, b) => a - b);
         appSelect.innerHTML = '<option value="" selected>Nenhuma</option>';
-        appValues.forEach(value => {
-            const option = new Option(value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), value);
+        achados_app.forEach(policy => {
+            const normalizedValue = normalizeCurrency(policy.ma_condutor);
+            const optionText = `${normalizedValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} (Apólice: ${policy.apolice})`;
+            const option = new Option(optionText, JSON.stringify(policy));
             appSelect.add(option);
         });
     }
@@ -537,20 +553,25 @@ async function buscar() {
 }
 
 function selecionarCoberturaEstipulante() {
-    const rcfValue = parseFloat(document.getElementById('coberturaEstipulanteRCF').value) || null;
-    const appValue = parseFloat(document.getElementById('coberturaEstipulanteAPP').value) || null;
+    const rcfSelect = document.getElementById('coberturaEstipulanteRCF');
+    const appSelect = document.getElementById('coberturaEstipulanteAPP');
+
+    const selectedRcfPolicyRaw = rcfSelect.value ? JSON.parse(rcfSelect.value) : null;
+    const selectedAppPolicyRaw = appSelect.value ? JSON.parse(appSelect.value) : null;
+
     const resultadoFinalDiv = document.getElementById('resultadoFinalEstipulante');
     const resultadoContent = document.getElementById('resultadoFinalEstipulanteContent');
 
     if (!resultadoFinalDiv || !resultadoContent) return;
 
-    if (!rcfValue && !appValue) {
+    if (!selectedRcfPolicyRaw && !selectedAppPolicyRaw) {
         alert('Por favor, selecione ao menos um valor de cobertura.');
         return;
     }
 
-    const selectedRcfPolicy = rcfValue ? estipulantePolicies.rcf.find(p => normalizeCurrency(p.dano_material_DM) === rcfValue) : null;
-    const selectedAppPolicy = appValue ? estipulantePolicies.app.find(p => normalizeCurrency(p.ma_condutor) === appValue) : null;
+    // Use the parsed policy objects directly
+    const selectedRcfPolicy = selectedRcfPolicyRaw;
+    const selectedAppPolicy = selectedAppPolicyRaw;
 
     // Salva as apólices selecionadas no formDataStorage
     formDataStorage.selectedEstipulanteRcfPolicy = selectedRcfPolicy;
@@ -734,9 +755,58 @@ function iniciarFluxo(tipoSolicitante) {
 
 let parceiroPolicies = { rcf: [], app: [] };
 
+/**
+ * Normaliza um valor monetário em string para um número.
+ * Ex: "R$ 50.000,00" -> 50000
+ * @param {string} value
+ * @returns {number}
+ */
 function normalizeCurrency(value) {
   if (typeof value !== 'string') return value;
-  return parseFloat(value.replace(/[^0-9,]/g, '').replace(',', '.'));
+  // Remove currency symbol and spaces
+  let cleanedValue = value.replace('R$', '').trim();
+
+  // Count occurrences of '.' and ','
+  const numCommas = (cleanedValue.match(/,/g) || []).length;
+  const numDots = (cleanedValue.match(/\./g) || []).length;
+  const lastCommaIndex = cleanedValue.lastIndexOf(',');
+  const lastDotIndex = cleanedValue.lastIndexOf('.');
+
+  // Heuristic for Brazilian/European format (e.g., 1.234.567,89)
+  // Last comma is decimal, dots are thousands.
+  if (numCommas === 1 && numDots >= 1 && lastCommaIndex > lastDotIndex) {
+    cleanedValue = cleanedValue.replace(/\./g, ''); // Remove thousands dots
+    cleanedValue = cleanedValue.replace(/,/g, '.'); // Replace decimal comma with dot
+  } 
+  // Heuristic for US/English format (e.g., 1,234,567.89)
+  // Last dot is decimal, commas are thousands.
+  else if (numDots === 1 && numCommas >= 1 && lastDotIndex > lastCommaIndex) {
+    cleanedValue = cleanedValue.replace(/,/g, ''); // Remove thousands commas
+    // Decimal is already dot.
+  }
+  // Simplified cases: only commas or only dots (assume last one is decimal)
+  else if (numCommas === 1 && numDots === 0) { // e.g., "123,45"
+    cleanedValue = cleanedValue.replace(/,/g, '.'); // Replace decimal comma with dot
+  }
+  else if (numDots === 1 && numCommas === 0) { // e.g., "123.45"
+    // Already dot decimal
+  }
+  // Fallback for potentially inconsistent "rcf.csv" type formats like "50,000.00" (comma thousands, dot decimal)
+  // This part specifically targets the `rcf.csv` inconsistent format, assuming it's US-like.
+  else {
+      // If we have both '.' and ',', and dot is last, assume US format (comma thousands, dot decimal)
+      if (lastDotIndex > -1 && lastDotIndex > lastCommaIndex) {
+          cleanedValue = cleanedValue.replace(/,/g, ''); // Remove thousands commas
+      } 
+      // If comma is last, assume Brazilian format (dot thousands, comma decimal)
+      else if (lastCommaIndex > -1 && lastCommaIndex > lastDotIndex) {
+          cleanedValue = cleanedValue.replace(/\./g, ''); // Remove thousands dots
+          cleanedValue = cleanedValue.replace(/,/g, '.'); // Replace decimal comma with dot
+      }
+      // If only one or no recognized separators, parseFloat will handle it.
+  }
+
+  return parseFloat(cleanedValue);
 }
 
 /**
@@ -843,6 +913,7 @@ async function buscarParceiro() {
 function selecionarCobertura() {
     const rcfValue = parseFloat(document.getElementById('coberturaRCF').value) || null;
     const appValue = parseFloat(document.getElementById('coberturaAPP').value) || null;
+    console.log(rcfValue, appValue);
     const resultadoFinalDiv = document.getElementById('resultadoFinal');
     const resultadoContent = document.getElementById('resultadoFinalContent');
 
