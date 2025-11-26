@@ -169,6 +169,23 @@ const stepTemplates = {
           </select>
         </div>
       </div>
+
+      <div id="parcelamento_fields">
+        <hr>
+        <h4 class="mb-4">Parcelamento</h4>
+        <div id="observacaoAPP" class="alert alert-info" style="display: none;">
+          <strong>Atenção:</strong> O produto APP (Acidentes Pessoais de Passageiros) é sempre pago à vista. O parcelamento se aplica apenas ao RCF.
+        </div>
+        <div class="row">
+          <div class="col-md-12 mb-3">
+            <label for="qtdParcelas" class="form-label">Quantidade de parcelas *</label>
+            <select id="qtdParcelas" class="form-select" required>
+              <option value="" disabled selected>Selecione</option>
+              <option>1x</option> <option>2x</option> <option>3x</option> <option>4x</option> <option>5x</option> <option>6x</option> <option>7x</option> <option>8x</option> <option>9x</option> <option>10x</option> <option>11x</option>  <option>12x</option> 
+            </select>
+          </div>
+        </div>
+      </div>
       
       <div id="parcelamento_fields">
         <hr>
@@ -277,7 +294,7 @@ const stepTemplates = {
         </div>
       </div>
 
-      <div data-visible-when-fluxo="nova">
+      <div data-visible-when-fluxo="nova, renovacao">
         <div id="rcf_fields" style="display: none;">
           <div id="coberturaRCF" class="mb-4">
             <label for="valorRCF_select" class="form-label">Valor RCF (R$) *</label>
@@ -296,7 +313,7 @@ const stepTemplates = {
       </div>
 
 
-      <div data-visible-when-fluxo="nova">
+      <div data-visible-when-fluxo="nova, renovacao">
         <div id="app_fields" class="mb-4" style="display: none;">
           <label for="valorAPP_select" class="form-label">Valor APP por pessoa (R$) *</label>
           <div id="appApoliceInfo" class="text-muted mb-2"></div>
@@ -2020,6 +2037,14 @@ const stepTemplates = {
           <input id="codCI" class="form-control"  />
         </div>
       </div>
+      <div class="col-md-12 mb-3 mt-3">
+        <label for="paymentMethod" class="form-label">Forma de pagamento *</label>
+        <select id="paymentMethod" class="form-select" required>
+          <option value="" disabled selected>Selecione</option>
+          <option>Boleto</option> <option>Cartão</option> <option>Débito em conta</option>
+        </select>
+      </div>
+
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
         <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
@@ -2776,9 +2801,18 @@ const stepTemplates = {
             <label class="form-label">Motivo Inadimplência *</label>
             <textarea id="finRegMotivo" class="form-control" rows="3" required></textarea>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Responsável pelo Pedido *</label>
-            <input id="finRegResponsavel" class="form-control" required />
+          <div class="row">
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Responsável pelo Pedido *</label>
+              <input id="finRegResponsavel" class="form-control" required />
+            </div>
+            <div class="col-md-12 mb-3 mt-3">
+              <label for="paymentMethodFin" class="form-label">Forma de pagamento *</label>
+              <select id="paymentMethodFin" class="form-select" required>
+                <option value="" disabled selected>Selecione</option>
+                <option>Boleto</option> <option>Cartão</option> <option>Débito em conta</option>
+              </select>
+            </div>
           </div>
           <div class="mb-3">
             <label class="form-label">Observações Complementares</label>
