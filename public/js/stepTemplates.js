@@ -7,12 +7,12 @@ const stepTemplates = {
         <select id="tipoSolicitacao" class="form-select" required>
           <option value="" disabled selected>Selecione</option>
           <option value="nova" data-visible-when-solicitante="colaborador, estipulante, parceiro">Nova Transmissão</option>
-          <option value="renovacao" data-visible-when-solicitante="colaborador, estipulante, segurado">Renovação</option>
-          <option value="endosso" data-visible-when-solicitante="colaborador, estipulante, segurado">Endosso</option>
-          <option value="segunda_via" data-visible-when-solicitante="colaborador, estipulante, segurado">2ª Via de Documentos/Posição Financeira</option>
-          <option value="financeiro_regularizacao" data-visible-when-solicitante="colaborador, estipulante, segurado">Financeiro Regularização</option>
+          <option value="renovacao" data-visible-when-solicitante="colaborador, estipulante, parceiro">Renovação</option>
+          <option value="endosso">Endosso</option>
+          <option value="segunda_via">2ª Via de Documentos/Posição Financeira</option>
+          <option value="financeiro_regularizacao">Financeiro Regularização</option>
           <option value="cotacao" data-visible-when-solicitante="colaborador, segurado">Cotação</option>
-          <option value="aviso_sinistro" data-visible-when-solicitante="colaborador, estipulante, segurado">Aviso de Sinistro</option>
+          <option value="aviso_sinistro">Aviso de Sinistro</option>
         </select>
       </div>
       <div class="btn-group-navigation">
@@ -170,6 +170,23 @@ const stepTemplates = {
         </div>
       </div>
       
+      <div id="parcelamento_fields">
+        <hr>
+        <h4 class="mb-4">Parcelamento</h4>
+        <div id="observacaoAPP" class="alert alert-info">
+          <strong>Atenção:</strong> O produto APP (Acidentes Pessoais de Passageiros) é sempre pago à vista. O parcelamento se aplica apenas ao RCF.
+        </div>
+        <div class="row">
+          <div class="col-md-12 mb-3">
+            <label for="qtdParcelas" class="form-label">Quantidade de parcelas *</label>
+            <select id="qtdParcelas" class="form-select" required>
+              <option value="" disabled selected>Selecione</option>
+              <option>1x</option> <option>2x</option> <option>3x</option> <option>4x</option> <option>5x</option> <option>6x</option> <option>7x</option> <option>8x</option> <option>9x</option> <option>10x</option> <option>11x</option>  <option>12x</option> 
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div id="cotacao-container" class="mb-3" data-visible-when-solicitante="colaborador, parceiro">
         <label class="form-label">Upload Cotação </label>
         <input id="cnhSeg" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"  />
@@ -189,7 +206,7 @@ const stepTemplates = {
       <h4 class="mb-4">Produtos e Coberturas</h4>
       <div class="mb-4">
         <label class="form-label">Selecione os produtos desejados *</label>
-        <select id="produtos" class="form-select" required data-rule="app_fields:rcf_app;rcf_fields:rcf_app;rcf_fields:rcf;app_fields:app;empresarial_fields:empresarial;parcelamento_fields:rcf_app;parcelamento_fields:rcf;parcelamento_fields:app;observacaoAPP:rcf_app;observacaoAPP:app;seguro_vida_fields:seguro_vida;seguro_viagem_fields:seguro_viagem;rc_profissional_fields:rc_profissional;carta_verde_fields:carta_verde;veiculoFields:rcf_app;veiculoFields:rcf;veiculoFields:app;cotacao_extra_fields:rcf_app;cotacao_extra_fields:rcf;cotacao_extra_fields:app;auto_compreensivo_fields:auto">
+        <select id="produtos" class="form-select" required data-rule="app_fields:rcf_app;rcf_fields:rcf_app;rcf_fields:rcf;app_fields:app;empresarial_fields:empresarial;observacaoAPP:rcf_app;observacaoAPP:app;seguro_vida_fields:seguro_vida;seguro_viagem_fields:seguro_viagem;rc_profissional_fields:rc_profissional;carta_verde_fields:carta_verde;veiculoFields:rcf_app;veiculoFields:rcf;veiculoFields:app;cotacao_extra_fields:rcf_app;cotacao_extra_fields:rcf;cotacao_extra_fields:app;auto_compreensivo_fields:auto">
           <option value="" disabled selected>Selecione</option>
           <option value="rcf_app">RCF e APP</option>
           <option value="rcf">Somente RCF</option>
@@ -2659,16 +2676,6 @@ const stepTemplates = {
   segunda_via_docs: `
         <div class="form-step" data-step="1">
           <h4 class="mb-4">2ª Via de Documentos/Posição Financeira</h4>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Nome Completo ou Razão Social *</label>
-              <input id="segundaViaNome" class="form-control" required />
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">CPF ou CNPJ *</label>
-              <input id="segundaViaDocumento" class="form-control" placeholder="CPF ou CNPJ" required />
-            </div>
-          </div>
           <div class="mb-3">
             <label for="segundaViaTipoDoc" class="form-label">Tipo de Documento *</label>
             <select id="segundaViaTipoDoc" class="form-select" required data-rule="segundaViaOutroContainer:outra">
@@ -2700,16 +2707,6 @@ const stepTemplates = {
   financeiro_regularizacao: `
         <div class="form-step" data-step="1">
           <h4 class="mb-4">Financeiro Regularização</h4>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Nome Completo ou Razão Social *</label>
-              <input id="finRegNome" class="form-control" required />
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">CPF ou CNPJ *</label>
-              <input id="finRegDocumento" class="form-control" placeholder="CPF ou CNPJ" required />
-            </div>
-          </div>
           <div class="row">
             <div class="col-md-6 mb-3">
               <label for="segTrabalhadasFin" class="form-label">Seguradoras *</label>

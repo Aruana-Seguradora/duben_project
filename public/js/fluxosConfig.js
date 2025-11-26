@@ -136,12 +136,55 @@ const fluxosConfig = {
     nova: {
       description: 'Encontre a apólice ideal para seu cliente',
       steps: [
-        { label: 'Busca', template: 'parceiro_busca_cobertura' },
+        { label: 'Parceiro', template: 'parceiro_busca_cobertura' },
         { label: 'Segurado', template: 'segurado' },
         { label: 'Veículo', template: 'veiculo' },
         { label: 'Auxiliares', template: 'auxiliares' },
         { label: 'Info & Consent.', template: 'consentimento' },
         { label: 'Enviar', template: 'enviar' },
+      ],
+    },
+    aviso_sinistro: {
+      description: 'Preencha os dados para Aviso de Sinistro',
+      steps: [
+        { label: 'Parceiro', template: 'parceiro_busca_cobertura' },
+        { label: 'Aviso Segurado', template: 'aviso_sinistro' },
+        { label: 'Aviso Terceiro', template: 'aviso_sinistro_terceiro' },
+        { label: 'Aviso Ocorrência', template: 'aviso_sinistro_ocorrencia' },
+        { label: 'Info & Consent.', template: 'consentimento' },
+        { label: 'Enviar', template: 'enviar' },
+      ],
+    },
+    segunda_via: {
+      description: 'Solicite 2ª Via de Documentos ou Posição Financeira',
+      steps: [
+        { label: 'Parceiro', template: 'parceiro_busca_cobertura' },
+        { label: 'Dados', template: 'segunda_via_docs' },
+      ],
+    },
+    endosso: {
+      description: 'Siga as etapas para solicitar o Endosso',
+      steps: [
+        { label: 'Parceiro', template: 'parceiro_busca_cobertura' },
+        { label: 'Dados', template: 'endosso_dados' },
+      ],
+    },
+    renovacao: {
+      description: 'Siga as etapas para solicitar a Renovação',
+      steps: [
+        { label: 'Parceiro', template: 'parceiro_busca_cobertura' },
+        { label: 'Segurado', template: 'segurado' },
+        { label: 'Apólice', template: 'renovacao_apolice' },
+        { label: 'Produtos', template: 'produtos_coberturas' },
+        { label: 'Auxiliares', template: 'auxiliares' },
+        { label: 'Confirmar', template: 'renovacao_confirmar' },
+      ],
+    },
+    financeiro_regularizacao: {
+      description: 'Solicite Regularização Financeira',
+      steps: [
+        { label: 'Parceiro', template: 'parceiro_busca_cobertura' },
+        { label: 'Dados', template: 'financeiro_regularizacao' },
       ],
     },
   },
@@ -153,7 +196,7 @@ const fluxosConfig = {
     cotacao: {
       description: 'Solicite uma cotação',
       steps: [
-        { label: 'Cliente', template: 'cliente' },
+        { label: 'Segurado', template: 'cliente' },
         { label: 'Cotação', template: 'produtos_coberturas' },
         { label: 'Auxiliares', template: 'auxiliares' },
         { label: 'Enviar', template: 'enviar' },
@@ -162,7 +205,6 @@ const fluxosConfig = {
     aviso_sinistro: {
       description: 'Preencha os dados para Aviso de Sinistro',
       steps: [
-        { label: 'Colaborador', template: 'solicitante' },
         { label: 'Aviso Segurado', template: 'aviso_sinistro' },
         { label: 'Aviso Terceiro', template: 'aviso_sinistro_terceiro' },
         { label: 'Aviso Ocorrência', template: 'aviso_sinistro_ocorrencia' },
@@ -173,7 +215,7 @@ const fluxosConfig = {
     segunda_via: {
       description: 'Solicite 2ª Via de Documentos ou Posição Financeira',
       steps: [
-        { label: 'Estipulante', template: 'estipulante_seguradoras' },
+        { label: 'Segurado', template: 'cliente' },
         { label: 'Dados', template: 'segunda_via_docs' },
       ],
     },
@@ -182,6 +224,13 @@ const fluxosConfig = {
       steps: [
         { label: 'Segurado', template: 'cliente' },
         { label: 'Dados', template: 'endosso_dados' },
+      ],
+    },
+    financeiro_regularizacao: {
+      description: 'Solicite Regularização Financeira',
+      steps: [
+        { label: 'Segurado', template: 'cliente' },
+        { label: 'Dados', template: 'financeiro_regularizacao' },
       ],
     },
   },
