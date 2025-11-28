@@ -8,7 +8,7 @@
 function initializeDeclarativeRules() {
   const ruleTriggers = document.querySelectorAll('[data-rule]');
 
-  const applyRule = (triggerElement) => {
+  const applyRule = triggerElement => {
     const rules = triggerElement.dataset.rule.split(';');
     const targetsVisibility = {};
 
@@ -27,17 +27,19 @@ function initializeDeclarativeRules() {
 
       const targetId = parts[0];
       const triggerValue = parts[1];
-      
+
       let isTriggered = false;
       if (triggerElement.type === 'radio') {
         if (triggerValue === 'checked') {
           isTriggered = triggerElement.checked;
         } else {
-          isTriggered = triggerElement.checked && triggerElement.value === triggerValue;
+          isTriggered =
+            triggerElement.checked && triggerElement.value === triggerValue;
         }
       } else if (triggerElement.type === 'checkbox') {
         isTriggered = triggerElement.checked;
-      } else { // Selects and other inputs
+      } else {
+        // Selects and other inputs
         isTriggered = triggerElement.value === triggerValue;
       }
 
@@ -60,7 +62,8 @@ function initializeDeclarativeRules() {
         if (!input.hasAttribute('data-required-original')) {
           input.setAttribute('data-required-original', input.required);
         }
-        const wasOriginallyRequired = input.getAttribute('data-required-original') === 'true';
+        const wasOriginallyRequired =
+          input.getAttribute('data-required-original') === 'true';
         input.required = shouldBeVisible && wasOriginallyRequired;
         if (!shouldBeVisible) {
           input.classList.remove('is-invalid');
@@ -78,8 +81,12 @@ function initializeDeclarativeRules() {
         return; // Skip if we've already set up listeners for this group.
       }
 
-      const radioGroup = document.querySelectorAll(`input[name="${groupName}"]`);
-      const triggersInGroup = Array.from(radioGroup).filter(r => r.hasAttribute('data-rule'));
+      const radioGroup = document.querySelectorAll(
+        `input[name="${groupName}"]`,
+      );
+      const triggersInGroup = Array.from(radioGroup).filter(r =>
+        r.hasAttribute('data-rule'),
+      );
 
       radioGroup.forEach(radio => {
         radio.addEventListener('change', () => {
@@ -91,19 +98,17 @@ function initializeDeclarativeRules() {
       processedRadioGroups.add(groupName);
       // Initial application for all triggers in the group.
       triggersInGroup.forEach(applyRule);
-
     } else {
       // Logic for other input types (select, checkbox, etc.).
       const eventType = trigger.tagName === 'SELECT' ? 'change' : 'input';
       trigger.addEventListener(eventType, () => applyRule(trigger));
       if (eventType !== 'change') {
-          trigger.addEventListener('change', () => applyRule(trigger));
+        trigger.addEventListener('change', () => applyRule(trigger));
       }
       applyRule(trigger); // Initial application.
     }
   });
 }
-
 
 function addListenersAndMasks() {
   const form = document.getElementById('multiStepForm');
@@ -366,18 +371,25 @@ function addListenersAndMasks() {
         appendValue('documento', 'endossoDocumento');
         appendValue('seguradora', 'endossoSeguradora');
         appendValue('outraSeguradora', 'endossoOutraSeguradoraNome');
-        
-        const apoliceEntries = document.querySelectorAll('#apolices-container .apolice-entry');
-        apoliceEntries.forEach((entry, index) => {
-            const apoliceInput = entry.querySelector('input[name^="apolice_"]');
-            const seguradoraSelect = entry.querySelector('select[name^="seguradora_apolice_"]');
 
-            if (apoliceInput && apoliceInput.value) {
-                formData.append(`apolice_${index + 1}`, apoliceInput.value);
-            }
-            if (seguradoraSelect && seguradoraSelect.value) {
-                formData.append(`seguradora_apolice_${index + 1}`, seguradoraSelect.value);
-            }
+        const apoliceEntries = document.querySelectorAll(
+          '#apolices-container .apolice-entry',
+        );
+        apoliceEntries.forEach((entry, index) => {
+          const apoliceInput = entry.querySelector('input[name^="apolice_"]');
+          const seguradoraSelect = entry.querySelector(
+            'select[name^="seguradora_apolice_"]',
+          );
+
+          if (apoliceInput && apoliceInput.value) {
+            formData.append(`apolice_${index + 1}`, apoliceInput.value);
+          }
+          if (seguradoraSelect && seguradoraSelect.value) {
+            formData.append(
+              `seguradora_apolice_${index + 1}`,
+              seguradoraSelect.value,
+            );
+          }
         });
 
         const tipoSolicitacao = document.getElementById('endossoTipo')?.value;
@@ -489,9 +501,9 @@ function addListenersAndMasks() {
   handleColaboradorValidation();
   setupParceiroStepListeners();
   setupEstipulanteStepListeners();
-  
+
   // --- Configuração dos Listeners ---
-  
+
   const codigo = document.getElementById('codigo');
   if (codigo) {
     codigo.addEventListener('blur', buscar);
@@ -524,284 +536,242 @@ function addListenersAndMasks() {
   // --- Inicialização da UI ---
   // Chama todas as funções de visibilidade para garantir o estado correto ao renderizar
 
+  buscaVeiculo();
+
   handleDadosEstipVisibility();
-  
-    
-  
-    // NOVO: Inicializa todas as regras declarativas
-  
-    initializeDeclarativeRules();
-  
-  
-  
-    // NOVO: Aplica visibilidade com base no fluxo atual
-  
-    applyFluxoVisibility();
-  
-  
-  
-    const segTrabalhadasSelect = document.getElementById('segTrabalhadas');
-  
-    if (segTrabalhadasSelect) {
-  
-      new MultiSelectTag('segTrabalhadas', {
-  
-        maxSelection: 6,
-  
-        placeholder: 'Seguradoras',
-  
-      });
-  
-    }
-  
-  }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  function handleDadosEstipVisibility() {
-  
-    const dadosEstipDiv = document.getElementById('dados_estip');
-  
-    if (!dadosEstipDiv) return;
-  
-  
-  
-    const tipoSolicitante = formDataStorage.tipoSolicitante;
-  
-    const estipuQuestion = formDataStorage.estipuQuestion;
-  
-  
-  
-    const isEstipulante = tipoSolicitante === 'estipulante';
-  
-    const isColaboradorComEstip = tipoSolicitante === 'colaborador' && estipuQuestion === 'Sim';
-  
-  
-  
-  
-  
-  
-  
-    if (isEstipulante || isColaboradorComEstip) {
-  
-      dadosEstipDiv.classList.remove('d-none');
-  
-    } else {
-  
-      dadosEstipDiv.classList.add('d-none');
-  
-    }
-  
-  }
-  
-  
-  
-  async function buscarCep(cepFieldId, logradouroFieldId, bairroFieldId, cidadeFieldId, estadoFieldId) {
-    const cepInput = document.getElementById(cepFieldId);
-    if (!cepInput) return;
 
-    const cep = cepInput.value.replace(/\D/g, '');
-    cepInput.classList.remove('is-invalid');
-    const errorDiv = cepInput.closest('.input-group')?.querySelector('.invalid-feedback');
-    if (errorDiv) errorDiv.textContent = 'Informe um CEP válido.';
+  // NOVO: Inicializa todas as regras declarativas
 
-    const addressFields = {
-        logradouro: document.getElementById(logradouroFieldId),
-        bairro: document.getElementById(bairroFieldId),
-        cidade: document.getElementById(cidadeFieldId),
-        estado: document.getElementById(estadoFieldId),
-    };
+  initializeDeclarativeRules();
 
-    Object.values(addressFields).forEach(field => { if (field) field.value = ''; });
+  // NOVO: Aplica visibilidade com base no fluxo atual
 
-    if (cep.length !== 8) return;
+  applyFluxoVisibility();
 
-    Object.values(addressFields).forEach(field => {
-        if (field) {
-            field.placeholder = 'Carregando...';
-            field.disabled = true;
-        }
+  const segTrabalhadasSelect = document.getElementById('segTrabalhadas');
+
+  if (segTrabalhadasSelect) {
+    new MultiSelectTag('segTrabalhadas', {
+      maxSelection: 6,
+
+      placeholder: 'Seguradoras',
     });
-    cepInput.disabled = true;
-
-    const url = `https://viacep.com.br/ws/${cep}/json/`;
-
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (data.erro) {
-            cepInput.classList.add('is-invalid');
-            if (errorDiv) errorDiv.textContent = 'CEP não encontrado.';
-            return;
-        }
-
-        if (addressFields.logradouro) addressFields.logradouro.value = data.logradouro;
-        if (addressFields.bairro) addressFields.bairro.value = data.bairro;
-        if (addressFields.cidade) addressFields.cidade.value = data.localidade;
-        if (addressFields.estado) addressFields.estado.value = data.uf;
-
-    } catch (error) {
-        console.error('Erro ao buscar CEP:', error);
-        cepInput.classList.add('is-invalid');
-        if (errorDiv) errorDiv.textContent = 'Erro ao buscar CEP.';
-    } finally {
-        Object.values(addressFields).forEach(field => {
-            if (field) {
-                field.placeholder = '';
-                field.disabled = false;
-            }
-        });
-        cepInput.disabled = false;
-    }
+  }
 }
-  
-  
-  
-  /**
+
+
+function handleDadosEstipVisibility() {
+  const dadosEstipDiv = document.getElementById('dados_estip');
+
+  if (!dadosEstipDiv) return;
+
+  const tipoSolicitante = formDataStorage.tipoSolicitante;
+
+  const estipuQuestion = formDataStorage.estipuQuestion;
+
+  const isEstipulante = tipoSolicitante === 'estipulante';
+
+  const isColaboradorComEstip =
+    tipoSolicitante === 'colaborador' && estipuQuestion === 'Sim';
+
+  if (isEstipulante || isColaboradorComEstip) {
+    dadosEstipDiv.classList.remove('d-none');
+  } else {
+    dadosEstipDiv.classList.add('d-none');
+  }
+}
+
+async function buscarCep(
+  cepFieldId,
+  logradouroFieldId,
+  bairroFieldId,
+  cidadeFieldId,
+  estadoFieldId,
+) {
+  const cepInput = document.getElementById(cepFieldId);
+  if (!cepInput) return;
+
+  const cep = cepInput.value.replace(/\D/g, '');
+  cepInput.classList.remove('is-invalid');
+  const errorDiv = cepInput
+    .closest('.input-group')
+    ?.querySelector('.invalid-feedback');
+  if (errorDiv) errorDiv.textContent = 'Informe um CEP válido.';
+
+  const addressFields = {
+    logradouro: document.getElementById(logradouroFieldId),
+    bairro: document.getElementById(bairroFieldId),
+    cidade: document.getElementById(cidadeFieldId),
+    estado: document.getElementById(estadoFieldId),
+  };
+
+  Object.values(addressFields).forEach(field => {
+    if (field) field.value = '';
+  });
+
+  if (cep.length !== 8) return;
+
+  Object.values(addressFields).forEach(field => {
+    if (field) {
+      field.placeholder = 'Carregando...';
+      field.disabled = true;
+    }
+  });
+  cepInput.disabled = true;
+
+  const url = `https://viacep.com.br/ws/${cep}/json/`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.erro) {
+      cepInput.classList.add('is-invalid');
+      if (errorDiv) errorDiv.textContent = 'CEP não encontrado.';
+      return;
+    }
+
+    if (addressFields.logradouro)
+      addressFields.logradouro.value = data.logradouro;
+    if (addressFields.bairro) addressFields.bairro.value = data.bairro;
+    if (addressFields.cidade) addressFields.cidade.value = data.localidade;
+    if (addressFields.estado) addressFields.estado.value = data.uf;
+  } catch (error) {
+    console.error('Erro ao buscar CEP:', error);
+    cepInput.classList.add('is-invalid');
+    if (errorDiv) errorDiv.textContent = 'Erro ao buscar CEP.';
+  } finally {
+    Object.values(addressFields).forEach(field => {
+      if (field) {
+        field.placeholder = '';
+        field.disabled = false;
+      }
+    });
+    cepInput.disabled = false;
+  }
+}
+
+/**
   
    * Aplica regras de visibilidade condicional com base no tipo de solicitante.
   
    * Lê o atributo `data-visible-when-solicitante`.
   
    */
-  
-  function applyConditionalVisibility() {
-    const tipoSolicitante = formDataStorage.tipoSolicitante;
-    const tipoSolicitacao = formDataStorage.tipoSolicitacao; // Adiciona tipoSolicitacao
-    if (!tipoSolicitante) return;
 
-    const conditionalElements = document.querySelectorAll(
-      '[data-visible-when-solicitante], [data-hide-when-estipulante-nova]', // Also select elements with the new attribute
-    );
+function applyConditionalVisibility() {
+  const tipoSolicitante = formDataStorage.tipoSolicitante;
+  const tipoSolicitacao = formDataStorage.tipoSolicitacao; // Adiciona tipoSolicitacao
+  if (!tipoSolicitante) return;
 
-    conditionalElements.forEach(element => {
-      let shouldBeVisible = true; // Default to visible
+  const conditionalElements = document.querySelectorAll(
+    '[data-visible-when-solicitante], [data-hide-when-estipulante-nova]', // Also select elements with the new attribute
+  );
 
-      // Check for data-hide-when-estipulante-nova rule
-      if (element.dataset.hideWhenEstipulanteNova === 'true') {
-        if (tipoSolicitante === 'estipulante' && tipoSolicitacao === 'nova') {
-          shouldBeVisible = false;
-        } else {
-          // If this hide rule doesn't apply, check the data-visible-when-solicitante rule if it exists
-          if (element.hasAttribute('data-visible-when-solicitante')) {
-            const allowedTypes = element.dataset.visibleWhenSolicitante
-              .split(',')
-              .map(s => s.trim());
-            shouldBeVisible = allowedTypes.includes(tipoSolicitante);
-          }
+  conditionalElements.forEach(element => {
+    let shouldBeVisible = true; // Default to visible
+
+    // Check for data-hide-when-estipulante-nova rule
+    if (element.dataset.hideWhenEstipulanteNova === 'true') {
+      if (tipoSolicitante === 'estipulante' && tipoSolicitacao === 'nova') {
+        shouldBeVisible = false;
+      } else {
+        // If this hide rule doesn't apply, check the data-visible-when-solicitante rule if it exists
+        if (element.hasAttribute('data-visible-when-solicitante')) {
+          const allowedTypes = element.dataset.visibleWhenSolicitante
+            .split(',')
+            .map(s => s.trim());
+          shouldBeVisible = allowedTypes.includes(tipoSolicitante);
         }
-      } else if (element.hasAttribute('data-visible-when-solicitante')) {
-        // Normal data-visible-when-solicitante rule
-        const allowedTypes = element.dataset.visibleWhenSolicitante
-          .split(',')
-          .map(s => s.trim());
-        shouldBeVisible = allowedTypes.includes(tipoSolicitante);
       }
+    } else if (element.hasAttribute('data-visible-when-solicitante')) {
+      // Normal data-visible-when-solicitante rule
+      const allowedTypes = element.dataset.visibleWhenSolicitante
+        .split(',')
+        .map(s => s.trim());
+      shouldBeVisible = allowedTypes.includes(tipoSolicitante);
+    }
 
-      // Lógica para data-visible-when-fluxo-nova (from previous step, for optionEmpresarial)
-      // Only apply this if the element has this attribute and it's set to 'true'
-      if (element.dataset.visibleWhenFluxoNova === 'true') {
-        shouldBeVisible = shouldBeVisible && (tipoSolicitacao === 'nova');
-      }
-      
-      element.style.display = shouldBeVisible ? '' : 'none';
-      // Se for uma opção, desabilite-a também para evitar que seja selecionada se estiver oculta.
-      // Apesar de display:none em option não ser totalmente cross-browser, o desabilitar ajuda.
-      if (element.tagName === 'OPTION') {
-        element.disabled = !shouldBeVisible;
-      }
+    // Lógica para data-visible-when-fluxo-nova (from previous step, for optionEmpresarial)
+    // Only apply this if the element has this attribute and it's set to 'true'
+    if (element.dataset.visibleWhenFluxoNova === 'true') {
+      shouldBeVisible = shouldBeVisible && tipoSolicitacao === 'nova';
+    }
 
-      const inputs = element.querySelectorAll('input, select, textarea');
-      inputs.forEach(input => {
-        if (!input.hasAttribute('data-required-original')) {
-          input.setAttribute('data-required-original', input.required);
-        }
-        const wasOriginallyRequired =
-          input.getAttribute('data-required-original') === 'true';
-        input.required = shouldBeVisible && wasOriginallyRequired;
-        if (!shouldBeVisible) {
-          input.classList.remove('is-invalid');
-        }
-      });
+    element.style.display = shouldBeVisible ? '' : 'none';
+    // Se for uma opção, desabilite-a também para evitar que seja selecionada se estiver oculta.
+    // Apesar de display:none em option não ser totalmente cross-browser, o desabilitar ajuda.
+    if (element.tagName === 'OPTION') {
+      element.disabled = !shouldBeVisible;
+    }
+
+    const inputs = element.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+      if (!input.hasAttribute('data-required-original')) {
+        input.setAttribute('data-required-original', input.required);
+      }
+      const wasOriginallyRequired =
+        input.getAttribute('data-required-original') === 'true';
+      input.required = shouldBeVisible && wasOriginallyRequired;
+      if (!shouldBeVisible) {
+        input.classList.remove('is-invalid');
+      }
     });
-  }
-  
-  
-  
-  /**
+  });
+}
+
+/**
   
    * Aplica regras de visibilidade condicional com base no fluxo atual.
   
    * Lê o atributo `data-visible-when-fluxo`.
   
    */
-  
-  function applyFluxoVisibility() {
-  
-    if (!currentFluxo) return;
-  
-  
-  
-    const conditionalElements = document.querySelectorAll('[data-visible-when-fluxo]');
-  
-  
-  
-    conditionalElements.forEach(element => {
-  
-      const allowedFluxos = element.dataset.visibleWhenFluxo.split(',').map(s => s.trim());
-  
-      
-  
-      const shouldBeVisible = allowedFluxos.includes(currentFluxo);
-  
-      element.style.display = shouldBeVisible ? '' : 'none';
-  
-  
-  
-      const inputs = element.querySelectorAll('input, select, textarea');
-  
-      inputs.forEach(input => {
-  
-        if (!input.hasAttribute('data-required-original')) {
-  
-          input.setAttribute('data-required-original', input.required);
-  
-        }
-  
-        const wasOriginallyRequired = input.getAttribute('data-required-original') === 'true';
-  
-        input.required = shouldBeVisible && wasOriginallyRequired;
-  
-        if (!shouldBeVisible) {
-  
-          input.classList.remove('is-invalid');
-  
-        }
-  
-      });
-  
-    });
-  
-  }
 
-  function addApoliceInput() {
-    const container = document.getElementById('apolices-container');
-    if (!container) return;
-  
-    const count = container.querySelectorAll('.apolice-entry').length + 1;
-  
-    const newEntry = document.createElement('div');
-    newEntry.className = 'row apolice-entry mb-3';
-    newEntry.innerHTML = `
+function applyFluxoVisibility() {
+  if (!currentFluxo) return;
+
+  const conditionalElements = document.querySelectorAll(
+    '[data-visible-when-fluxo]',
+  );
+
+  conditionalElements.forEach(element => {
+    const allowedFluxos = element.dataset.visibleWhenFluxo
+      .split(',')
+      .map(s => s.trim());
+
+    const shouldBeVisible = allowedFluxos.includes(currentFluxo);
+
+    element.style.display = shouldBeVisible ? '' : 'none';
+
+    const inputs = element.querySelectorAll('input, select, textarea');
+
+    inputs.forEach(input => {
+      if (!input.hasAttribute('data-required-original')) {
+        input.setAttribute('data-required-original', input.required);
+      }
+
+      const wasOriginallyRequired =
+        input.getAttribute('data-required-original') === 'true';
+
+      input.required = shouldBeVisible && wasOriginallyRequired;
+
+      if (!shouldBeVisible) {
+        input.classList.remove('is-invalid');
+      }
+    });
+  });
+}
+
+function addApoliceInput() {
+  const container = document.getElementById('apolices-container');
+  if (!container) return;
+
+  const count = container.querySelectorAll('.apolice-entry').length + 1;
+
+  const newEntry = document.createElement('div');
+  newEntry.className = 'row apolice-entry mb-3';
+  newEntry.innerHTML = `
       <div class="col-md-6 mb-3">
         <label class="form-label">Número da Apólice ${count}</label>
         <input type="text" class="form-control" name="apolice_${count}">
@@ -824,42 +794,40 @@ function addListenersAndMasks() {
         ></i>
       </div>
     `;
-    container.appendChild(newEntry);
-  }
-  
-  function removeApoliceInput(button) {
-    button.closest('.apolice-entry').remove();
-    
-    const addButton = document.getElementById('add-apolice-btn');
-    if (addButton) {
-      addButton.removeAttribute('disabled');
-      addButton.textContent = 'Adicionar outra apólice';
-    }
-  
-    // Re-number labels and input names to keep them sequential
-    const container = document.getElementById('apolices-container');
-    if (!container) return;
-    const entries = container.querySelectorAll('.apolice-entry');
-    entries.forEach((entry, index) => {
-      const apoliceLabel = entry.querySelector('div:first-child label');
-      const apoliceInput = entry.querySelector('div:first-child input');
-      const seguradoraLabel = entry.querySelector('div:nth-child(2) label');
-      const seguradoraSelect = entry.querySelector('div:nth-child(2) select');
+  container.appendChild(newEntry);
+}
 
-      const newCount = index + 1;
-      if (apoliceLabel) {
-        apoliceLabel.innerText = `Número da Apólice ${newCount}`;
-      }
-      if (apoliceInput) {
-        apoliceInput.name = `apolice_${newCount}`;
-      }
-      if (seguradoraLabel) {
-        seguradoraLabel.innerText = `Seguradora da Apólice ${newCount}`;
-      }
-      if (seguradoraSelect) {
-        seguradoraSelect.name = `seguradora_apolice_${newCount}`;
-      }
-    });
+function removeApoliceInput(button) {
+  button.closest('.apolice-entry').remove();
+
+  const addButton = document.getElementById('add-apolice-btn');
+  if (addButton) {
+    addButton.removeAttribute('disabled');
+    addButton.textContent = 'Adicionar outra apólice';
   }
-  
-  
+
+  // Re-number labels and input names to keep them sequential
+  const container = document.getElementById('apolices-container');
+  if (!container) return;
+  const entries = container.querySelectorAll('.apolice-entry');
+  entries.forEach((entry, index) => {
+    const apoliceLabel = entry.querySelector('div:first-child label');
+    const apoliceInput = entry.querySelector('div:first-child input');
+    const seguradoraLabel = entry.querySelector('div:nth-child(2) label');
+    const seguradoraSelect = entry.querySelector('div:nth-child(2) select');
+
+    const newCount = index + 1;
+    if (apoliceLabel) {
+      apoliceLabel.innerText = `Número da Apólice ${newCount}`;
+    }
+    if (apoliceInput) {
+      apoliceInput.name = `apolice_${newCount}`;
+    }
+    if (seguradoraLabel) {
+      seguradoraLabel.innerText = `Seguradora da Apólice ${newCount}`;
+    }
+    if (seguradoraSelect) {
+      seguradoraSelect.name = `seguradora_apolice_${newCount}`;
+    }
+  });
+}

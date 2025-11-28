@@ -160,28 +160,30 @@ const stepTemplates = {
         </div>
       </div>
 
-      <div class="row" data-visible-when-solicitante="colaborador, estipulante">
-        <div class="col-md-12 mb-3 mt-3">
-          <label for="paymentMethod" class="form-label">Forma de pagamento *</label>
-          <select id="paymentMethod" class="form-select" required>
-            <option value="" disabled selected>Selecione</option>
-            <option>Boleto</option> <option>Cartão</option> <option>Débito em conta</option>
-          </select>
-        </div>
-      </div>
-      
-      <div id="parcelamento_fields">
-        <hr>
-        <div class="alert alert-info">
-          <strong>Atenção:</strong> O produto APP (Acidentes Pessoais de Passageiros) é sempre pago à vista. O parcelamento se aplica apenas ao RCF.
-        </div>
+      <div data-visible-when-fluxo="renovacao, nova">
         <div class="row">
-          <div class="col-md-12 mb-3">
-            <label for="qtdParcelas" class="form-label">Quantidade de parcelas *</label>
-            <select id="qtdParcelas" class="form-select" required>
+          <div class="col-md-12 mb-3 mt-3">
+            <label for="paymentMethod" class="form-label">Forma de pagamento *</label>
+            <select id="paymentMethod" class="form-select" required>
               <option value="" disabled selected>Selecione</option>
-              <option>1x</option> <option>2x</option> <option>3x</option> <option>4x</option> <option>5x</option> <option>6x</option> <option>7x</option> <option>8x</option> <option>9x</option> <option>10x</option> <option>11x</option>  <option>12x</option> 
+              <option>Boleto</option> <option>Cartão</option> <option>Débito em conta</option>
             </select>
+          </div>
+        </div>
+        
+        <div id="parcelamento_fields">
+          <hr>
+          <div class="alert alert-info">
+            <strong>Atenção:</strong> O produto APP (Acidentes Pessoais de Passageiros) é sempre pago à vista. O parcelamento se aplica apenas ao RCF.
+          </div>
+          <div class="row">
+            <div class="col-md-12 mb-3">
+              <label for="qtdParcelas" class="form-label">Quantidade de parcelas *</label>
+              <select id="qtdParcelas" class="form-select" required>
+                <option value="" disabled selected>Selecione</option>
+                <option>1x</option> <option>2x</option> <option>3x</option> <option>4x</option> <option>5x</option> <option>6x</option> <option>7x</option> <option>8x</option> <option>9x</option> <option>10x</option> <option>11x</option>  <option>12x</option> 
+              </select>
+            </div>
           </div>
         </div>
       </div>
@@ -1267,8 +1269,6 @@ const stepTemplates = {
 
   aviso_sinistro: `
     <div class="form-step">
-      <h4 class="mb-4">Aviso de Sinistro</h4>
-
       <!-- Segurado -->
       <h5 class="mt-4 mb-3">Dados do Segurado</h5>
       <div class="mb-3">
@@ -1283,7 +1283,7 @@ const stepTemplates = {
         <label for="sinistroNumeroApolice" class="form-label">Número da apólice: *</label>
         <input type="text" id="sinistroNumeroApolice" class="form-control"  />
       </div>
-      <div class="row">
+      <div class="row"> 
         <div class="col-md-4 mb-3">
           <label for="sinistroMarcaVeiculo" class="form-label">Marca do veículo: *</label>
           <input type="text" id="sinistroMarcaVeiculo" class="form-control"  />
@@ -1428,9 +1428,115 @@ const stepTemplates = {
         <textarea id="sinistroMotivoResponsabilidade" class="form-control" rows="2"></textarea>
       </div>
 
+      <div class="btn-group-navigation">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">
+          Próximo <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>`,
+  aviso_sinistro_documentos_terceiro: `
+    <div class="form-step">
+      <h4 class="mb-4">Documentos do Terceiro</h4>
+      <p class="text-muted">Anexe os documentos relevantes para o Terceiro envolvido no sinistro. Múltiplos arquivos são permitidos.</p>
       <div class="mb-3">
-        <label class="form-label">Upload Docs (BO/BRAT) *</label>
-        <input id="cnhSeg" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" multiple />
+        <img src="../img/modelo-fotos.png" alt="Imagem ilustrativa de documentos do terceiro" class="img-fluid mb-3" />
+      </div>
+      <div class="mb-3">
+        <label for="docTerceiroAvisoSinistro" class="form-label">Aviso de Sinistro (preenchido pelo condutor)</label>
+        <input id="docTerceiroAvisoSinistro" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf" multiple />
+      </div>
+      <div class="mb-3">
+        <label for="docTerceiroCNH" class="form-label">CNH do Condutor</label>
+        <input id="docTerceiroCNH" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf" multiple />
+      </div>
+      <div class="mb-3">
+        <label for="docTerceiroCRLV" class="form-label">CRLV do Veículo Terceiro</label>
+        <input id="docTerceiroCRLV" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf" multiple />
+      </div>
+      <div class="mb-3">
+        <label for="docTerceiroFotosLocal" class="form-label">Fotos do Veículo no Local do Sinistro</label>
+        <input id="docTerceiroFotosLocal" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf" multiple />
+      </div>
+      <div class="mb-3">
+        <label for="docTerceiroFotosVeiculo" class="form-label">Fotos do Veículo Terceiro (placas e danos)</label>
+        <input id="docTerceiroFotosVeiculo" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf" multiple />
+      </div>
+      <div class="mb-3">
+        <label for="terceiroDadosOficina" class="form-label">Dados da Oficina Responsável (Nome, Contato)</label>
+        <textarea id="terceiroDadosOficina" class="form-control" rows="2"></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="docTerceiroOrcamentos" class="form-label">Orçamentos do Conserto (se houver)</label>
+        <input id="docTerceiroOrcamentos" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf" multiple />
+      </div>
+
+      <div class="btn-group-navigation">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">
+          Próximo <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>`,
+    aviso_sinistro_documentos: `
+    <div class="form-step">
+      <h4 class="mb-4">Documentos do Sinistro</h4>
+      <p class="text-muted">Anexe os documentos relevantes para o aviso de sinistro. Múltiplos arquivos são permitidos.</p>
+      <div class="mb-3">
+        <img src="../img/modelo-fotos.png" alt="Imagem ilustrativa de documentos do terceiro" class="img-fluid mb-3" />
+      </div>
+      <div class="mb-3">
+        <label for="docBoletimOcorrencia" class="form-label">Boletim de Ocorrência</label>
+        <input id="docBoletimOcorrencia" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf" multiple />
+      </div>
+
+      <div class="mb-3">
+        <label for="docAvisoSinistro" class="form-label">Aviso de Sinistro (preenchido e assinado)</label>
+        <input id="docAvisoSinistro" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf" multiple />
+      </div>
+
+      <div class="mb-3">
+        <label for="docCNH" class="form-label">CNH do Condutor</label>
+        <input id="docCNH" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf" multiple />
+      </div>
+
+      <div class="mb-3">
+        <label for="docCRLV" class="form-label">CRLV do Veículo Segurado</label>
+        <input id="docCRLV" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf" multiple />
+      </div>
+
+      <div class="mb-3">
+        <label for="docFotosLocal" class="form-label">Fotos do Veículo no Local do Acidente</label>
+        <input id="docFotosLocal" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf" multiple />
+      </div>
+
+      <div class="mb-3">
+        <label for="docFotosVeiculo" class="form-label">Fotos do Veículo (placas e danos)</label>
+        <input id="docFotosVeiculo" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf" multiple />
+      </div>
+
+      <div class="mb-3">
+        <label for="docRastreador" class="form-label">Relatório Rastreador/Tacógrafo</label>
+        <input id="docRastreador" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf" multiple />
+      </div>
+
+      <div class="mb-3">
+        <label for="docTaxi" class="form-label">Print da Tela Carioca Digital (TÁXI)</label>
+        <input id="docTaxi" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf" multiple />
+      </div>
+
+      <div class="mb-3">
+        <label for="docCarta" class="form-label">Carta de Próprio Punho (relato do acidente)</label>
+        <input id="docCarta" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf" multiple />
+      </div>
+
+      <div class="mb-3">
+        <label for="docCroqui" class="form-label">Croqui do Acidente</label>
+        <input id="docCroqui" type="file" class="form-control" accept=".jpg,.jpeg,.png,.pdf" multiple />
       </div>
 
       <div class="btn-group-navigation">
@@ -2019,14 +2125,15 @@ const stepTemplates = {
           <input id="codCI" class="form-control"  />
         </div>
       </div>
-      <div class="col-md-12 mb-3 mt-3">
-        <label for="paymentMethod" class="form-label">Forma de pagamento *</label>
-        <select id="paymentMethod" class="form-select" required>
-          <option value="" disabled selected>Selecione</option>
-          <option>Boleto</option> <option>Cartão</option> <option>Débito em conta</option>
-        </select>
+      <div data-visible-when-solicitante="colaborador, parceiro">
+        <div class="col-md-12 mb-3 mt-3">
+          <label for="paymentMethod" class="form-label">Forma de pagamento *</label>
+          <select id="paymentMethod" class="form-select" required>
+            <option value="" disabled selected>Selecione</option>
+            <option>Boleto</option> <option>Cartão</option> <option>Débito em conta</option>
+          </select>
+        </div>
       </div>
-
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
         <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>

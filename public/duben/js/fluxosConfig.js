@@ -51,7 +51,9 @@ const fluxosConfig = {
       steps: [
         { label: 'Colaborador', template: 'solicitante' },
         { label: 'Aviso Segurado', template: 'aviso_sinistro' },
+        { label: 'Segurado Docs', template: 'aviso_sinistro_documentos' },
         { label: 'Aviso Terceiro', template: 'aviso_sinistro_terceiro' },
+        { label: 'Terceiro Docs', template: 'aviso_sinistro_documentos_terceiro' },
         { label: 'Aviso Ocorrência', template: 'aviso_sinistro_ocorrencia' },
         { label: 'Info & Consent.', template: 'consentimento' },
         { label: 'Enviar', template: 'enviar' },
@@ -121,7 +123,9 @@ const fluxosConfig = {
       steps: [
         { label: 'Estipulante', template: 'estipulante_seguradoras' },
         { label: 'Aviso Segurado', template: 'aviso_sinistro' },
+        { label: 'Segurado Docs', template: 'aviso_sinistro_documentos' },
         { label: 'Aviso Terceiro', template: 'aviso_sinistro_terceiro' },
+        { label: 'Terceiro Docs', template: 'aviso_sinistro_documentos_terceiro' },
         { label: 'Aviso Ocorrência', template: 'aviso_sinistro_ocorrencia' },
         { label: 'Info & Consent.', template: 'consentimento' },
         { label: 'Enviar', template: 'enviar' },
@@ -149,7 +153,9 @@ const fluxosConfig = {
       steps: [
         { label: 'Parceiro', template: 'parceiro_busca_cobertura' },
         { label: 'Aviso Segurado', template: 'aviso_sinistro' },
+        { label: 'Segurado Docs', template: 'aviso_sinistro_documentos' },
         { label: 'Aviso Terceiro', template: 'aviso_sinistro_terceiro' },
+        { label: 'Terceiro Docs', template: 'aviso_sinistro_documentos_terceiro' },
         { label: 'Aviso Ocorrência', template: 'aviso_sinistro_ocorrencia' },
         { label: 'Info & Consent.', template: 'consentimento' },
         { label: 'Enviar', template: 'enviar' },
@@ -206,7 +212,9 @@ const fluxosConfig = {
       description: 'Preencha os dados para Aviso de Sinistro',
       steps: [
         { label: 'Aviso Segurado', template: 'aviso_sinistro' },
+        { label: 'Segurado Docs', template: 'aviso_sinistro_documentos' },
         { label: 'Aviso Terceiro', template: 'aviso_sinistro_terceiro' },
+        { label: 'Terceiro Docs', template: 'aviso_sinistro_documentos_terceiro' },
         { label: 'Aviso Ocorrência', template: 'aviso_sinistro_ocorrencia' },
         { label: 'Info & Consent.', template: 'consentimento' },
         { label: 'Enviar', template: 'enviar' },
