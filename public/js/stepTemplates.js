@@ -1427,7 +1427,7 @@ const stepTemplates = {
         <label for="sinistroMotivoResponsabilidade" class="form-label">Se sim, qual o motivo?: *</label>
         <textarea id="sinistroMotivoResponsabilidade" class="form-control" rows="2"></textarea>
       </div>
-      
+
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()">
           <i class="bi bi-arrow-left"></i> Voltar
@@ -2125,14 +2125,15 @@ const stepTemplates = {
           <input id="codCI" class="form-control"  />
         </div>
       </div>
-      <div class="col-md-12 mb-3 mt-3">
-        <label for="paymentMethod" class="form-label">Forma de pagamento *</label>
-        <select id="paymentMethod" class="form-select" required>
-          <option value="" disabled selected>Selecione</option>
-          <option>Boleto</option> <option>Cartão</option> <option>Débito em conta</option>
-        </select>
+      <div data-visible-when-solicitante="colaborador, parceiro">
+        <div class="col-md-12 mb-3 mt-3">
+          <label for="paymentMethod" class="form-label">Forma de pagamento *</label>
+          <select id="paymentMethod" class="form-select" required>
+            <option value="" disabled selected>Selecione</option>
+            <option>Boleto</option> <option>Cartão</option> <option>Débito em conta</option>
+          </select>
+        </div>
       </div>
-
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
         <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
