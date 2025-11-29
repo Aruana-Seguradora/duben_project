@@ -12,7 +12,6 @@
         "ext-fileinfo": "*",
         "ext-iconv": "*",
         "ext-intl": "*",
-        "ext-libxml": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*",
         "ext-phar": "*",
