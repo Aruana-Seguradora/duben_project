@@ -1,2 +1,2 @@
 [phases.setup]
-nixPkgs = ["php83Packages.composer"]
+nixPkgs = ["...]
