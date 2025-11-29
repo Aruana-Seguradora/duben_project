@@ -1,5 +1,5 @@
 # Nixpacks configuration for Laravel 12 + Filament production deployment with PHP-FPM
-providers = ["php", "node"]
+providers = ["php"]
 
 [phases.setup]
 nixPkgs = [
