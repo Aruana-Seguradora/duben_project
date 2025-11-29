@@ -1,17 +1,18 @@
 # Nixpacks configuration for Laravel 12 + Filament production deployment with PHP-FPM
+providers = ["php", "node"]
 
 [phases.setup]
 nixPkgs = [
   "php84Packages.composer",
-  "php84",
   "nginx",
-  "nodejs_22"
+  "php84Extensions.fpm",
+  "nodejs_22",
 ]
 
 [phases.install]
 cmds = [
   "composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader",
-  "npm ci"
+  "npm install",
 ]
 
 [phases.build]
