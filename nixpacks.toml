@@ -22,11 +22,11 @@ cmds = [
   "php artisan route:cache",
   "php artisan view:cache",
   "php artisan filament:assets",
-  "chmod +x /app/start.sh"
+  # "chmod +x /app/start.sh"
 ]
 
-[start]
-cmd = "sh /app/start.sh"
+#[start]
+#cmd = "sh /app/start.sh"
 
 [variables]
 APP_ENV = "production"
