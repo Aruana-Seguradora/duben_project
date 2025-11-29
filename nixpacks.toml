@@ -26,7 +26,7 @@ cmds = [
 ]
 
 [start]
-cmd = "/app/start.sh"
+cmd = "sh /app/start.sh"
 
 [variables]
 APP_ENV = "production"
