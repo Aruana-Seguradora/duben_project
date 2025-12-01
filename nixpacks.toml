@@ -1,34 +1,35 @@
-
 # Nixpacks configuration for Laravel 12 + Filament production deployment with PHP-FPM
 providers = ["php"]
 
 [phases.setup]
 nixPkgs = [
-  "php84",
-  "php84Packages.composer",
-  "nginx",
-  "nodejs_22",
-  "python311Packages.supervisor"
+    "php84",
+    "php84Packages.composer",
+    "nginx",
+    "nodejs_22",
+    "python311Packages.supervisor"
 ]
 
 [phases.install]
 cmds = [
-  "composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader",
+    "composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader",
 ]
 
 [phases.build]
 cmds = [
-  "npm install",
-  "npm run build",
-  "php artisan config:cache",
-  "php artisan route:cache",
-  "php artisan view:cache",
-  "php artisan filament:assets",
-  "mkdir -p /etc/supervisor/conf.d/",
-  "cp /assets/worker-*.conf /etc/supervisor/conf.d/",
-  "cp /assets/supervisord.conf /etc/supervisord.conf",
-  "chmod +x /assets/start.sh",
-  "..."
+    "sudo apt update",
+    "sudo apt upgrade -y",
+    "npm install",
+    "npm run build",
+    "php artisan config:cache",
+    "php artisan route:cache",
+    "php artisan view:cache",
+    "php artisan filament:assets",
+    "mkdir -p /etc/supervisor/conf.d/",
+    "cp /assets/worker-*.conf /etc/supervisor/conf.d/",
+    "cp /assets/supervisord.conf /etc/supervisord.conf",
+    "chmod +x /assets/start.sh",
+    "..."
 
 ]
 
