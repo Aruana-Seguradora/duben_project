@@ -5,9 +5,12 @@ providers = ["php"]
 nixPkgs = [
     "php84",
     "php84Packages.composer",
+    "php84Extensions.pdo_mysql",
+    "php84Extensions.mysqli",
     "nginx",
     "nodejs_22",
-    "python311Packages.supervisor"
+    "python311Packages.supervisor",
+    "mysql80"
 ]
 
 [phases.install]
