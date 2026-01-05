@@ -91,13 +91,11 @@ function validateStep(step) {
     // --- Fim das Validações Customizadas ---
 
     if (!fieldValid) {
-      console.log('Campo inválido encontrado:', {
-        id: input.id,
-        element: input,
-        required: input.required,
-        visible: input.offsetParent !== null,
-      });
       isValid = false;
+      const feedback = input.nextElementSibling;
+      if (feedback && feedback.classList.contains('invalid-feedback')) {
+        feedback.textContent = input.validationMessage;
+      }
     }
     input.classList.toggle('is-invalid', !fieldValid);
   });
