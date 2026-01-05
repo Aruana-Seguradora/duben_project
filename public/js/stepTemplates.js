@@ -69,6 +69,46 @@ const stepTemplates = {
             <input id="codigo" class="form-control" placeholder="10L4" >
           </div>
         </div>
+        
+        <div data-visible-when-fluxo="renovacao">
+          <div class="mb-4">
+            <label class="form-label">Selecione os produtos desejados *</label>
+            <select id="produtos" class="form-select" required data-rule="app_fields:rcf_app;rcf_fields:rcf_app;rcf_fields:rcf;app_fields:app;">
+              <option value="" disabled selected>Selecione</option>
+              <option value="rcf_app">RCF e APP</option>
+              <option value="rcf">Somente RCF</option>
+              <option value="app">Somente APP</option>
+            </select>
+          </div>
+        
+          <div id="rcf_fields" style="display: none;">
+            <div id="coberturaRCFren" class="mb-4">
+              <label for="valorRCF_select" class="form-label">Valor RCF (R$) *</label>
+              <div id="rcfApoliceInfo" class="text-muted mb-2"></div> 
+              <select id="valorRCF_select" class="form-select" data-rule="valorRCF_outro:outro">
+                <option value="" disabled selected>Selecione</option>
+                <option value="50000">R$ 50.000</option>
+                <option value="100000">R$ 100.000</option>
+                <option value="150000">R$ 150.000</option>
+                <option value="200000">R$ 200.000</option>
+                <option value="outro">Outro Valor</option>
+              </select>
+              <input type="number" class="form-control mt-2" id="valorRCF_outro" step="1000" style="display: none;" placeholder="Digite o valor desejado" />
+            </div>
+          </div>
+      
+          <div id="app_fields" class="mb-4" style="display: none;">
+            <label for="valorAPP_select" class="form-label">Valor APP por pessoa (R$) *</label>
+            <div id="appApoliceInfo" class="text-muted mb-2"></div>
+            <select id="valorAPP_select" class="form-select" data-rule="valorAPP_outro:outro">
+              <option value="" disabled selected>Selecione</option>
+              <option value="5000">R$ 5.000</option>
+              <option value="10000">R$ 10.000</option>
+              <option value="outro">Outro Valor</option>
+            </select>
+            <input type="number" class="form-control mt-2" id="valorAPP_outro" step="1000" style="display: none;" placeholder="Digite o valor desejado" />
+          </div>
+        </div>
 
         <div id="resultadoEstipulante" class="mt-3">
           <div id="estipulanteLoading" style="display: none;">
@@ -1482,7 +1522,7 @@ const stepTemplates = {
         </button>
       </div>
     </div>`,
-    aviso_sinistro_documentos: `
+  aviso_sinistro_documentos: `
     <div class="form-step">
       <h4 class="mb-4">Documentos do Sinistro</h4>
       <p class="text-muted">Anexe os documentos relevantes para o aviso de sinistro. Múltiplos arquivos são permitidos.</p>
@@ -2049,6 +2089,12 @@ const stepTemplates = {
           Li e concordo com os termos e condições. *
         </label>
       </div>
+
+      <div class="my-3">
+        <label class="form-label">Termo de adesão ao estipulante (PDF/JPG/PNG) *</label>
+        <input id="termoAdesao" type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png"  />
+      </div>
+
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()">
           <i class="bi bi-arrow-left"></i> Voltar
@@ -2125,15 +2171,7 @@ const stepTemplates = {
           <input id="codCI" class="form-control"  />
         </div>
       </div>
-      <div data-visible-when-solicitante="colaborador, parceiro">
-        <div class="col-md-12 mb-3 mt-3">
-          <label for="paymentMethod" class="form-label">Forma de pagamento *</label>
-          <select id="paymentMethod" class="form-select" required>
-            <option value="" disabled selected>Selecione</option>
-            <option>Boleto</option> <option>Cartão</option> <option>Débito em conta</option>
-          </select>
-        </div>
-      </div>
+
       <div class="btn-group-navigation">
         <button type="button" class="btn btn-secondary" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Voltar</button>
         <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
@@ -2925,6 +2963,27 @@ const stepTemplates = {
         <div id="resultadoFinalContent" class="card p-3">
           <!-- Conteúdo do resultado -->
         </div>
+      </div> 
+      
+      <div class="col-md-12 mb-3 mt-3">
+        <label for="paymentMethod" class="form-label">Forma de pagamento *</label>
+        <select id="paymentMethod" class="form-select" required>
+          <option value="" disabled selected>Selecione</option>
+          <option>Boleto</option> <option>Cartão</option> <option>Débito em conta</option>
+        </select>
+      </div>
+      
+      <div class="alert alert-info">
+        <strong>Atenção:</strong> O produto APP (Acidentes Pessoais de Passageiros) é sempre pago à vista. O parcelamento se aplica apenas ao RCF.
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label for="qtdParcelas" class="form-label">Quantidade de parcelas *</label>
+          <select id="qtdParcelas" class="form-select" required>
+            <option value="" disabled selected>Selecione</option>
+            <option>1x</option> <option>2x</option> <option>3x</option> <option>4x</option> <option>5x</option> <option>6x</option> <option>7x</option> <option>8x</option> <option>9x</option> <option>10x</option> <option>11x</option>  <option>12x</option> 
+          </select>
+        </div>
       </div>
 
       <div class="btn-group-navigation mt-4">
@@ -2937,7 +2996,7 @@ const stepTemplates = {
       </div>
     </div>
   `,
-endosso_alteracao_endereco_completo: `
+  endosso_alteracao_endereco_completo: `
 <div class="form-step">
     <h4 class="mb-4">Endosso - Alteração de Endereço Completo</h4>
 
@@ -3061,7 +3120,7 @@ endosso_alteracao_endereco_completo: `
         <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo <i class="bi bi-arrow-right"></i></button>
     </div>
 </div>`,
-endosso_motorista_pernoite: `
+  endosso_motorista_pernoite: `
 <div class="form-step">
     <h4 class="mb-4">Endosso - Alteração de Motorista Principal / Endereço de Pernoite</h4>
 

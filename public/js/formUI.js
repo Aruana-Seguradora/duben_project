@@ -300,10 +300,21 @@ function addListenersAndMasks() {
 
         break;
       case 'renovacao':
+        // Dados do solicitante (pode ser colaborador, estipulante ou parceiro)
+        appendValue('colaboradorCodigo', 'colaboradorCodigo');
+        appendValue('solicitanteNome', 'estipNome'); // re-used for collaborator name
+        appendValue('estipulanteCodigo', 'codigo');
+        appendValue('parceiroCodigo', 'parceiroCodigo');
+        appendValue('parceiroCoberturaRCF', 'coberturaRCF');
+        appendValue('parceiroCoberturaAPP', 'coberturaAPP');
+
+        // Dados da apólice anterior
         appendValue('numeroApoliceAnterior', 'renovApolice');
         appendValue('dataVencimentoAnterior', 'renovVencimento');
         appendValue('seguradoraAnterior', 'renovSeguradora');
-        appendValue('outraSeguradoraAnterior', 'outraSeguradoraNome');
+        appendValue('codigoCI', 'codCI');
+
+        // Dados do segurado
         appendValue('seguradoNome', 'seguradoNome');
         appendValue('seguradoNomeSocial', 'seguradoNomeSocial');
         appendValue('seguradoTipoPessoa', 'seguradoTipoPessoa');
@@ -336,7 +347,41 @@ function addListenersAndMasks() {
         appendValue('seguradoEstado', 'segurado_estado');
         appendFile('seguradoCNH', 'cnhSeg');
         appendFile('seguradoComprovanteResidencia', 'comprovanteResidenciaSeg');
+
+        // Produtos e Coberturas
+        appendValue('produtos', 'produtos');
+        const valorRCFSelect_renov = document.getElementById('valorRCF_select');
+        if (valorRCFSelect_renov && valorRCFSelect_renov.value === 'outro') {
+          appendInt('valorRCF', 'valorRCF_outro');
+        } else {
+          appendInt('valorRCF', 'valorRCF_select');
+        }
+        const valorAPPSelect_renov = document.getElementById('valorAPP_select');
+        if (valorAPPSelect_renov && valorAPPSelect_renov.value === 'outro') {
+          appendInt('valorAPP', 'valorAPP_outro');
+        } else {
+          appendInt('valorAPP', 'valorAPP_select');
+        }
+        appendValue('formaPagamento', 'paymentMethod');
+        appendValue('qtdParcelas', 'qtdParcelas');
+
+        // Auxiliares
+        appendChecked('adicionarAuxiliar', 'addAuxiliar');
+        appendValue('auxiliar1Nome', 'aux1Nome');
+        appendValue('auxiliar1CPF', 'aux1CPF');
+        appendFile('auxiliar1CNH', 'aux1CNH');
+        appendChecked('adicionarAuxiliar2', 'addAuxiliar2');
+        appendValue('auxiliar2Nome', 'aux2Nome');
+        appendValue('auxiliar2CPF', 'aux2CPF');
+        appendFile('auxiliar2CNH', 'aux2CNH');
+
+        // Consentimento e finalização
+        appendValue('infoAdicionais', 'infoAdicionais');
+        appendChecked('termos', 'termos');
+        appendFile('termoAdesao', 'termoAdesao');
         appendChecked('confirmado', 'renovConfirm');
+
+        // Log para depuração
         break;
       case 'aviso_sinistro':
         appendValue('corretor', 'sinistroCorretor');
@@ -673,7 +718,7 @@ function applyConditionalVisibility() {
 
     // Check for data-hide-when-estipulante-nova rule
     if (element.dataset.hideWhenEstipulanteNova === 'true') {
-      if (tipoSolicitante === 'estipulante' && tipoSolicitacao === 'nova') {
+      if ((tipoSolicitante === 'estipulante' && tipoSolicitacao === 'nova') || (tipoSolicitante === 'colaborador' && tipoSolicitacao === 'renovacao')) {
         shouldBeVisible = false;
       } else {
         // If this hide rule doesn't apply, check the data-visible-when-solicitante rule if it exists
